@@ -1,0 +1,7 @@
+Nuxt Folder - npx nuxi@latest init view
+
+UI Library (NUXT UI) - npx nuxi@latest module add ui
+
+Icons - npm i @iconify-json/lucide
+
+NPM - npm install
