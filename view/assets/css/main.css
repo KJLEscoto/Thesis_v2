@@ -16,3 +16,7 @@
 *::-webkit-scrollbar-thumb:hover {
   background-color: #555;
 }
+
+body {
+  @apply bg-custom-200 dark:bg-custom-950 tracking-wider text-custom-900 dark:text-custom-100 transition-all duration-200
+}

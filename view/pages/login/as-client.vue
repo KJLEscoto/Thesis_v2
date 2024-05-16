@@ -1,5 +1,6 @@
 <template>
   <div class="flex justify-center items-center h-screen w-auto">
+    <ToggleDarkMode class="fixed lg:top-20 z-50 top-5 left-5 lg:left-20 duration-200"/>
     <div class="h-auto w-1/3 rounded p-10 bg-custom-100 dark:bg-custom-900 shadow-lg">
       <header class="flex items-center justify-center gap-1">
         <UIcon name="i-lucide-shield-check" class="text-3xl"/>

@@ -1,5 +1,5 @@
 <template>
-  <div class="h-auto w-full">
+  <div class="h-auto w-full p-5">
     Lorem ipsum dolor sit amet consectetur, adipisicing elit. Perferendis molestiae voluptates officia cumque impedit totam eos reiciendis obcaecati sequi sed ex suscipit laboriosam libero, iste sint sapiente deserunt dolores in?
     Corporis rerum placeat vel voluptatibus officia suscipit consectetur, necessitatibus blanditiis quis unde quae reprehenderit nemo aspernatur eum aliquid nobis corrupti numquam. Odit doloremque vel voluptate voluptates quisquam perferendis in facere!
     Quas at, odit suscipit temporibus esse corrupti quam ullam. Atque repudiandae corporis excepturi sint ea non! Fugiat commodi cum similique dolorum nulla iste, aperiam, vero autem modi consequatur ipsa in.

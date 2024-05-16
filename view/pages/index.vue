@@ -1,5 +1,6 @@
 <template>
-  <div class="gradient-bg h-full w-full">
+  <div class="h-auto w-full relative">
+    <ToggleDarkMode class="fixed lg:top-20 z-50 top-5 left-5 lg:left-20 duration-200"/>
     <div class="lg:grid-cols-2 grid-cols-1 lg:grid flex flex-col-reverse lg:h-screen h-auto w-auto lg:gap-20 gap-10 lg:p-20 p-16">
       <section class="m-auto">
         <h1 class="font-bold cursor-default lg:text-4xl text-3xl lg:text-start text-center">Empower Your Security</h1>
@@ -14,5 +15,6 @@
       </section>
     </div>
   </div>
+
 </template>
   

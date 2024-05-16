@@ -11,7 +11,7 @@ const isDark = computed({
 })
 </script>
 <template>
-  <UTooltip :text="toggleText" :ui="{ background: 'dark:bg-custom-800', arrow: { background: 'dark:before:bg-custom-900'}}">
+  <UTooltip :text="toggleText" :popper="{ arrow: true, placement: 'right' }" :ui="{ background: 'dark:bg-custom-800', arrow: { background: 'dark:before:bg-custom-950'}}">
     <ClientOnly>
       <UButton
         :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
