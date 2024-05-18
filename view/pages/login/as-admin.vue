@@ -33,18 +33,34 @@
             class="w-full bg-custom-50 py-2 px-3 rounded border-2 border-custom-200 transition-all duration-300 outline-none focus:border-custom-700 dark:focus:border-custom-50 mt-1"/>
         </section>
 
-        <UButton to="/admin/dashboard" label="Login" class="flex justify-center items-center gap-1 py-3 rounded bg-custom-700 hover:bg-custom-800 dark:bg-custom-600 dark:hover:bg-custom-700 dark:text-white"/>
+        <UButton @click="adminLogin" :label="labelAdmin" :loading-icon="loadIcon" :loading="loading" class="flex justify-center items-center gap-1 py-3 rounded bg-custom-700 hover:bg-custom-800 dark:bg-custom-600 dark:hover:bg-custom-700 dark:text-white"/>
 
       </UForm>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 
 const state = reactive({
   email: undefined,
   password: undefined
-})
+});
+
+const loading = ref(false);
+const router = useRouter();
+const loadIcon = ref('');
+const labelAdmin = ref('Login');
+
+const adminLogin = () => {
+  loading.value = true;
+  loadIcon.value = 'i-lucide-loader-circle';
+  labelAdmin.value = '';
+  setTimeout(() => {
+    router.push('/admin/dashboard');
+    labelAdmin.value = 'Login';
+    loading.value = false;
+  }, 800);
+};
 
 </script>

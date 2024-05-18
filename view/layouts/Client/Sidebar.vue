@@ -1,5 +1,5 @@
 <template>
-  <div class="lg:flex grid items-start gradient-bg w-full h-auto">
+  <div class="lg:flex grid items-start w-full h-auto ">
     <section class="grid inset-y-0 left-0 h-auto">
       <ClientSidebar />
     </section>

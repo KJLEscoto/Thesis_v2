@@ -27,7 +27,7 @@
             class="w-full bg-custom-50 py-2 px-3 rounded border-2 border-custom-200 transition-all duration-300 outline-none focus:border-custom-700 dark:focus:border-custom-50 mt-1 text-custom-900"/>
         </section>
 
-        <UButton label="Login" to="/client/monitor" class="w-full items-center justify-center font-bold flex py-3 rounded dark:text-white"/>
+        <UButton :label="labelClient" class="w-full items-center justify-center font-bold flex py-3 rounded dark:text-white" @click="clientLogin" :loading="loading" :loading-icon="loadIcon"/>
 
         <Divider />
 
@@ -38,7 +38,23 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
+
+const loading = ref(false);
+const router = useRouter();
+const loadIcon = ref('');
+const labelClient = ref('Login');
+
+const clientLogin = () => {
+  loading.value = true;
+  loadIcon.value = 'i-lucide-loader-circle';
+  labelClient.value = '';
+  setTimeout(() => {
+    router.push('/client/monitor');
+    labelClient.value = 'Login';
+    loading.value = false;
+  }, 800);
+};
 
 const state = reactive({
   email: undefined,
