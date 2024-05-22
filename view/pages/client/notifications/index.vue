@@ -1,7 +1,7 @@
 <template>
   <div class="h-auto w-full p-5">
     <header class="lg:flex block justify-between items-center mb-5">
-      <h1 class="font-bold cursor-default lg:mb-0 mb-5">History <span class="font-normal text-sm">({{ totalItems }})</span></h1>
+      <h1 class="font-bold cursor-default lg:mb-0 mb-5">Saved History <span class="font-normal text-xs">({{ totalItems }})</span></h1>
       <div class="flex justify-center lg:justify-end items-center">
         <UPagination
         :prev-button="{ icon: 'i-heroicons-arrow-small-left-20-solid', label: 'Prev', color: 'gray' }"
@@ -17,7 +17,7 @@
     </header>
     <section class="sm:block flex justify-center items-center">
       <div class="max-h-[80vh] sm:max-w-full max-w-[55vh] overflow-auto border rounded border-custom-300 dark:border-custom-800">
-        <table class="w-full whitespace-nowrap">
+        <table class="w-full whitespace-nowrap cursor-default">
           <!-- Table Header -->
           <thead class="bg-custom-300 dark:bg-custom-900 sticky top-0">
             <tr>
@@ -50,14 +50,14 @@
 
 <script setup>
 definePageMeta({
-  layout: 'client-sidebar'
+  layout: 'sidebar'
 })
 
 import { ref, computed } from 'vue';
 import { faker } from '@faker-js/faker';
 
 const headers = [
-  '#',
+  'No.',
   'Date',
   'Motion Detected',
   'Level',
@@ -100,13 +100,13 @@ const generateData = (numRows) => {
   return data;
 };
 
-const data = ref(generateData(150));
+const data = ref(generateData(1500));
 const currentPage = ref(1);
 const pageCount = ref(20);
 const totalItems = computed(() => data.value.length);
 
 // Calculate total pages
-const totalPages = computed(() => Math.ceil(totalItems.value / pageCount.value));
+// const totalPages = computed(() => Math.ceil(totalItems.value / pageCount.value));
 
 // Paginate data based on current page and page size
 const paginatedData = computed(() => {

@@ -15,25 +15,25 @@
 
       <UForm :state="state" class="grid gap-5">
 
-        <section id="username">
-          <label class="font-semibold flex gap-1 justify-start items-center">
+        <section>
+          <label class="font-semibold flex gap-1 justify-start items-center" for="username">
             <UIcon name="i-lucide-user-round"/>
             <p>Username</p>
           </label>
-          <input placeholder="Enter username" type="text"
-            class="w-full bg-custom-50 py-2 px-3 rounded border-2 border-custom-200 transition-all duration-300 outline-none focus:border-custom-700 dark:focus:border-custom-50 mt-1"/>
+          <input placeholder="Enter username" type="text" id="username"
+            class="w-full bg-custom-50 py-2 px-3 rounded border-2 border-custom-200 transition-all duration-300 outline-none focus:border-custom-700 dark:focus:border-custom-50 mt-1 text-custom-900"/>
         </section>
 
-        <section id="username">
-          <label class="font-semibold flex gap-1 justify-start items-center">
+        <section>
+          <label class="font-semibold flex gap-1 justify-start items-center" for="password">
             <UIcon name="i-lucide-key-round"/>
             <p>Password</p>
           </label>
-          <input placeholder="Enter password" type="password"
-            class="w-full bg-custom-50 py-2 px-3 rounded border-2 border-custom-200 transition-all duration-300 outline-none focus:border-custom-700 dark:focus:border-custom-50 mt-1"/>
+          <input type="password" id="password" placeholder="••••••••"
+            class="w-full bg-custom-50 py-2 px-3 rounded border-2 border-custom-200 transition-all duration-300 outline-none focus:border-custom-700 dark:focus:border-custom-50 mt-1 text-custom-900"/>
         </section>
 
-        <UButton @click="adminLogin" :label="labelAdmin" :loading-icon="loadIcon" :loading="loading" class="flex justify-center items-center gap-1 py-3 rounded bg-custom-700 hover:bg-custom-800 dark:bg-custom-600 dark:hover:bg-custom-700 dark:text-white"/>
+        <UButton @click="adminLogin" :label="labelAdmin" :loading-icon="loadIcon" :loading="loading" class="flex justify-center items-center gap-1 py-3 rounded bg-custom-700 hover:bg-custom-800 dark:bg-custom-600 dark:hover:bg-custom-700 dark:text-custom-200"/>
 
       </UForm>
     </div>
@@ -41,6 +41,9 @@
 </template>
 
 <script setup>
+import { ref, reactive } from 'vue';
+import { useRouter } from 'vue-router';
+import { user as userRole } from '~/assets/js/userRole';
 
 const state = reactive({
   email: undefined,
@@ -57,6 +60,7 @@ const adminLogin = () => {
   loadIcon.value = 'i-lucide-loader-circle';
   labelAdmin.value = '';
   setTimeout(() => {
+    userRole.role = 'superadmin';
     router.push('/admin/dashboard');
     labelAdmin.value = 'Login';
     loading.value = false;
