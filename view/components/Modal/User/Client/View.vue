@@ -1,5 +1,5 @@
 <template>
-  <UModal v-model="isOpen" :ui="{background: 'dark:bg-custom-900'}">
+  <UModal v-model="isOpen" :ui="{background: 'bg-custom-50 dark:bg-custom-900'}">
     <div class="p-4">
       <div v-if="clientData" class="h-60 flex flex-col gap-2">
         <div class="flex justify-between">

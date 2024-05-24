@@ -28,7 +28,7 @@ const handleClick = () => {
   loading.value = true;
   loadIcon.value = 'i-lucide-loader-circle'
   setTimeout(() => {
-    router.push('/login/as-client');
+    router.push('/login/client');
     loading.value = false;
   }, 800);
 };
