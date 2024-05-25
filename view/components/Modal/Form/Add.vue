@@ -33,11 +33,11 @@
             </UFormGroup>
 
             <UFormGroup class="grid col-span-3" label="Role">
-              <UInputMenu :ui="{background: 'bg-white dark:bg-white', rounded: 'rounded', padding: 'p-5'}" v-model="selectedRole" :options="roleOptions" placeholder="Select a role"/>
+              <UInputMenu color="gray" :ui="{rounded: 'rounded', color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" :uiMenu="{background: 'dark:bg-custom-400', option: {color: 'dark:text-white', active: 'dark:bg-custom-600', empty: 'dark:text-white'}, empty: 'dark:text-white'}" v-model="selectedRole" :options="roleOptions" placeholder="Select a role"/>
             </UFormGroup>
 
             <UFormGroup class="grid col-span-2" label="Status">
-              <URadioGroup v-model="selectedStatus" :options="statusOptions" class="ml-2" :ui="{legend: 'font-thin'}"
+              <URadioGroup v-model="selectedStatus" :options="statusOptions" class="ml-2" :uiRadio="radioGroupUI"
               />
             </UFormGroup>
 
@@ -62,7 +62,7 @@
 
           <hr class="border-custom-300 dark:border-custom-500">
 
-          <UButton label="Save" class="flex justify-center items-center w-full rounded" type="submit"/>
+          <UButton label="Save" class="flex justify-center items-center w-full rounded dark:text-white" type="submit"/>
 
         </UForm>
       </div>
@@ -87,17 +87,19 @@ const props = defineProps({
   }
 });
 
-const selectedGender = ref('');
 const selectedRole = ref('');
 const selectedStatus = ref('Active');
+const selectedGender = ref('');
 
 const roleOptions = ['Admin', 'Client'];
 const statusOptions = ['Active', 'Inactive'];
+const genderOptions = ['Male', 'Female'];
 
-const genderOptions = [
-  { label: 'Male', value: 'male' },
-  { label: 'Female', value: 'female' }
-];
+// const radioGroupUI = computed(() => ({
+//   color: selectedStatus.value === statusOptions[0] 
+//     ? 'text-green-500'
+//     : 'text-red-500'
+// }));
 
 const emit = defineEmits(['update:modelValue']);
 const isOpen = ref(props.modelValue);

@@ -3,7 +3,10 @@
     <div class="p-4">
       <div v-if="clientData" class="h-60 flex flex-col gap-2">
         <div class="flex justify-between">
-          <h1 class="font-semibold cursor-default text-lg">Client Details</h1>
+          <div class="flex gap-1 justify-start items-center">
+            <UIcon name="i-lucide-book-user" class="text-lg"/>
+            <h1 class="font-semibold cursor-default text-lg">Client Details</h1>
+          </div>
           <UButton icon="i-lucide-edit" label="Edit" size="2xs" @click="handleEdit"/>
         </div>
         <hr class="border-custom-300 dark:border-custom-700">
@@ -14,8 +17,8 @@
           <p class="text-start">Gender:</p>
           <p class=" col-span-3 text-start dark:font-light">{{ clientData.gender }}</p>
 
-          <p class="text-start">Email:</p>
-          <p class=" col-span-3 text-start dark:font-light">{{ clientData.email }}</p>
+          <p class="text-start">Username:</p>
+          <p class=" col-span-3 text-start dark:font-light">{{ clientData.username }}</p>
 
           <p class="text-start">Phone:</p>
           <p class=" col-span-3 text-start dark:font-light">{{ clientData.phone }}</p>

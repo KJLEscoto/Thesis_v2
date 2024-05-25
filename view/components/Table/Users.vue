@@ -12,16 +12,15 @@
           <!-- Table Body -->
           <tbody class="bg-custom-50 text-sm">
             <tr v-for="(client, index) in clients" :key="index" 
-                :class="{'bg-[#d4dfe3] dark:bg-[#24494a]': selectedRow === client.id}" 
+                :class="{'dark:bg-custom-700 bg-custom-200': selectedRow === client.id}" 
                 class="dark:bg-custom-950 border-b border-custom-300 dark:border-custom-900"
                 @click="selectRow(client.id, $event)">
               <td class="p-4">{{ client.id }}</td>
               <td class="p-4">{{ client.name }}</td>
-              <td class="p-4">{{ client.email }}</td>
-              <!-- <td class="p-4">{{ client.phone }}</td> -->
+              <td class="p-4">{{ client.username }}</td>
               <td class="p-4">{{ client.role }}</td>
               <td class="p-4">
-                <span :class="['inline-block w-3 h-3 rounded-full', client.status === 'active' ? 'bg-green-500' : 'bg-red-500']"></span>
+                <span :class="['inline-block w-3 h-3 rounded-full', client.status === statusOptions[0] ? 'bg-green-500' : 'bg-red-500']"></span>
               </td>
               <td class="p-4">
                 <UDropdown mode="hover" :items="actions(client)" :popper="{ placement: 'bottom-end', arrow: 'true', offsetDistance: -10 }" :ui="{ background: 'dark:bg-custom-950 bg-white', item: {disabled: 'cursor-default opacity-100 font-semibold'}}">
@@ -49,16 +48,15 @@ const selectedClient = ref(null);
 const tableHeaders = [
   'No.',
   'Name',
-  'Email',
+  'Username',
   'Role',
   'Status',
   'Action'
 ];
 
-const genderOptions = [
-  { label: 'Male', value: 'male' },
-  { label: 'Female', value: 'female' }
-];
+const genderOptions = ['Male', 'Female'];
+const roleOptions = ['Client', 'Admin']
+const statusOptions = ['Active', 'Inactive']
 
 const generateData = (numRows) => {
   const data = [];
@@ -66,11 +64,11 @@ const generateData = (numRows) => {
     data.push({
       id: i,
       name: faker.person.fullName(),
-      gender: faker.helpers.arrayElement(genderOptions).value,
-      email: faker.internet.email(),
+      gender: faker.helpers.arrayElement(genderOptions),
+      username: faker.internet.userName(),
       phone: faker.phone.number('09#########'), // Philippines phone number format
-      role: faker.helpers.arrayElement(['client', 'admin']),
-      status: faker.helpers.arrayElement(['active', 'inactive'])
+      role: faker.helpers.arrayElement(roleOptions),
+      status: faker.helpers.arrayElement(statusOptions)
     });
   }
   return data;
@@ -85,7 +83,7 @@ const selectRow = (id, event) => {
 };
 
 const toggleStatus = (client) => {
-  client.status = client.status === 'active' ? 'inactive' : 'active';
+  client.status = client.status === 'Active' ? 'Inactive' : 'Active' || client.status === 'Inactive' ? 'Active' : 'Inactive';
 };
 
 const actions = (client) => [
