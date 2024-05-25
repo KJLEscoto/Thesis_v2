@@ -1,13 +1,27 @@
 <template>
-  <UModal v-model="isOpen" :ui="{background: 'bg-custom-50 dark:bg-custom-900'}">
+  <UModal 
+    v-model="isOpen" 
+    :ui="{background: 'bg-custom-50 dark:bg-custom-900'}"
+  >
     <div class="p-4">
-      <div v-if="clientData" class="h-60 flex flex-col gap-2">
+      <div 
+        v-if="clientData" 
+        class="h-60 flex flex-col gap-2"
+      >
         <div class="flex justify-between">
           <div class="flex gap-1 justify-start items-center">
-            <UIcon name="i-lucide-book-user" class="text-lg"/>
+            <UIcon 
+              name="i-lucide-book-user" 
+              class="text-lg"
+            />
             <h1 class="font-semibold cursor-default text-lg">Client Details</h1>
           </div>
-          <UButton icon="i-lucide-edit" label="Edit" size="2xs" @click="handleEdit"/>
+          <UButton 
+            icon="i-lucide-edit" 
+            label="Edit" 
+            size="2xs" 
+            @click="handleEdit"
+          />
         </div>
         <hr class="border-custom-300 dark:border-custom-700">
         <div class="grid grid-cols-4 h-auto overflow-auto gap-1 p-1">
@@ -36,11 +50,24 @@
           <p class=" col-span-3 text-start dark:font-light">date here</p>
         </div>
       </div>
+
       <hr class="border-custom-300 dark:border-custom-700 mb-2 mt-2">
-      <UButton label="Okay" class="flex justify-center items-center w-full rounded" @click="isOpen = false"/>
+
+      <UButton 
+        label="Okay" 
+        class="flex justify-center items-center w-full rounded" 
+        @click="isOpen = false"
+      />
+
     </div>
   </UModal>
-  <ModalUserClientEdit v-model="openEdit" :clientData="clientData" @close-edit="closeEdit"/>
+
+  <ModalUserClientEdit 
+    v-model="openEdit" 
+    :clientData="clientData" 
+    @close-edit="closeEdit"
+  />
+
 </template>
 
 <script setup>

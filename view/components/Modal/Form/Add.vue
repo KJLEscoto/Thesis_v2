@@ -1,39 +1,94 @@
 <template>
   <div>
-    <UModal v-model="isOpen" :ui="{background: 'bg-custom-50 dark:bg-custom-900'}" prevent-close>
+    <UModal 
+      v-model="isOpen" 
+      :ui="{background: 'bg-custom-50 dark:bg-custom-900'}" 
+      prevent-close
+    >
+
       <div class="p-4">
 
-        <UForm class="h-auto flex flex-col gap-3" :state="state">
+        <UForm 
+        class="h-auto flex flex-col gap-3" 
+        :state="state"
+        >
 
           <header class="flex justify-between">
             <div class="font-semibold cursor-default flex items-center gap-1">
-              <UIcon name="i-lucide-user-round-plus" class="text-lg"/>
+              <UIcon 
+                name="i-lucide-user-round-plus" 
+                class="text-lg"
+              />
               <h1 class="font-bold text-lg">New User</h1>
             </div>
-            <UIcon name="i-lucide-x" @click="isOpen = false" class="text-red-400 hover:text-red-600 text-xl cursor-pointer"/>
+            <UIcon 
+              name="i-lucide-x" 
+              @click="isOpen = false" 
+              class="text-red-400 hover:text-red-600 text-xl cursor-pointer"
+            />
           </header>
 
           <hr class="border-custom-300 dark:border-custom-500">
 
           <section class="grid grid-cols-5 gap-3">
-            <UFormGroup class="grid col-span-2" label="First name">
-              <UInput type="text" color="gray" size="sm" :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" />
+            <UFormGroup 
+              class="grid col-span-2" 
+              label="First name"
+            >
+              <UInput 
+                type="text" 
+                color="gray" 
+                size="sm" 
+                :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" 
+              />
             </UFormGroup>
 
-            <UFormGroup class="grid col-span-2" label="Last name">
-              <UInput type="text" color="gray" size="sm" :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" />
+            <UFormGroup 
+              class="grid col-span-2" 
+              label="Last name"
+            >
+              <UInput 
+                type="text" 
+                color="gray" 
+                size="sm" 
+                :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" 
+              />
             </UFormGroup>
 
-            <UFormGroup class="grid col-span-1" label="M. I.">
-              <UInput type="text" color="gray" size="sm" :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" />
+            <UFormGroup 
+              class="grid col-span-1" 
+              label="M. I."
+            >
+              <UInput 
+                type="text" 
+                color="gray" 
+                size="sm" 
+                :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" 
+              />
             </UFormGroup>
 
-            <UFormGroup class="grid col-span-2" label="Gender">
-              <URadioGroup v-model="selectedGender" :options="genderOptions" class="ml-2"/>
+            <UFormGroup 
+              class="grid col-span-2" 
+              label="Gender"
+            >
+              <URadioGroup 
+                v-model="selectedGender" 
+                :options="genderOptions" 
+                class="ml-2"
+              />
             </UFormGroup>
 
-            <UFormGroup class="grid col-span-3" label="Role">
-              <UInputMenu color="gray" :ui="{rounded: 'rounded', color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" :uiMenu="{background: 'dark:bg-custom-400', option: {color: 'dark:text-white', active: 'dark:bg-custom-600', empty: 'dark:text-white'}, empty: 'dark:text-white'}" v-model="selectedRole" :options="roleOptions" placeholder="Select a role"/>
+            <UFormGroup 
+              class="grid col-span-3" 
+              label="Role"
+            >
+              <UInputMenu 
+                color="gray" :ui="{rounded: 'rounded', color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" 
+                :uiMenu="{background: 'dark:bg-custom-400', option: {color: 'dark:text-white', active: 'dark:bg-custom-600', empty: 'dark:text-white'}, empty: 'dark:text-white'}" 
+                v-model="selectedRole" 
+                :options="roleOptions" 
+                placeholder="Select a role"
+              />
             </UFormGroup>
 
             <UFormGroup class="grid col-span-2" label="Status">
@@ -51,18 +106,38 @@
               <UInput type="text" color="gray" size="sm" :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" />
             </UFormGroup>
 
-            <UFormGroup class="grid col-span-5" label="Username">
-              <UInput type="text" color="gray" size="sm" :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" />
+            <UFormGroup 
+              class="grid col-span-5" 
+              abel="Username"
+            >
+              <UInput 
+                type="text" 
+                color="gray" 
+                size="sm" 
+                :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" 
+              />
             </UFormGroup>
 
-            <UFormGroup class="grid col-span-5" label="Password">
-              <UInput type="password" color="gray" size="sm" :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" />
+            <UFormGroup 
+              class="grid col-span-5" 
+              label="Password"
+            >
+              <UInput 
+                type="password" 
+                color="gray" 
+                size="sm" 
+                :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" 
+              />
             </UFormGroup>
           </section>
 
           <hr class="border-custom-300 dark:border-custom-500">
 
-          <UButton label="Save" class="flex justify-center items-center w-full rounded dark:text-white" type="submit"/>
+          <UButton 
+            label="Save" 
+            class="flex justify-center items-center w-full rounded dark:text-white" 
+            type="submit"
+          />
 
         </UForm>
       </div>

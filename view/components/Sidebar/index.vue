@@ -10,7 +10,10 @@ const open = ref(false);
 
   <!--mobile-->
   <div class="fixed top-0 left-0 z-30 w-full bg-custom-100 dark:bg-custom-900">
-    <div v-show="!open" class="flex shadow lg:hidden items-center justify-between h-full p-5 tracking-wide border-b border-custom-500">
+    <div 
+      v-show="!open" 
+      class="flex shadow lg:hidden items-center justify-between h-full p-5 tracking-wide border-b border-custom-500"
+    >
       <div class="flex gap-3 items-center justify-start">
         <label class="font-semibold text-xl">
           {{
@@ -20,17 +23,37 @@ const open = ref(false);
             ''
           }}
         </label>
+
         <ToggleDarkMode />
       </div>
-      <UIcon name="i-lucide-align-justify" class="cursor-pointer left-2 top-2 w-auto h-7 text-custom-600 hover:text-custom-500" @click="open = true"/>
+
+      <UIcon 
+        name="i-lucide-align-justify" 
+        class="cursor-pointer left-2 top-2 w-auto h-7 text-custom-600 hover:text-custom-500" 
+        @click="open = true"
+      />
     </div>
-    <div v-if="open" class="border-b border-custom-500 shadow-xl">
+
+    <div 
+      v-if="open" 
+      class="border-b border-custom-500 shadow-xl"
+    >
       <SidebarMenu @click="open = false"/>
-      <UIcon name="i-lucide-x" class="cursor-pointer right-5 top-5 w-auto h-7 absolute text-red-600 hover:text-red-500" @click="open = false"/>
+      <UIcon 
+        name="i-lucide-x" 
+        class="cursor-pointer right-5 top-5 w-auto h-7 absolute text-red-600 hover:text-red-500" 
+        @click="open = false"
+      />
+
       <div class="border-t border-custom-500">
-        <UserItem class="shadow-md" @click="open = false"/>
+        <UserItem 
+          class="shadow-md" 
+          @click="open = false"
+        />
       </div>
+
     </div>
+
   </div>
 
   <!--desktop-->

@@ -7,11 +7,22 @@
         <p class="mt-5 cursor-default lg:text-start text-justify">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut laudantium aliquam beatae. Debitis accusamus aperiam odio repudiandae ea quaerat illo facilis fugiat nobis? Possimus temporibus, sed unde placeat consectetur quae?
           A, ut consequatur. Debitis iste repudiandae explicabo sit nemo natus molestiae optio neque aperiam, itaque cum illo vel quae incidunt quis deleniti ad earum provident quibusdam. Nobis odit consequuntur sint.</p>
         <div class="flex lg:justify-start justify-center mt-7">
-          <UButton :loading="loading" icon="i-lucide-cctv" label="Start Monitoring" class="px-12 py-4 rounded-full dark:text-custom-100 dark:bg-custom-500 hover:dark:bg-custom-600" @click="handleClick" :loading-icon="loadIcon" />
+          <UButton 
+            :loading="loading" 
+            icon="i-lucide-cctv" 
+            label="Start Monitoring" 
+            class="px-12 py-4 rounded-full dark:text-custom-100 dark:bg-custom-500 hover:dark:bg-custom-600" 
+            @click="handleClick" 
+            :loading-icon="loadIcon" 
+          />
         </div>
       </section>
       <section class="m-auto">
-        <img src="/assets/img/cctv-animate.gif" alt="cctv" class="shadow-md lg:scale-125 scale-100 border-8 rounded-full border-custom-500 dark:border-custom-300">
+        <img 
+          src="/assets/img/cctv-animate.gif" 
+          alt="cctv"
+          class="shadow-md lg:scale-125 scale-100 border-8 rounded-full border-custom-500 dark:border-custom-300"
+        >
       </section>
     </div>
   </div>
