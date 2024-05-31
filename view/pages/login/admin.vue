@@ -82,7 +82,7 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
-import { user as userRole } from '~/assets/js/userRole';
+import { user } from '~/assets/js/userRole';
 
 const state = reactive({
   email: '',
@@ -99,7 +99,7 @@ const adminLogin = () => {
   loadIcon.value = 'i-lucide-loader-circle';
   labelAdmin.value = '';
   setTimeout(() => {
-    userRole.role = 'superadmin';
+    user.role = 'superadmin';
     router.push('/admin/dashboard');
     labelAdmin.value = 'Login';
     loading.value = false;

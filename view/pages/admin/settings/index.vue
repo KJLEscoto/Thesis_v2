@@ -1,6 +1,6 @@
 <template>
-  <div class="h-auto w-full p-5">
-    <TableUsers />
+  <div>
+    settings
   </div>
 </template>
 

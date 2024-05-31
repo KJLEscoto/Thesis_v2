@@ -19,11 +19,7 @@ const clientItems = ref([
   {
     title: 'Settings',
     path: '/client/settings',
-    icon: 'mage:settings'
-  },
-  {
-    title: 'Test',
-    icon: 'cbi:speedtest'
+    icon: 'i-lucide-settings'
   },
 ]);
 
@@ -37,14 +33,16 @@ const adminItems = ref([
     title: 'List of Users',
     path: '/admin/users',
     icon: 'i-lucide-users-round'
+  }, 
+  {
+    title: 'Notification Log',
+    path: '/admin/notification-log',
+    icon: 'i-lucide-book-open-text'
   },
   {
     title: 'Settings',
-    icon: 'mage:settings'
-  },
-  {
-    title: 'Test',
-    icon: 'cbi:speedtest'
+    path: '/admin/settings',
+    icon: 'i-lucide-settings'
   },
 ]);
 

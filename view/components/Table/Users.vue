@@ -1,78 +1,79 @@
 <template>
-  <section class="sm:block grid justify-center items-center">
-    <!-- <div class="max-h-[80vh] sm:max-w-full max-w-[55vh] overflow-auto border rounded border-custom-300 dark:border-custom-800">
-      <table class="w-full whitespace-nowrap cursor-default">
+  <section class="items-center grid gap-5">
 
-        <thead class="bg-custom-300 dark:bg-custom-900 sticky top-0 z-10">
-          <tr>
-            <th v-for="(header, index) in tableHeaders" :key="index" class="py-2 px-4 text-start uppercase font-semibold text-sm">{{ header }}</th>
-          </tr>
-        </thead>
+    <header class="cursor-default flex justify-between">
+      <h1 class="text-lg font-semibold relative">Users <span class="font-normal text-xs absolute">({{ totalClients }})</span> </h1>
 
-        <tbody class="bg-custom-50 text-sm">
-          <tr v-for="(client, index) in clients" :key="index" 
-              :class="{'dark:bg-custom-700 bg-custom-200': selectedRow === client.id}" 
-              class="dark:bg-custom-950 border-b border-custom-300 dark:border-custom-900"
-              @click="selectRow(client.id, $event)">
-            <td class="p-4">{{ client.id }}</td>
-            <td class="p-4">{{ client.name }}</td>
-            <td class="p-4">{{ client.username }}</td>
-            <td class="p-4">{{ client.role }}</td>
-            <td class="p-4">
-              <span :class="['inline-block w-3 h-3 rounded-full', client.status === statusOptions[0] ? 'bg-green-500' : 'bg-red-500']"></span>
-            </td>
-            <td class="p-4">
-              <UDropdown mode="hover" :items="actions(client)" :popper="{ placement: 'bottom-end', arrow: 'true', offsetDistance: -10 }" :ui="{ background: 'dark:bg-custom-950 bg-white', item: {disabled: 'cursor-default opacity-100 font-semibold'}}">
-                <UIcon name="i-lucide-ellipsis" class="text-xl"/>
-              </UDropdown>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div> -->
+      <UButton 
+        label="Add User" 
+        icon="i-lucide-user-round-plus" 
+        class="dark:text-custom-200 bg-custom-400 hover:bg-custom-500 dark:bg-custom-700 dark:hover:bg-custom-800 sm:hidden block" 
+        @click="newClientForm" 
+        size="xs"
+      />
+    </header>
 
-    <div class="mb-5 flex sm:flex-row flex-col-reverse gap-5 sm:justify-between justify-center">
+    <div class="flex sm:gap-0 gap-5 sm:flex-row flex-col-reverse sm:justify-between justify-center">
+      <div class="flex gap-2 justify-start">
+        <UButton 
+          label="Add User" 
+          icon="i-lucide-user-round-plus" 
+          class="dark:text-custom-200 bg-custom-400 hover:bg-custom-500 dark:bg-custom-700 dark:hover:bg-custom-800 hidden sm:block" 
+          @click="newClientForm" 
+          size="xs"
+        />
+        <UInput 
+          v-model="q" 
+          name="q"
+          placeholder="Search..." 
+          icon="i-heroicons-magnifying-glass-20-solid"
+          autocomplete="off"
+          color="gray" 
+          size="sm" 
+          :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}, icon: { trailing: {pointer: '' }}}"
+          class="w-full sm:w-auto sm:-mb-0 -mb-5"
+        >
 
-      <UInput 
-        v-model="q" 
-        name="q"
-        placeholder="Search..." 
-        icon="i-heroicons-magnifying-glass-20-solid"
-        autocomplete="off"
-        color="gray" 
-        size="sm" 
-        :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}, icon: { trailing: {pointer: '' }}}"
-      >
+          <template #trailing>
+            <UButton
+              v-show="q !== ''"
+              color="gray"
+              variant="link"
+              icon="i-heroicons-x-mark-20-solid"
+              :padded="false"
+              @click="q = ''"
+              class="hover:text-red-400 dark:hover:text-red-600 text-red-700 dark:text-red-400"
+            />
+          </template>
+        </UInput>
+      </div>
+      
 
-        <template #trailing>
-          <UButton
-            v-show="q !== ''"
-            color="gray"
-            variant="link"
-            icon="i-heroicons-x-mark-20-solid"
-            :padded="false"
-            @click="q = ''"
-            class="hover:text-red-400 dark:hover:text-red-600 text-red-700 dark:text-red-400"
-          />
-        </template>
-      </UInput>
-
-      <UPagination />
-
+      <UPagination
+        :prev-button="{ icon: 'i-heroicons-arrow-small-left-20-solid', label: 'Prev', color: 'gray' }"
+        :next-button="{ icon: 'i-heroicons-arrow-small-right-20-solid', trailing: true, label: 'Next', color: 'gray' }"
+        :model-value="currentPage"
+        :page-count="pageCount"
+        :total="totalClients"
+        show-first
+        show-last
+        @update:model-value="updatePage"
+        class="flex justify-center"
+      />
     </div>
 
     <UTable 
       :columns="tableHeaders" 
-      :rows="filteredRows" 
-      class="max-h-[80vh] sm:max-w-full max-w-[55vh] overflow-auto border rounded border-custom-300 dark:border-custom-800" 
+      :rows="paginatedData" 
+      class="max-h-[80vh] max-w-full overflow-auto border rounded border-custom-300 dark:border-custom-800" 
       :ui="{thead: 'sticky top-0 z-10 dark:bg-custom-700 bg-custom-300 cursor-default', tbody: 'bg-custom-100 dark:bg-custom-950'}"
     >
     
       <template #status-data="{ row }">
         <UKbd 
           :class="{
-            'border bg-green-100 border-green-500 text-green-500 dark:text-green-400 cursor-default': row.status === 'Active',
-            'border bg-red-100 border-red-500 text-red-500 dark:text-red-400 cursor-default': row.status === 'Inactive'
+            'border bg-green-600 border-green-600 dark:border-green-700 text-custom-100 dark:text-green-400 cursor-default': row.status === 'Active',
+            'border bg-red-600 border-red-600 dark:border-red-700 text-custom-100 dark:text-red-400 cursor-default': row.status === 'Inactive'
           }" 
           :value="row.status
         "/>
@@ -104,12 +105,21 @@
     />
 
   </section>
+  
+  <ModalFormAdd v-model="newClient"/>
 
 </template>
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { faker } from '@faker-js/faker';
+
+
+const newClient = ref(false)
+
+const newClientForm = () => {
+  newClient.value = true;
+}
 
 const openView = ref(false);
 const openEdit = ref(false);
@@ -160,25 +170,37 @@ const generateData = (numRows) => {
   return data;
 };
 
-const clients = ref(generateData(15));
-
-const toggleStatus = (client) => {
-  client.status = client.status === 'Active' ? 'Inactive' : 'Active' || client.status === 'Inactive' ? 'Active' : 'Inactive';
-};
-
-const q = ref('')
+const clients = ref(generateData(200));
+const currentPage = ref(1);
+const pageCount = ref(20); // Adjust the page count as needed
+const totalClients = computed(() => clients.value.length);
+const q = ref('');
 
 const filteredRows = computed(() => {
   if (!q.value) {
-    return clients.value
+    return clients.value;
   }
 
   return clients.value.filter((person) => {
     return Object.values(person).some((value) => {
-      return String(value).toLowerCase().includes(q.value.toLowerCase())
-    })
-  })
-})
+      return String(value).toLowerCase().includes(q.value.toLowerCase());
+    });
+  });
+});
+
+const paginatedData = computed(() => {
+  const start = (currentPage.value - 1) * pageCount.value;
+  const end = start + pageCount.value;
+  return filteredRows.value.slice(start, end);
+});
+
+const updatePage = (page) => {
+  currentPage.value = page;
+};
+
+const toggleStatus = (client) => {
+  client.status = client.status === 'Active' ? 'Inactive' : 'Active';
+};
 
 const actions = (client) => [
   [{

@@ -108,7 +108,7 @@
 
             <UFormGroup 
               class="grid col-span-5" 
-              abel="Username"
+              label="Username"
             >
               <UInput 
                 type="text" 

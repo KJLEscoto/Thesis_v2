@@ -79,7 +79,7 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
-import { user as userRole } from '~/assets/js/userRole';
+import { user } from '~/assets/js/userRole';
 
 const loading = ref(false);
 const router = useRouter();
@@ -94,7 +94,7 @@ const clientLogin = () => {
   // Simulate login process
   setTimeout(() => {
     // Update usertype in the userType module
-    userRole.role = 'client';
+    user.role = 'client';
     
     // Navigate to client monitor page
     router.push('/client/monitor');
