@@ -2,12 +2,6 @@
 import { ref, computed } from 'vue';
 import { user } from '~/assets/js/userRole';
 
-const capitalizedName = computed(() => {
-  const maxLength = 13; // Adjust the maximum length as needed
-  const truncatedName = user.name.length > maxLength ? user.name.slice(0, maxLength) + '...' : user.name;
-  return truncatedName.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-});
-
 const initial = computed(() => user.name.charAt(0).toUpperCase());
 
 const isOpen = ref(true)
@@ -37,12 +31,12 @@ const items = [
       :popper="{ placement: 'bottom' , arrow: true }" 
       text="See Profile"
     > -->
-      <div class="w-full flex justify-start items-center gap-2 relative p-4" >
+      <div class="w-auto flex justify-start items-center gap-2 relative p-4" >
         <div class="rounded-full bg-custom-400 h-10 w-10 flex justify-center items-center">
           <p class="font-bold text-2xl m-auto">{{ initial }}</p>
         </div>
-        <div class="border-l border-custom-400 pl-2">
-          <p class="tracking-wide">{{ capitalizedName }}</p>
+        <div class="border-l border-custom-400 pl-2 w-auto">
+          <p class="tracking-wide lg:truncate lg:max-w-[150px] max-w-full">{{ user.name }}</p>
           <p class="text-custom-500 dark:text-custom-400 font-semibold text-sm tracking-wider">{{ user.role }}</p>
         </div>
       </div>

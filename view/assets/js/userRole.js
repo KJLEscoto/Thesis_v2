@@ -5,5 +5,5 @@ import { reactive } from 'vue';
 // example lang sa karon
 export const user = reactive({
   name: 'kent joemar luna escoto',
-  role: 'client'
+  role: 'superadmin'
 });

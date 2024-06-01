@@ -86,7 +86,7 @@ watch([route, items], () => {
         class="flex gap-2 items-center px-5 dark:hover:bg-custom-600 hover:bg-white py-2 transition cursor-pointer rounded-sm relative" 
         :class="[activeItem === item ? 'bg-custom-200 dark:bg-custom-700' : '']"
       >
-        <UIcon :name="item.icon"/>
+        <UIcon :name="item.icon" class="text-lg"/>
         <label>{{ item.title }}</label>
       </nuxt-link>
     </div>

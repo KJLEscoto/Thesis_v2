@@ -1,5 +1,17 @@
 <template>
-  <div class="h-auto w-full p-5">
+  <div class="h-auto w-full flex flex-col gap-5 p-5">
+    <header class="cursor-default flex justify-between">
+      <h1 class="text-lg font-semibold text-custom-800 dark:text-white">Users</h1>
+      <div class="block lg:hidden">
+        <UButton 
+          label="Add User" 
+          icon="i-lucide-user-round-plus" 
+          class="dark:text-custom-200 bg-custom-400 hover:bg-custom-500 dark:bg-custom-700 dark:hover:bg-custom-800 rounded p-2" 
+          to="/admin/users/create"
+          size="xs"
+        />
+      </div>
+    </header>
     <TableUsers />
   </div>
 </template>

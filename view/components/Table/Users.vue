@@ -1,27 +1,16 @@
 <template>
   <section class="items-center grid gap-5">
-
-    <header class="cursor-default flex justify-between">
-      <h1 class="text-lg font-semibold relative">Users <span class="font-normal text-xs absolute">({{ totalClients }})</span> </h1>
-
-      <UButton 
-        label="Add User" 
-        icon="i-lucide-user-round-plus" 
-        class="dark:text-custom-200 bg-custom-400 hover:bg-custom-500 dark:bg-custom-700 dark:hover:bg-custom-800 sm:hidden block" 
-        @click="newClientForm" 
-        size="xs"
-      />
-    </header>
-
     <div class="flex sm:gap-0 gap-5 sm:flex-row flex-col-reverse sm:justify-between justify-center">
-      <div class="flex gap-2 justify-start">
-        <UButton 
-          label="Add User" 
-          icon="i-lucide-user-round-plus" 
-          class="dark:text-custom-200 bg-custom-400 hover:bg-custom-500 dark:bg-custom-700 dark:hover:bg-custom-800 hidden sm:block" 
-          @click="newClientForm" 
-          size="xs"
-        />
+      <div class="flex gap-1 justify-start items-center">
+        <div class="lg:block hidden">
+          <UButton 
+            label="Add User" 
+            icon="i-lucide-user-round-plus" 
+            class="dark:text-custom-200 bg-custom-400 hover:bg-custom-500 dark:bg-custom-700 dark:hover:bg-custom-800 rounded p-2" 
+            to="/admin/users/create"
+            size="xs"
+          />
+        </div>
         <UInput 
           v-model="q" 
           name="q"
@@ -47,7 +36,6 @@
           </template>
         </UInput>
       </div>
-      
 
       <UPagination
         :prev-button="{ icon: 'i-heroicons-arrow-small-left-20-solid', label: 'Prev', color: 'gray' }"
@@ -68,15 +56,14 @@
       class="max-h-[80vh] max-w-full overflow-auto border rounded border-custom-300 dark:border-custom-800" 
       :ui="{thead: 'sticky top-0 z-10 dark:bg-custom-700 bg-custom-300 cursor-default', tbody: 'bg-custom-100 dark:bg-custom-950'}"
     >
-    
       <template #status-data="{ row }">
         <UKbd 
           :class="{
             'border bg-green-600 border-green-600 dark:border-green-700 text-custom-100 dark:text-green-400 cursor-default': row.status === 'Active',
             'border bg-red-600 border-red-600 dark:border-red-700 text-custom-100 dark:text-red-400 cursor-default': row.status === 'Inactive'
           }" 
-          :value="row.status
-        "/>
+          :value="row.status"
+        />
       </template>
 
       <template #actions-data="{ row }">
@@ -105,54 +92,19 @@
     />
 
   </section>
-  
-  <ModalFormAdd v-model="newClient"/>
-
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed } from 'vue';
 import { faker } from '@faker-js/faker';
-
-
-const newClient = ref(false)
-
-const newClientForm = () => {
-  newClient.value = true;
-}
 
 const openView = ref(false);
 const openEdit = ref(false);
 const selectedClient = ref(null);
 
-const tableHeaders = [{
-  key: 'id',
-  label: '#'
-}, {
-  key: 'name',
-  label: 'Name',
-  sortable: true
-}, {
-  key: 'username',
-  label: 'Username',
-  sortable: true
-}, {
-  key: 'role',
-  label: 'Role',
-  sortable: true
-}, {
-  key: 'status',
-  label: 'Status',
-  sortable: true
-}, {
-  key: 'actions',
-  label: 'Actions'
-}
-];
-
 const genderOptions = ['Male', 'Female'];
-const roleOptions = ['Client', 'Admin']
-const statusOptions = ['Active', 'Inactive']
+const roleOptions = ['Client', 'Admin'];
+const statusOptions = ['Active', 'Inactive'];
 
 const generateData = (numRows) => {
   const data = [];
@@ -175,6 +127,15 @@ const currentPage = ref(1);
 const pageCount = ref(20); // Adjust the page count as needed
 const totalClients = computed(() => clients.value.length);
 const q = ref('');
+
+const tableHeaders = [
+  { key: 'id', label: `# (${clients.value.length})`   },
+  { key: 'name', label: 'Name', sortable: true },
+  { key: 'username', label: 'Username', sortable: true },
+  { key: 'role', label: 'Role', sortable: true },
+  { key: 'status', label: 'Status', sortable: true },
+  { key: 'actions', label: 'Actions' }
+];
 
 const filteredRows = computed(() => {
   if (!q.value) {
@@ -203,36 +164,37 @@ const toggleStatus = (client) => {
 };
 
 const actions = (client) => [
-  [{
-    label: `${client.name}`,
-    disabled: true
-  }],
-  [{
-    label: 'View Details',
-    icon: 'i-lucide-eye',
-    click: () => {
-      selectedClient.value = client;
-      openView.value = true;
+  [{ label: `${client.name}`, disabled: true }],
+  [
+    {
+      label: 'View Details',
+      icon: 'i-lucide-eye',
+      click: () => {
+        selectedClient.value = client;
+        navigateTo('/admin/users/read/' + client.id);
+      }
+    },
+    {
+      label: 'Edit Information',
+      icon: 'i-lucide-edit',
+      click: () => {
+        selectedClient.value = client;
+        navigateTo('/admin/users/update/' + client.id);
+      }
+    },
+    {
+      label: 'Status: ' + client.status,
+      icon: 'i-lucide-toggle-left',
+      click: () => {
+        toggleStatus(client);
+      }
     }
-  },
-  {
-    label: 'Edit Information',
-    icon: 'i-lucide-edit',
-    click: () => {
-      selectedClient.value = client;
-      openEdit.value = true;
+  ],
+  [
+    {
+      label: 'Delete Client',
+      icon: 'i-lucide-trash-2'
     }
-  },
-  {
-    label: 'Status: ' + client.status,
-    icon: 'i-lucide-toggle-left',
-    click: () => {
-      toggleStatus(client);
-    }
-  }],
-  [{
-    label: 'Delete Client',
-    icon: 'i-lucide-trash-2'
-  }]
+  ]
 ];
 </script>
