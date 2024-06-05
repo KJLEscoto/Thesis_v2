@@ -13,16 +13,14 @@
             label="Start Monitoring" 
             class="px-12 py-4 rounded-full dark:text-custom-100 dark:bg-custom-500 hover:dark:bg-custom-600" 
             @click="handleClick" 
-            :loading-icon="loadIcon" 
-          />
+            :loading-icon="loadIcon" />
         </div>
       </section>
       <section class="m-auto">
         <img 
           src="/assets/img/cctv-animate.gif" 
           alt="cctv"
-          class="shadow-md lg:scale-125 scale-100 border-8 rounded-full border-custom-500 dark:border-custom-300"
-        >
+          class="shadow-md lg:scale-125 scale-100 border-8 rounded-full border-custom-500 dark:border-custom-300" >
       </section>
     </div>
   </div>

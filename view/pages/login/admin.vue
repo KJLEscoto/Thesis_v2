@@ -5,8 +5,7 @@
 
       <UForm 
         :state="state" 
-        class="h-auto w-[500px] flex flex-col gap-5 rounded p-8 bg-custom-50 dark:bg-custom-900 shadow-lg"
-      >
+        class="h-auto w-[500px] flex flex-col gap-5 rounded p-8 bg-custom-50 dark:bg-custom-900 shadow-lg" >
 
         <header class="flex items-center justify-between">
           <UButton 
@@ -14,13 +13,11 @@
             icon="i-lucide-corner-up-left" 
             to="/login/client" 
             class="flex justify-center items-center text-sm rounded dark:bg-red-600 dark:hover:bg-red-500 bg-red-700 hover:bg-red-600 dark:text-custom-100" 
-            size="2xs"
-          />
+            size="2xs" />
           <div class="flex justify-end items-center gap-1">
             <UIcon 
               name="i-lucide-circle-user-round" 
-              class="text-3xl"
-            />
+              class="text-3xl" />
             <h1 class="text-xl font-bold cursor-default">Admin</h1>
           </div>
         </header>
@@ -32,8 +29,7 @@
             <div class="flex items-center justify-start gap-1">
               <UIcon 
                 name="i-lucide-user-round" 
-                class="text-lg"
-              />
+                class="text-lg" />
               <p class="text-base">Username</p>
             </div>
           </template>
@@ -42,8 +38,7 @@
             color="gray" 
             size="md" 
             :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" 
-            placeholder="Enter username"
-          />
+            placeholder="Enter username" />
         </UFormGroup>
 
         <UFormGroup class="grid gap-1">
@@ -51,8 +46,7 @@
             <div class="flex items-center justify-start gap-1">
               <UIcon 
                 name="i-lucide-key-round" 
-                class="text-lg"
-              />
+                class="text-lg" />
               <p class="text-base">Password</p>
             </div>
           </template>
@@ -61,8 +55,7 @@
             color="gray" 
             size="md" 
             :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" 
-            placeholder="••••••••"
-          />
+            placeholder="••••••••" />
         </UFormGroup>
 
         <UButton 
@@ -70,8 +63,7 @@
           :label="labelAdmin" 
           :loading-icon="loadIcon" 
           :loading="loading" 
-          class="flex justify-center items-center gap-1 py-2 rounded bg-custom-700 hover:bg-custom-800 dark:bg-custom-600 dark:hover:bg-custom-700 dark:text-custom-200"
-        />
+          class="flex justify-center items-center gap-1 py-2 rounded bg-custom-700 hover:bg-custom-800 dark:bg-custom-600 dark:hover:bg-custom-700 dark:text-custom-200" />
 
       </UForm>
 
@@ -82,7 +74,7 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
-import { user } from '~/assets/js/userRole';
+import { user } from '~/assets/js/userSample';
 
 const state = reactive({
   email: '',

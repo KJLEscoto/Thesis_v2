@@ -14,8 +14,7 @@ const isDark = computed({
   <UTooltip 
     :text="toggleText" 
     :popper="{ arrow: true, placement: 'right' }" 
-    :ui="{ background: 'dark:bg-custom-800 bg-custom-50', arrow: { background: 'dark:before:bg-custom-950 before:bg-custom-300'}}"
-  >
+    :ui="{ background: 'dark:bg-custom-800 bg-custom-50', arrow: { background: 'dark:before:bg-custom-950 before:bg-custom-300'}}" >
     <ClientOnly>
       <UButton
         :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
@@ -23,8 +22,7 @@ const isDark = computed({
         variant="ghost"
         aria-label="Theme"
         @click="isDark = !isDark"
-        class="rounded-full dark:hover:bg-custom-800"
-      />
+        class="rounded-full dark:hover:bg-custom-800" />
       <template #fallback>
         <div class="w-8 h-8" />
       </template>

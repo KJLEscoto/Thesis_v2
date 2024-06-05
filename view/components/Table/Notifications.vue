@@ -10,8 +10,7 @@
       :total="totalItems"
       show-first
       show-last
-      @update:model-value="updatePage"
-    />
+      @update:model-value="updatePage" />
     </div>
   </header>
   
@@ -19,8 +18,7 @@
       :columns="tableHeaders" 
       :rows="paginatedData" 
       class="max-h-[80vh] sm:max-w-full max-w-[55vh] overflow-auto border rounded border-custom-300 dark:border-custom-800" 
-      :ui="{thead: 'sticky top-0 z-10 dark:bg-custom-700 bg-custom-300 cursor-default', tbody: 'bg-custom-100 dark:bg-custom-950'}"
-    >
+      :ui="{thead: 'sticky top-0 z-10 dark:bg-custom-700 bg-custom-300 cursor-default', tbody: 'bg-custom-100 dark:bg-custom-950'}" >
       <template #level-data="{ row }">
         <UKbd 
           :class="{
@@ -28,12 +26,17 @@
             'border bg-yellow-500 border-yellow-500 dark:border-yellow-500 text-custom-100 dark:text-yellow-400 cursor-default': row.level === 'warning',
             'border bg-red-600 border-red-600 dark:border-red-700 text-custom-100 dark:text-red-400 cursor-default': row.level === 'danger',
           }" 
-          :value="row.level
-        "/>
+          :value="row.level" />
       </template>
       <template #action-data="{ row }">
-        <UTooltip text="View" :popper="{ arrow: true, placement: 'right' }" :ui="{ background: 'dark:bg-custom-800 bg-custom-50', arrow: { background: 'dark:before:bg-custom-700 before:bg-custom-300'}}">
-          <UIcon name="i-lucide-eye" class="text-xl hover:opacity-75" @click="viewAction(row)"/>
+        <UTooltip 
+          text="View" 
+          :popper="{ arrow: true, placement: 'right' }" 
+          :ui="{ background: 'dark:bg-custom-800 bg-custom-50', arrow: { background: 'dark:before:bg-custom-700 before:bg-custom-300'}}" >
+          <UIcon 
+            name="i-lucide-eye" 
+            class="text-xl hover:opacity-75" 
+            @click="viewAction(row)" />
         </UTooltip>
       </template>
     </UTable>

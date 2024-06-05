@@ -15,15 +15,13 @@
           <div class="font-semibold cursor-default flex items-center gap-1">
             <UIcon 
               name="i-lucide-edit" 
-              class="text-lg"
-            />
+              class="text-lg" />
             <h1 class="font-bold text-lg">Editable Information</h1>
           </div>
           <UIcon 
             name="i-lucide-x" 
             @click="isOpen = false" 
-            class="text-red-400 hover:text-red-600 text-xl cursor-pointer"
-          />
+            class="text-red-400 hover:text-red-600 text-xl cursor-pointer" />
         </header>
 
         <hr class="border-custom-300 dark:border-custom-500">
@@ -31,75 +29,63 @@
         <section class="grid grid-cols-5 gap-3">
           <UFormGroup 
             class="grid col-span-2" 
-            label="First name"
-          >
+            label="First name" >
             <UInput 
               v-model="clientData.name" 
               type="text" color="gray" 
-              size="sm" :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" 
-            />
+              size="sm" :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}"  />
           </UFormGroup>
 
           <UFormGroup 
             class="grid col-span-2" 
-            label="Last name"
-          >
+            label="Last name" >
             <UInput 
               type="text" 
               color="gray" 
               size="sm" 
-              :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" 
-            />
+              :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" />
           </UFormGroup>
 
           <UFormGroup 
             class="grid col-span-1" 
-            label="M. I."
-          >
+            label="M. I." >
             <UInput 
               type="text" 
               color="gray" 
               size="sm" 
-              :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" 
-            />
+              :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" />
           </UFormGroup>
 
           <UFormGroup 
             class="grid col-span-2" 
-            label="Gender"
-          >
+            label="Gender" >
             <URadioGroup 
               disabled 
               v-model="clientData.gender" 
               :options="genderOptions" 
-              class="ml-2"
-            />
+              class="ml-2" />
           </UFormGroup>
 
           <UFormGroup 
             class="grid col-span-3" 
-            label="Role"
-          >
+            label="Role" >
             <UInputMenu 
               v-model="clientData.role" 
               disabled color="gray" 
               :ui="{rounded: 'rounded', color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" 
               :uiMenu="{background: 'dark:bg-custom-400', option: {color: 'dark:text-white', active: 'dark:bg-custom-600', empty: 'dark:text-white'}, empty: 'dark:text-white'}" 
               :options="roleOptions" 
-              placeholder="Select a role"
-            />
+              placeholder="Select a role" />
           </UFormGroup>
 
           <UFormGroup 
             class="grid col-span-2" 
-            label="Status"
-          >
+            label="Status" >
             <URadioGroup 
               v-model="clientData.status" 
               :options="statusOptions" 
               class="ml-2" 
-              :uiRadio="radioGroupUI"
-            />
+              :uiRadio="radioGroupUI" />
           </UFormGroup>
 
           <UFormGroup class="grid col-span-3">
@@ -113,34 +99,29 @@
               type="text" 
               color="gray" 
               size="sm" 
-              :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" 
-            />
+              :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" />
           </UFormGroup>
 
           <UFormGroup 
             class="grid col-span-5" 
-            label="Username"
-          >
+            label="Username" >
             <UInput 
               disabled 
               v-model="clientData.username" 
               type="text" 
               color="gray" 
               size="sm" 
-              :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" 
-            />
+              :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" />
           </UFormGroup>
 
           <UFormGroup 
             class="grid col-span-5" 
-            label="Password"
-          >
+            label="Password" >
             <UInput 
               type="password" 
               color="gray" 
               size="sm" 
-              :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" 
-            />
+              :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" />
           </UFormGroup>
         </section>
 
@@ -150,8 +131,7 @@
           label="Update" 
           class="flex justify-center items-center w-full rounded" 
           type="submit" 
-          @click="updateClientDetails"
-        />
+          @click="updateClientDetails" />
 
       </UForm>
     </div>

@@ -56,8 +56,7 @@
       <UButton 
         label="Okay" 
         class="flex justify-center items-center w-full rounded" 
-        @click="isOpen = false"
-      />
+        @click="isOpen = false" />
 
     </div>
   </UModal>
@@ -65,8 +64,7 @@
   <ModalUserClientEdit 
     v-model="openEdit" 
     :clientData="clientData" 
-    @close-edit="closeEdit"
-  />
+    @close-edit="closeEdit" />
 
 </template>
 

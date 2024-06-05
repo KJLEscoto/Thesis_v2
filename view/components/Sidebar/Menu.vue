@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { user } from '~/assets/js/userRole';
+import { user } from '~/assets/js/userSample';
 
 const route = useRoute();
 
@@ -28,6 +28,11 @@ const adminItems = ref([
     title: 'Dashboard',
     path: '/admin/dashboard',
     icon: 'i-lucide-layout-dashboard'
+  },
+  {
+    title: 'Motion Feed',
+    path: '/admin/motion-feed',
+    icon: 'i-lucide-file-input'
   },
   {
     title: 'List of Users',
@@ -74,8 +79,7 @@ watch([route, items], () => {
 
     <ToggleDarkMode 
       class="block" 
-      :popper="{ placement: 'right', arrow: true }"
-    />
+      :popper="{ placement: 'right', arrow: true }" />
   </header>
   <section class="grow overflow-y-auto lg:max-h-[79vh] max-h-[30vh] w-auto">
     <div class="grid gap-2 w-full p-5">
@@ -84,8 +88,7 @@ watch([route, items], () => {
         v-for="(item, index) in items" 
         :key="index" 
         class="flex gap-2 items-center px-5 dark:hover:bg-custom-600 hover:bg-white py-2 transition cursor-pointer rounded-sm relative" 
-        :class="[activeItem === item ? 'bg-custom-200 dark:bg-custom-700' : '']"
-      >
+        :class="[activeItem === item ? 'bg-custom-200 dark:bg-custom-700' : '']" >
         <UIcon :name="item.icon" class="text-lg"/>
         <label>{{ item.title }}</label>
       </nuxt-link>

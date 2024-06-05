@@ -3,10 +3,15 @@
     <section class="">
       <UBreadcrumb :links="links">    
         <template #divider>
-          <UIcon name="i-lucide-chevron-right" class="text-lg"/>
+          <UIcon 
+            name="i-lucide-chevron-right" 
+            class="text-lg" />
         </template>
         <template #default="{ link, isActive }">
-          <div :class="{'dark:text-white text-custom-800 text-lg cursor-default': isActive, 'text-custom-300 hover:text-custom-500 hover:dark:text-custom-300 dark:text-custom-500 text-lg': !isActive}" class="rounded-full">
+          <div 
+            :class="{'dark:text-white text-custom-800 text-lg cursor-default': isActive, 
+            'text-custom-300 hover:text-custom-500 hover:dark:text-custom-300 dark:text-custom-500 text-lg': !isActive}" 
+            class="rounded-full" >
             {{ link.label }}
           </div>
         </template>
@@ -17,7 +22,9 @@
         <div class="flex justify-between">
                 
           <div class="font-semibold cursor-default flex items-center gap-1 w-1/2">
-            <UIcon name="i-lucide-book-user" class="text-xl" />
+            <UIcon 
+              name="i-lucide-book-user" 
+              class="text-xl" />
             <h1 class="font-bold text-xl">User Details</h1>
           </div>
           
@@ -27,16 +34,14 @@
                   label="Back" 
                   icon="i-lucide-move-left"
                   class="flex justify-center w-full items-center rounded dark:bg-red-600 dark:hover:bg-red-500 bg-red-700 hover:bg-red-600 dark:text-custom-100" 
-                  to="/admin/users"
-                />
+                  to="/admin/users" />
               </section>
               <section class="w-auto">
                 <UButton 
                   label="Edit" 
                   class="flex justify-center w-full items-center rounded dark:text-white"
                   icon="i-lucide-edit"
-                  to="/admin/users/read/update/1"
-                />
+                  to="/admin/users/read/update/1" />
               </section>
             </div>
           </div>
@@ -44,8 +49,8 @@
         <div class="grid lg:grid-cols-2 grid-cols-1 gap-3">
           <section class="bg-custom-100 dark:bg-custom-900 rounded p-2 lg:row-span-2 row-span-1">
             <h1 class=" font-semibold">Personal Information</h1>
-            <hr class="border-custom-200 dark:border-custom-700">
-            <div class="grid grid-cols-4 gap-2 mt-1">
+            <hr class="border-custom-200 dark:border-custom-700 mt-2 mb-2">
+            <div class="grid grid-cols-4 gap-2 mt-1 text-sm">
               <h1 class="col-span-1">Name:</h1>
               <p class="col-span-3">...</p>
 
@@ -65,8 +70,8 @@
           <div class="grid row-span-2 gap-3">
             <section class="bg-custom-100 dark:bg-custom-900  rounded p-2">
               <h1 class=" font-semibold">Login Credentials</h1>
-              <hr class="border-custom-200 dark:border-custom-700">
-              <div class="grid grid-cols-3 gap-2 mt-1">
+              <hr class="border-custom-200 dark:border-custom-700 mt-2 mb-2">
+              <div class="grid grid-cols-3 gap-2 text-sm">
                 <h1 class="col-span-1">Username:</h1>
                 <p class="col-span-2">...</p>
 
@@ -76,8 +81,8 @@
             </section>
             <section class="bg-custom-100 dark:bg-custom-900  rounded p-2">
               <h1 class=" font-semibold">Timestamps (date & time)</h1>
-              <hr class="border-custom-200 dark:border-custom-700">
-              <div class="grid grid-cols-5 gap-2 mt-1">
+              <hr class="border-custom-200 dark:border-custom-700 mt-2 mb-2">
+              <div class="grid grid-cols-5 gap-2 mt-1 text-sm">
                 <h1 class="col-span-2">Account Created:</h1>
                 <p class="col-span-3">...</p>
 

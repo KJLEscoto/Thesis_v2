@@ -3,29 +3,25 @@
     <UModal 
       v-model="isOpen" 
       :ui="{background: 'bg-custom-50 dark:bg-custom-900'}" 
-      prevent-close
-    >
+      prevent-close >
 
       <div class="p-4">
 
         <UForm 
         class="h-auto flex flex-col gap-3" 
-        :state="state"
-        >
+        :state="state" >
 
           <header class="flex justify-between">
             <div class="font-semibold cursor-default flex items-center gap-1">
               <UIcon 
                 name="i-lucide-user-round-plus" 
-                class="text-lg"
-              />
+                class="text-lg" />
               <h1 class="font-bold text-lg">New User</h1>
             </div>
             <UIcon 
               name="i-lucide-x" 
               @click="isOpen = false" 
-              class="text-red-400 hover:text-red-600 text-xl cursor-pointer"
-            />
+              class="text-red-400 hover:text-red-600 text-xl cursor-pointer" />
           </header>
 
           <hr class="border-custom-300 dark:border-custom-500">
@@ -33,67 +29,60 @@
           <section class="grid grid-cols-5 gap-3">
             <UFormGroup 
               class="grid col-span-2" 
-              label="First name"
-            >
+              label="First name" >
               <UInput 
                 type="text" 
                 color="gray" 
                 size="sm" 
-                :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" 
-              />
+                :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" />
             </UFormGroup>
 
             <UFormGroup 
               class="grid col-span-2" 
-              label="Last name"
-            >
+              label="Last name" >
               <UInput 
                 type="text" 
                 color="gray" 
                 size="sm" 
-                :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" 
-              />
+                :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" />
             </UFormGroup>
 
             <UFormGroup 
               class="grid col-span-1" 
-              label="M. I."
-            >
+              label="M. I." >
               <UInput 
                 type="text" 
                 color="gray" 
                 size="sm" 
-                :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" 
-              />
+                :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}"  />
             </UFormGroup>
 
             <UFormGroup 
               class="grid col-span-2" 
-              label="Gender"
-            >
+              label="Gender" >
               <URadioGroup 
                 v-model="selectedGender" 
                 :options="genderOptions" 
-                class="ml-2"
-              />
+                class="ml-2" />
             </UFormGroup>
 
             <UFormGroup 
               class="grid col-span-3" 
-              label="Role"
-            >
+              label="Role" >
               <UInputMenu 
                 color="gray" :ui="{rounded: 'rounded', color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" 
                 :uiMenu="{background: 'dark:bg-custom-400', option: {color: 'dark:text-white', active: 'dark:bg-custom-600', empty: 'dark:text-white'}, empty: 'dark:text-white'}" 
                 v-model="selectedRole" 
                 :options="roleOptions" 
-                placeholder="Select a role"
-              />
+                placeholder="Select a role" />
             </UFormGroup>
 
             <UFormGroup class="grid col-span-2" label="Status">
-              <URadioGroup v-model="selectedStatus" :options="statusOptions" class="ml-2" :uiRadio="radioGroupUI"
-              />
+              <URadioGroup 
+                v-model="selectedStatus" 
+                :options="statusOptions" 
+                class="ml-2" 
+                :uiRadio="radioGroupUI" />
             </UFormGroup>
 
             <UFormGroup class="grid col-span-3">
@@ -103,31 +92,31 @@
                   <UIcon name="i-emojione-v1-flag-for-philippines" />
                 </div>
               </template>
-              <UInput type="text" color="gray" size="sm" :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" />
-            </UFormGroup>
-
-            <UFormGroup 
-              class="grid col-span-5" 
-              label="Username"
-            >
               <UInput 
                 type="text" 
                 color="gray" 
                 size="sm" 
-                :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" 
-              />
+                :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" />
             </UFormGroup>
 
             <UFormGroup 
               class="grid col-span-5" 
-              label="Password"
-            >
+              label="Username" >
+              <UInput 
+                type="text" 
+                color="gray" 
+                size="sm" 
+                :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" />
+            </UFormGroup>
+
+            <UFormGroup 
+              class="grid col-span-5" 
+              label="Password" >
               <UInput 
                 type="password" 
                 color="gray" 
                 size="sm" 
-                :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" 
-              />
+                :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" />
             </UFormGroup>
           </section>
 
@@ -136,8 +125,7 @@
           <UButton 
             label="Save" 
             class="flex justify-center items-center w-full rounded dark:text-white" 
-            type="submit"
-          />
+            type="submit" />
 
         </UForm>
       </div>

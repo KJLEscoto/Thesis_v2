@@ -2,14 +2,6 @@
   <section class="items-center grid gap-5">
     <div class="flex sm:gap-0 gap-5 sm:flex-row flex-col-reverse sm:justify-between justify-center">
       <div class="flex gap-1 justify-start items-center">
-        <div class="lg:block hidden">
-          <UButton 
-            label="Add User" 
-            icon="i-lucide-user-round-plus" 
-            class="dark:text-custom-200 bg-custom-400 hover:bg-custom-500 dark:bg-custom-700 dark:hover:bg-custom-800 rounded p-2" 
-            to="/admin/users/create"
-            size="xs" />
-        </div>
         <UInput 
           v-model="q" 
           name="q"
@@ -39,7 +31,7 @@
         :next-button="{ icon: 'i-heroicons-arrow-small-right-20-solid', trailing: true, label: 'Next', color: 'gray' }"
         :model-value="currentPage"
         :page-count="pageCount"
-        :total="totalClients"
+        :total="totalLogs"
         show-first
         show-last
         @update:model-value="updatePage"
@@ -58,6 +50,12 @@
         </span>
       </template>
 
+      <template #message-data="{ row }">
+        <div class="max-w-[30vh] truncate">
+          {{ row.message }}
+        </div>
+      </template>
+
       <template #status-data="{ row }">
         <UKbd 
           :class="{
@@ -67,16 +65,16 @@
           :value="row.status" />
       </template>
 
-      <template #actions-data="{ row }">
-        <UDropdown 
-          mode="hover" 
-          :items="actions(row)" 
-          :popper="{ placement: 'bottom-end', arrow: 'true', offsetDistance: -10 }" 
-          :ui="{ background: 'dark:bg-custom-950 bg-white', item: {disabled: 'cursor-default opacity-100 font-semibold'}}" >
-          <UIcon 
-            name="i-lucide-ellipsis" 
-            class="text-xl" />
-        </UDropdown>
+        <template #action-data="{ row }">
+          <UTooltip 
+            text="View" 
+            :popper="{ arrow: true, placement: 'right' }" 
+            :ui="{ background: 'dark:bg-custom-800 bg-custom-50', arrow: { background: 'dark:before:bg-custom-700 before:bg-custom-300'}}" >
+            <UIcon 
+              name="i-lucide-eye" 
+              class="text-xl hover:opacity-75" 
+              @click="viewAction(row)" />
+          </UTooltip>
       </template>
     </UTable>
 
@@ -87,54 +85,64 @@
 import { ref, computed, watch } from 'vue';
 import { faker } from '@faker-js/faker';
 
-const selectedClient = ref(null);
+const statusOptions = ['idk', 'idk'];
 
-const genderOptions = ['Male', 'Female'];
-const roleOptions = ['Client', 'Admin'];
-const statusOptions = ['Active', 'Inactive'];
+const motions = {
+  normal: ['pickpocketing', 'shoplifting'],
+  danger: ['stealing', 'burglary'],
+  warning: ['grab', 'snatch'],
+};
+
+const getRandomMotion = () => {
+  const categories = Object.keys(motions);
+  const randomCategory = faker.helpers.arrayElement(categories);
+  return faker.helpers.arrayElement(motions[randomCategory]);
+};
 
 const generateData = (numRows) => {
   const data = [];
+  const fullNames = Array.from({ length: 10 }, () => faker.person.fullName()); // Generate 10 fake full names
   for (let i = 1; i <= numRows; i++) {
+    const fullName = fullNames[(i - 1) % 10]; // Repeat full names across pages
     data.push({
-      name: faker.person.fullName(),
-      gender: faker.helpers.arrayElement(genderOptions),
-      username: faker.internet.userName(),
-      phone: faker.phone.number('09#########'), // Philippines phone number format
-      role: faker.helpers.arrayElement(roleOptions),
-      status: faker.helpers.arrayElement(statusOptions)
+      date: faker.date.recent().toLocaleDateString(), // Generate recent date
+      motion_detected: getRandomMotion(), // Get random motion detected
+      user_name: fullName, // Use generated full name
+      message: faker.lorem.sentence(), // Generate a random sentence
+      status: faker.helpers.arrayElement(statusOptions) // Generate status
     });
   }
   return data;
 };
 
-const clients = ref(generateData(200));
+const logs = ref(generateData(100));
 const currentPage = ref(1);
 const pageCount = ref(20);
 const q = ref('');
 
 const tableHeaders = [
-  { key: 'id', label: `# (${clients.value.length})` },
-  { key: 'name', label: 'Name', sortable: true },
-  { key: 'username', label: 'Username', sortable: true },
-  { key: 'role', label: 'Role', sortable: true },
-  { key: 'status', label: 'Status', sortable: true },
-  { key: 'actions', label: 'Actions' }
+  { key: 'id', label: `# (${logs.value.length})` },
+  { key: 'date', label: 'Date', sortable: true },
+  { key: 'motion_detected', label: 'Motion Detected' },
+  { key: 'user_name', label: 'Detected By' },
+  { key: 'message', label: 'Message'},
+  { key: 'status', label: 'Status' },
+  { key: 'action', label: 'Action' }
 ];
 
 const filteredRows = computed(() => {
   if (!q.value) {
-    return clients.value;
+    return logs.value;
   }
 
-  return clients.value.filter((person) => {
+  return logs.value.filter((person) => {
     return Object.values(person).some((value) => {
       return String(value).toLowerCase().includes(q.value.toLowerCase());
     });
   });
 });
 
-const totalClients = computed(() => filteredRows.value.length);
+const totalLogs = computed(() => filteredRows.value.length);
 
 const paginatedData = computed(() => {
   const start = (currentPage.value - 1) * pageCount.value;
@@ -146,44 +154,9 @@ const updatePage = (page) => {
   currentPage.value = page;
 };
 
-const toggleStatus = (client) => {
-  client.status = client.status === 'Active' ? 'Inactive' : 'Active';
+const viewAction = (row) => {
+  console.log('View action for row:', row);
 };
-
-const actions = (client) => [
-  [{ label: `${client.name}`, disabled: true }],
-  [
-    {
-      label: 'View Details',
-      icon: 'i-lucide-eye',
-      click: () => {
-        selectedClient.value = client;
-        navigateTo('/admin/users/read/' + client.id);
-      }
-    },
-    {
-      label: 'Edit Information',
-      icon: 'i-lucide-edit',
-      click: () => {
-        selectedClient.value = client;
-        navigateTo('/admin/users/update/' + client.id);
-      }
-    },
-    {
-      label: 'Status: ' + client.status,
-      icon: 'i-lucide-toggle-left',
-      click: () => {
-        toggleStatus(client);
-      }
-    }
-  ],
-  [
-    {
-      label: 'Delete Client',
-      icon: 'i-lucide-trash-2'
-    }
-  ]
-];
 
 // Watch the search query and reset the current page to 1 when it changes
 watch(q, () => {
