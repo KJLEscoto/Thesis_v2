@@ -30,14 +30,13 @@
 <script setup>
 
 const loading = ref(false);
-const router = useRouter();
 const loadIcon = ref('')
 
 const handleClick = () => {
   loading.value = true;
   loadIcon.value = 'i-lucide-loader-circle'
   setTimeout(() => {
-    router.push('/login/client');
+    navigateTo('/login/client');
     loading.value = false;
   }, 800);
 };

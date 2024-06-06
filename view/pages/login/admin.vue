@@ -4,8 +4,11 @@
     <ToggleDarkMode class="fixed lg:top-20 z-50 top-5 left-5 lg:left-20 duration-200"/>
 
       <UForm 
-        :state="state" 
-        class="h-auto w-[500px] flex flex-col gap-5 rounded p-8 bg-custom-50 dark:bg-custom-900 shadow-lg" >
+        :state="state"
+        @submit="onSubmit"
+        :validate="validate" 
+        @error="onError"
+        class="h-auto w-[500px] flex flex-col gap-5 rounded p-8 bg-custom-50 dark:bg-custom-900 shadow-lg border dark:border-custom-700 border-custom-300" >
 
         <header class="flex items-center justify-between">
           <UButton 
@@ -24,7 +27,12 @@
 
         <hr class="border-custom-300 dark:border-custom-500">
 
-        <UFormGroup class="grid gap-1">
+        <!-- username -->
+        <UFormGroup 
+          class="grid gap-1" 
+          name="username" 
+          :ui="{ error: 'mt-1' }">
+
           <template #label>
             <div class="flex items-center justify-start gap-1">
               <UIcon 
@@ -33,15 +41,35 @@
               <p class="text-base">Username</p>
             </div>
           </template>
-          <UInput 
-            type="text" 
-            color="gray" 
-            size="md" 
-            :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" 
-            placeholder="Enter username" />
+
+          <template #default="{ error }">
+            <UInput 
+              v-model="state.username"
+              type="text" 
+              :color="error ? 'red' : 'gray'" 
+              size="md" 
+              :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined"
+              :ui="{
+                rounded: 'rounded',
+                color: error ? 
+                  { red: { outline: 'bg-red-100 dark:bg-red-50 text-custom-900 dark:text-custom-900 focus:ring-1 focus:ring-red-400 border-2 border-red-400 focus:border-red-400 active:ring-red-400 active:border-red-400' } } : { gray: { outline: 'dark:bg-custom-100 dark:text-custom-900' } }
+              }"
+              placeholder="Enter username" />
+          </template>
+
+          <template #error="{ error }">
+            <span :class="[error ? 'text-red-500 dark:text-red-400 text-xs font-bold' : 'text-custom-500 dark:text-custom-400']">
+              {{ error ? error : undefined }}
+            </span>
+          </template>
         </UFormGroup>
 
-        <UFormGroup class="grid gap-1">
+
+        <!-- password -->
+        <UFormGroup 
+          class="grid gap-1"
+          name="password"
+          :ui="{error: 'mt-1'}">
           <template #label>
             <div class="flex items-center justify-start gap-1">
               <UIcon 
@@ -50,17 +78,32 @@
               <p class="text-base">Password</p>
             </div>
           </template>
-          <UInput 
-            type="password" 
-            color="gray" 
-            size="md" 
-            :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}}" 
-            placeholder="••••••••" />
+
+          <template #default="{ error }">
+            <UInput 
+              v-model="state.password"
+              type="password" 
+              color="gray" 
+              size="md" 
+              :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined"
+              :ui="{
+                rounded: 'rounded',
+                color: error ? 
+                  { red: { outline: 'bg-red-100 dark:bg-red-50 text-custom-900 dark:text-custom-900 focus:ring-1 focus:ring-red-400 border-2 border-red-400 focus:border-red-400 active:ring-red-400 active:border-red-400' } } : { gray: { outline: 'dark:bg-custom-100 dark:text-custom-900' } }
+              }"
+              placeholder="••••••••" />
+          </template>
+
+          <template #error="{ error }">
+            <span :class="[error ? 'text-red-500 dark:text-red-400 text-xs font-bold' : 'text-primary-500 dark:text-primary-400']">
+              {{ error ? error : undefined }}
+            </span>
+          </template>
         </UFormGroup>
 
         <UButton 
-          @click="adminLogin" 
-          :label="labelAdmin" 
+          type="submit"
+          :label="label" 
           :loading-icon="loadIcon" 
           :loading="loading" 
           class="flex justify-center items-center gap-1 py-2 rounded bg-custom-700 hover:bg-custom-800 dark:bg-custom-600 dark:hover:bg-custom-700 dark:text-custom-200" />
@@ -71,31 +114,47 @@
 
 </template>
 
-<script setup>
-import { ref, reactive } from 'vue';
-import { useRouter } from 'vue-router';
+<script setup lang="ts">
+
 import { user } from '~/assets/js/userSample';
+import type { FormError, FormErrorEvent, FormSubmitEvent } from '#ui/types'
 
 const state = reactive({
-  email: '',
-  password: ''
-});
+  username: undefined,
+  password: undefined
+})
+
+const validate = (state: any): FormError[] => {
+  const errors = []
+  if (!state.username) errors.push({ path: 'username', message: 'Required' })
+  if (!state.password) errors.push({ path: 'password', message: 'Required' })
+  return errors
+}
 
 const loading = ref(false);
-const router = useRouter();
 const loadIcon = ref('');
-const labelAdmin = ref('Login');
+const label = ref('Login');
 
-const adminLogin = () => {
+async function onSubmit (event: FormSubmitEvent<any>) {
+  // Do something with data
+  console.log(event.data)
+  
   loading.value = true;
   loadIcon.value = 'i-lucide-loader-circle';
-  labelAdmin.value = '';
+  label.value = '';
+
   setTimeout(() => {
     user.role = 'superadmin';
-    router.push('/admin/dashboard');
-    labelAdmin.value = 'Login';
+    label.value = 'Login';
     loading.value = false;
-  }, 800);
-};
+    navigateTo('/admin/dashboard')
+  }, 800)
+}
+
+async function onError (event: FormErrorEvent) {
+  const element = document.getElementById(event.errors[0].id)
+  element?.focus()
+  element?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+}
 
 </script>

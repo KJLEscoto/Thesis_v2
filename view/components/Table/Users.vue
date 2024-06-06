@@ -96,13 +96,22 @@ const statusOptions = ['Active', 'Inactive'];
 const generateData = (numRows) => {
   const data = [];
   for (let i = 1; i <= numRows; i++) {
+    const firstname = faker.person.firstName();
+    const lastname = faker.person.lastName();
+    const middle_initial = faker.random.alpha().toUpperCase();
+    const name = `${firstname} ${middle_initial}. ${lastname}`;
+
     data.push({
-      name: faker.person.fullName(),
+      id: i,
+      firstname: firstname,
+      lastname: lastname,
+      middle_initial: middle_initial,
       gender: faker.helpers.arrayElement(genderOptions),
       username: faker.internet.userName(),
-      phone: faker.phone.number('09#########'), // Philippines phone number format
+      phone: faker.phone.number('09#########'),
       role: faker.helpers.arrayElement(roleOptions),
-      status: faker.helpers.arrayElement(statusOptions)
+      status: faker.helpers.arrayElement(statusOptions),
+      name: name 
     });
   }
   return data;
@@ -158,7 +167,7 @@ const actions = (client) => [
       icon: 'i-lucide-eye',
       click: () => {
         selectedClient.value = client;
-        navigateTo('/admin/users/read/' + client.id);
+        navigateTo(`/admin/users/read/${client.id}`);
       }
     },
     {
@@ -166,11 +175,11 @@ const actions = (client) => [
       icon: 'i-lucide-edit',
       click: () => {
         selectedClient.value = client;
-        navigateTo('/admin/users/update/' + client.id);
+        navigateTo(`/admin/users/update/${client.id}`);
       }
     },
     {
-      label: 'Status: ' + client.status,
+      label: `Status: ${client.status}`,
       icon: 'i-lucide-toggle-left',
       click: () => {
         toggleStatus(client);

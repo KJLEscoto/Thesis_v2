@@ -47,39 +47,39 @@
           </div>
 
         <div class="grid lg:grid-cols-2 grid-cols-1 gap-3">
-          <section class="bg-custom-100 dark:bg-custom-900 rounded p-2 lg:row-span-2 row-span-1">
+          <section class="bg-custom-100 dark:bg-custom-900 rounded p-5 lg:row-span-2 row-span-1">
             <h1 class=" font-semibold">Personal Information</h1>
             <hr class="border-custom-200 dark:border-custom-700 mt-2 mb-2">
             <div class="grid grid-cols-4 gap-2 mt-1 text-sm">
               <h1 class="col-span-1">Name:</h1>
-              <p class="col-span-3">...</p>
+              <p class="col-span-3">{{ props.clientData.name }}</p>
 
               <h1 class="col-span-1">Gender:</h1>
-              <p class="col-span-3">...</p>
+              <p class="col-span-3">{{ props.clientData.gender }}</p>
 
               <h1 class="col-span-1">Phone:</h1>
-              <p class="col-span-3">...</p>
+              <p class="col-span-3">{{ props.clientData.phone }}</p>
 
               <h1 class="col-span-1">Role:</h1>
-              <p class="col-span-3">...</p>
+              <p class="col-span-3">{{ props.clientData.role }}</p>
 
               <h1 class="col-span-1">Status:</h1>
-              <p class="col-span-3">...</p>
+              <p class="col-span-3">{{ props.clientData.status }}</p>
             </div>
           </section>
           <div class="grid row-span-2 gap-3">
-            <section class="bg-custom-100 dark:bg-custom-900  rounded p-2">
+            <section class="bg-custom-100 dark:bg-custom-900  rounded p-5">
               <h1 class=" font-semibold">Login Credentials</h1>
               <hr class="border-custom-200 dark:border-custom-700 mt-2 mb-2">
               <div class="grid grid-cols-3 gap-2 text-sm">
                 <h1 class="col-span-1">Username:</h1>
-                <p class="col-span-2">...</p>
+                <p class="col-span-2">{{ props.clientData.username }}</p>
 
                 <h1 class="col-span-1">Password:</h1>
                 <p class="col-span-2">...</p>
               </div>
             </section>
-            <section class="bg-custom-100 dark:bg-custom-900  rounded p-2">
+            <section class="bg-custom-100 dark:bg-custom-900  rounded p-5">
               <h1 class=" font-semibold">Timestamps (date & time)</h1>
               <hr class="border-custom-200 dark:border-custom-700 mt-2 mb-2">
               <div class="grid grid-cols-5 gap-2 mt-1 text-sm">
@@ -98,22 +98,8 @@
 </template>
 
 <script setup>
-
 definePageMeta({
   layout: 'sidebar'
-})
-
-const client = [
-  {
-    id: 1
-  }
-]
-
-const props = defineProps({
-  clientData: {
-    type: Object,
-    default: () => ({})
-  }
 });
 
 const links = [{
@@ -121,6 +107,12 @@ const links = [{
   to: '/admin/users'
 }, {
   label: 'Read'
-}]
+}];
 
+const props = defineProps({
+  clientData: {
+    type: Object,
+    default: () => ({})
+  }
+});
 </script>

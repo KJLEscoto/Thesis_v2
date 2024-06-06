@@ -1,6 +1,7 @@
 <template>
-  <div class="h-screen w-full p-5 flex flex-col justify-between">
+  <div class="lg:h-screen h-auto w-full p-5 gap-5 flex flex-col justify-between">
     <div class="flex-col gap-5 flex">
+      
       <header class="flex justify-between w-full items-center">
         <h1 class="text-lg font-semibold text-custom-800 dark:text-white">Settings</h1>
         <UButton 
@@ -8,48 +9,52 @@
           label="Logout" 
           icon="i-lucide-log-out"/>
       </header>
+
       <main class="flex flex-col h-auto gap-5 p-5 rounded dark:bg-custom-900 bg-custom-100">
+        
         <h1 class="font-semibold text-lg">Profile</h1>
         <hr class="dark:border-custom-700 border-custom-200">
-        <div class="flex gap-10 h-auto w-full">
-          <section class="w-52 h-52 rounded-full dark:bg-custom-700 bg-custom-400 flex justify-center items-center cursor-default">
+        
+        <div class="md:flex grid gap-10 h-auto w-full">
+          
+          <section class="w-52 h-52 rounded-full dark:bg-custom-700 md:mx-10 mx-auto bg-custom-400 flex justify-center items-center cursor-default">
             <span class="font-black text-[150px]">{{ initial }}</span>
           </section>
-          <section class="grid grid-cols-2 gap-2">
-            <h1>Name:</h1>
-            <p class="capitalize">{{ user.name }}</p>
-            <h1>Gender:</h1>
-            <p class="capitalize">{{ user.gender }}</p>
-            <h1>Phone:</h1>
-            <p>{{ user.phone }}</p>
-            <h1>Role:</h1>
-            <p>{{ user.role }}</p>
-            <h1>Status:</h1>
-            <p>{{ user.status }}</p>
+
+          <section class="my-auto">
+            <div v-for="(p, index) in profile" :key="index" class="grid grid-cols-5 gap-5 my-2">
+              <h1 class="capitalize col-span-2">{{ p.label }}: </h1>
+              <p class="capitalize col-span-3 dark:text-custom-500 text-custom-500">{{ p.value }}</p>
+            </div>
           </section>
+
         </div>
       </main>
-      <div class="flex h-auto w-full justify-between gap-5">
+      
+      <div class="grid md:grid-cols-2 grid-cols-1 h-auto w-full justify-between gap-5">
+        
         <section class="h-auto w-full dark:bg-custom-900 bg-custom-100 flex flex-col gap-5 p-5 rounded">
           <h1 class="font-semibold text-lg">Login Credentials</h1>
           <hr class="dark:border-custom-700 border-custom-200">
-          <section class="grid grid-cols-2 gap-2">
-            <h1>Username:</h1>
-            <p>{{ user.username }}</p>
-            <h1>Password:</h1>
-            <p>{{ user.password }}</p>
+          <section class="my-auto">
+            <div v-for="(l, index) in login" :key="index" class="grid grid-cols-3 gap-5 my-2">
+              <h1 class="capitalize col-span-1">{{ l.label }}: </h1>
+              <p class="col-span-2 dark:text-custom-500 text-custom-500">{{ l.value }}</p>
+            </div>
           </section>
         </section>
+
         <section class="h-auto w-full dark:bg-custom-900 bg-custom-100 flex flex-col gap-5 p-5 rounded">
           <h1 class="font-semibold text-lg">Timestamps (date & time)</h1>
           <hr class="dark:border-custom-700 border-custom-200">
-          <section class="grid grid-cols-2 gap-2">
-            <h1>Account Created:</h1>
-            <p>{{ user.account_created }}</p>
-            <h1>Last Update:</h1>
-            <p>{{ user.updated_at }}</p>
+          <section class="my-auto">
+            <div v-for="(t, index) in timestamp" :key="index" class="grid grid-cols-5 gap-5 my-2">
+              <h1 class="capitalize col-span-2">{{ t.label }}: </h1>
+              <p class="col-span-3 dark:text-custom-500 text-custom-500">{{ t.value }}</p>
+            </div>
           </section>
         </section>
+
       </div>
     </div>
     <Footer />
@@ -65,5 +70,50 @@ const initial = computed(() => user.name.charAt(0).toUpperCase());
 definePageMeta({
   layout: 'sidebar'
 })
+
+const profile = [
+  {
+    label: 'name',
+    value: user.name
+  },
+  {
+    label: 'gender',
+    value: user.gender
+  },
+  {
+    label: 'phone no.',
+    value: user.phone
+  },
+  {
+    label: 'role',
+    value: user.role
+  },
+  {
+    label: 'status',
+    value: user.status
+  },
+]
+
+const login = [
+  {
+    label: 'username',
+    value: user.username
+  },
+  {
+    label: 'password',
+    value: user.password
+  },
+]
+
+const timestamp = [
+  {
+    label: 'account created',
+    value: user.account_created
+  },
+  {
+    label: 'last update',
+    value: user.updated_at
+  },
+]
 
 </script>
