@@ -39,7 +39,7 @@
         :next-button="{ icon: 'i-heroicons-arrow-small-right-20-solid', trailing: true, label: 'Next', color: 'gray' }"
         :model-value="currentPage"
         :page-count="pageCount"
-        :total="totalClients"
+        :total="totalUsers"
         show-first
         show-last
         @update:model-value="updatePage"
@@ -61,8 +61,8 @@
       <template #status-data="{ row }">
         <UKbd 
           :class="{
-            'border bg-green-600 border-green-600 dark:border-green-700 text-custom-100 dark:text-green-400 cursor-default': row.status === 'Active',
-            'border bg-red-600 border-red-600 dark:border-red-700 text-custom-100 dark:text-red-400 cursor-default': row.status === 'Inactive'
+            'dark:border bg-green-600 dark:border-green-700 text-custom-100 dark:text-green-400 cursor-default': row.status === 'Active',
+            'dark:border bg-red-600 dark:border-red-700 text-custom-100 dark:text-red-400 cursor-default': row.status === 'Inactive'
           }" 
           :value="row.status" />
       </template>
@@ -72,43 +72,59 @@
           mode="hover" 
           :items="actions(row)" 
           :popper="{ placement: 'bottom-end', arrow: 'true', offsetDistance: -10 }" 
-          :ui="{ background: 'dark:bg-custom-950 bg-white', item: {disabled: 'cursor-default opacity-100 font-semibold'}}" >
+          :ui="{ background: 'dark:bg-custom-950 bg-white', item: { disabled: 'cursor-disable opacity-100' } }" >
+          
           <UIcon 
             name="i-lucide-ellipsis" 
             class="text-xl" />
+
+          <template #item="{ item }">
+            <div class="flex justify-between w-full">
+              <UTooltip v-if="item.disabled" :text="item.tooltip" :popper="{ placement: 'right-start' }" class="flex justify-between w-full">
+                <span class="truncate opacity-20">{{ item.label }}</span>
+                <UIcon :name="item.icon" class="flex-shrink-0 h-4 w-4 text-gray-400 dark:text-gray-500 opacity-20" />
+              </UTooltip>
+              <div v-else class="flex justify-between w-full">
+                <span class="truncate">{{ item.label }}</span>
+                <UIcon :name="item.icon" class="flex-shrink-0 h-4 w-4 text-gray-400 dark:text-gray-500" />
+              </div>
+            </div>
+          </template>
         </UDropdown>
       </template>
+
     </UTable>
 
   </section>
 </template>
 
 <script setup>
+
+// imports
 import { ref, computed, watch } from 'vue';
 import { faker } from '@faker-js/faker';
+import { user } from '~/assets/js/userSample';
 
-const selectedClient = ref(null);
+// variable to fetch the specific user
+const selectedUser = ref(null);
 
-const genderOptions = ['Male', 'Female'];
+
 const roleOptions = ['Client', 'Admin'];
 const statusOptions = ['Active', 'Inactive'];
 
+
+// fake data
 const generateData = (numRows) => {
   const data = [];
   for (let i = 1; i <= numRows; i++) {
     const firstname = faker.person.firstName();
     const lastname = faker.person.lastName();
-    const middle_initial = faker.random.alpha().toUpperCase();
+    const middle_initial = faker.string.alpha().toUpperCase();
     const name = `${firstname} ${middle_initial}. ${lastname}`;
 
     data.push({
       id: i,
-      firstname: firstname,
-      lastname: lastname,
-      middle_initial: middle_initial,
-      gender: faker.helpers.arrayElement(genderOptions),
       username: faker.internet.userName(),
-      phone: faker.phone.number('09#########'),
       role: faker.helpers.arrayElement(roleOptions),
       status: faker.helpers.arrayElement(statusOptions),
       name: name 
@@ -117,34 +133,44 @@ const generateData = (numRows) => {
   return data;
 };
 
-const clients = ref(generateData(200));
+
+// variables
+const users = ref(generateData(200));
 const currentPage = ref(1);
 const pageCount = ref(20);
 const q = ref('');
 
+
+// headers in table
 const tableHeaders = [
-  { key: 'id', label: `# (${clients.value.length})` },
+  { key: 'id', label: `# (${users.value.length})` },
   { key: 'name', label: 'Name', sortable: true },
-  { key: 'username', label: 'Username', sortable: true },
+  { key: 'username', label: 'Username' },
   { key: 'role', label: 'Role', sortable: true },
   { key: 'status', label: 'Status', sortable: true },
   { key: 'actions', label: 'Actions' }
 ];
 
+
+// filter the table in search
 const filteredRows = computed(() => {
   if (!q.value) {
-    return clients.value;
+    return users.value;
   }
 
-  return clients.value.filter((person) => {
+  return users.value.filter((person) => {
     return Object.values(person).some((value) => {
       return String(value).toLowerCase().includes(q.value.toLowerCase());
     });
   });
 });
 
-const totalClients = computed(() => filteredRows.value.length);
 
+// count overall no. of users
+const totalUsers = computed(() => filteredRows.value.length);
+
+
+// pages
 const paginatedData = computed(() => {
   const start = (currentPage.value - 1) * pageCount.value;
   const end = start + pageCount.value;
@@ -155,30 +181,40 @@ const updatePage = (page) => {
   currentPage.value = page;
 };
 
+
+// change status
 const toggleStatus = (client) => {
   client.status = client.status === 'Active' ? 'Inactive' : 'Active';
 };
 
+const isAdmin = user.role === 'admin';
+
+// for actions
 const actions = (client) => [
-  [{ label: `${client.name}`, disabled: true }],
+  // [{ label: `${client.name}`, disabled: true }],
   [
     {
+      title: 'read',
       label: 'View Details',
       icon: 'i-lucide-eye',
       click: () => {
-        selectedClient.value = client;
+        selectedUser.value = client;
         navigateTo(`/admin/users/read/${client.id}`);
       }
     },
     {
+      title: 'update',
       label: 'Edit Information',
       icon: 'i-lucide-edit',
       click: () => {
-        selectedClient.value = client;
+        selectedUser.value = client;
         navigateTo(`/admin/users/update/${client.id}`);
-      }
+      },
+      disabled: isAdmin,
+      tooltip: isAdmin ? 'Only superadmin can edit' : null
     },
     {
+      title: 'toggle',
       label: `Status: ${client.status}`,
       icon: 'i-lucide-toggle-left',
       click: () => {
@@ -188,8 +224,11 @@ const actions = (client) => [
   ],
   [
     {
+      title: 'delete',
       label: 'Delete Client',
-      icon: 'i-lucide-trash-2'
+      icon: 'i-lucide-trash-2',
+      disabled: isAdmin,
+      tooltip: isAdmin ? 'Only superadmin can delete' : null
     }
   ]
 ];

@@ -7,7 +7,10 @@ export const user = reactive({
   mi: 'l',
   gender: 'male',
   phone: '09123456789',
-  role: 'superadmin',
+
+  // statically change it for now just to test (client, admin, superadmin)
+  role: 'admin',
+
   status: 'active',
   username: 'superadmin123',
   password: 'password',

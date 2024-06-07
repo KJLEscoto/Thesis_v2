@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen w-full flex flex-col p-5 gap-5">
+  <div class="h-auto w-full flex flex-col p-5 gap-10">
     <section class="">
       <UBreadcrumb :links="links">    
         <template #divider>
@@ -18,7 +18,7 @@
       </UBreadcrumb>
     </section>
     <section class="h-4/5 w-full flex justify-center items-center">
-      <div class="sm:w-3/4 w-full h-auto">
+      <div class="sm:w-3/4 w-full h-auto border p-5 rounded border-custom-300 bg-custom-100 dark:bg-custom-900 dark:border-custom-700">
 
         <UForm 
           class="h-auto w-full flex flex-col gap-3" 
@@ -36,7 +36,7 @@
             </div>
           </header>
 
-          
+          <p>-- iupdate ang info sa user -- <span class="text-xs">(ang superadmin lang maka access diri na page)</span></p>
           <div class="flex justify-between">
 
             <h1 class="text-lg w-auto">Personal Information</h1>
@@ -178,7 +178,7 @@
                   <UInput 
                     type="text" 
                     color="gray" 
-                    size="mmd" 
+                    size="md" 
                     v-model="state.phone"
                     :ui="{
                       rounded: 'rounded',

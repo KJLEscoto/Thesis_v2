@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen w-full flex flex-col p-5 gap-5">
+  <div class="h-auto w-full flex flex-col p-5 gap-10">
     <section class="">
       <UBreadcrumb :links="links">    
         <template #divider>
@@ -17,7 +17,7 @@
       </UBreadcrumb>
     </section>
     <section class="h-4/5 w-full flex justify-center items-center">
-      <div class="sm:w-3/4 w-full h-auto">
+      <div class="sm:w-3/4 w-full h-auto border p-5 rounded border-custom-300 bg-custom-100 dark:bg-custom-900 dark:border-custom-700">
 
       <UForm 
         class="h-auto w-full flex flex-col gap-3" 
@@ -177,7 +177,7 @@
                 <UInput 
                   type="text" 
                   color="gray" 
-                  size="mmd" 
+                  size="md" 
                   v-model="state.phone"
                   :ui="{
                     rounded: 'rounded',
@@ -213,26 +213,51 @@
             label="Role"
             name="role" >
             <template #default="{ error }">
-              <UInputMenu 
+              <USelectMenu 
                 color="gray" 
+                selected-icon="i-heroicons-hand-thumb-up-solid"
                 size="md"
                 :ui="{
-                    rounded: 'rounded',
-                    color: error ? 
-                      { red: { outline: 'bg-red-100 dark:bg-red-50 text-custom-900 dark:text-custom-900 focus:ring-1 focus:ring-red-400 border-2 border-red-400 focus:border-red-400 active:ring-red-400 active:border-red-400' } } : { gray: { outline: 'dark:bg-custom-100 dark:text-custom-900' } }
-                  }" 
+                  rounded: 'rounded',
+                  color: error ? 
+                    { red: { outline: 'bg-red-100 dark:bg-red-50 text-custom-900 dark:text-custom-900 focus:ring-1 focus:ring-red-400 border-2 border-red-400 focus:border-red-400 active:ring-red-400 active:border-red-400' } } : { gray: { outline: 'dark:bg-custom-100 dark:text-custom-900' } }
+                }" 
                 :uiMenu="{background: 'dark:bg-custom-400', option: {color: 'dark:text-white', active: 'dark:bg-custom-600', empty: 'dark:text-white'}, empty: 'dark:text-white'}" 
                 v-model="state.role" 
                 :options="roleOptions" 
                 placeholder="Select a role" />
-              </template>
-              <template #error="{ error }">
-                <span :class="[error ? 'text-red-500 dark:text-red-400 text-xs font-bold' : 'text-primary-500 dark:text-primary-400']">
-                  {{ error ? error : undefined }}
-                </span>
+            </template>
+            <template #error="{ error }">
+              <span :class="[error ? 'text-red-500 dark:text-red-400 text-xs font-bold' : 'text-primary-500 dark:text-primary-400']">
+                {{ error ? error : undefined }}
+              </span>
             </template>
           </UFormGroup>
         </section>
+
+        <!-- <div class="flex w-full">
+          <div class="w-2/3"></div>
+            <UFormGroup 
+            v-if="state.role.value === roleOptions[0].value"
+            label="Permission"
+            name="permission" 
+            help="(for some actions)" >
+            <div v-for="(p) in permissionOptions" :key="p.label">
+              <UCheckbox 
+                v-model="state.permission[p.label.toLowerCase()]"
+                class="ml-2">
+                <template #label>
+                  <span> {{ p.label }} </span>
+                </template>
+              </UCheckbox>
+            </div>
+            <template #error="{ error }">
+              <span :class="[error ? 'text-red-500 dark:text-red-400 text-xs font-bold' : 'text-primary-500 dark:text-primary-400']">
+                {{ error ? error : undefined }}
+              </span>
+            </template>
+          </UFormGroup>
+        </div> -->
 
         <h1 class="text-lg w-auto text-start mt-3 -mb-2">Login Credentials</h1>
         <hr class="border-custom-300 dark:border-custom-500 w-full">
@@ -297,7 +322,6 @@ definePageMeta({
   layout: 'sidebar'
 })
 
-
 import type { FormError, FormErrorEvent, FormSubmitEvent } from '#ui/types'
 
 const roleOptions = [
@@ -310,6 +334,21 @@ const roleOptions = [
     label: 'Client'
   }
 ];
+
+const permissionOptions = [
+  { 
+    value: false, 
+    label: 'View' 
+  },
+  { 
+    value: false, 
+    label: 'Update' 
+  },
+  { 
+    value: false, 
+    label: 'Delete' 
+  }
+]
 
 const statusOptions = [
   {
@@ -334,15 +373,20 @@ const genderOptions = [
 ];
 
 const state = reactive({
-  first_name: undefined,
-  last_name: undefined,
-  m_i: undefined,
-  gender: undefined,
-  phone: undefined,
+  first_name: '',
+  last_name: '',
+  m_i: '',
+  gender: '',
+  phone: '',
   status: statusOptions[0].value,
-  role: undefined,
-  username: undefined,
-  password: undefined
+  role: '',
+  // permission: {
+  //   view: false,
+  //   update: false,
+  //   delete: false
+  // },
+  username: '',
+  password: ''
 })
 
 const validate = (state: any): FormError[] => {
@@ -352,6 +396,13 @@ const validate = (state: any): FormError[] => {
   if (!state.gender) errors.push({ path: 'gender', message: 'Required' })
   if (!state.phone) errors.push({ path: 'phone', message: 'Required' })
   if (!state.status) errors.push({ path: 'status', message: 'Required' })
+
+  // Check if at least one permission is selected
+  // const selectedPermissions = Object.values(state.permission);
+  // if (!selectedPermissions.some(permission => permission)) {
+  //   errors.push({ path: 'permission', message: 'At least one permission must be selected' })
+  // }
+
   if (!state.role) errors.push({ path: 'role', message: 'Required' })
   if (!state.username) errors.push({ path: 'username', message: 'Required' })
   if (!state.password) errors.push({ path: 'password', message: 'Required' })
@@ -377,10 +428,13 @@ async function onSubmit (event: FormSubmitEvent<any>) {
   }, 800)
 }
 
-async function onError (event: FormErrorEvent) {
-  const element = document.getElementById(event.errors[0].id)
-  element?.focus()
-  element?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+async function onError(event: FormErrorEvent) {
+  const firstError = event.errors.find(error => error.path !== 'permission');
+  if (firstError) {
+    const element = document.getElementById(firstError.id);
+    element?.focus();
+    element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
 }
 
 const links = [{

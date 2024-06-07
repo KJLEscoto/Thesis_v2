@@ -1,7 +1,5 @@
 <template>
-  <div>
-    settings
-  </div>
+  <Settings />
 </template>
 
 <script setup>

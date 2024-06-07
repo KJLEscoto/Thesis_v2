@@ -1,71 +1,80 @@
 <template>
-  <header class="lg:flex block justify-between items-center mb-5">
-    <h1 class="font-semibold text-lg cursor-default lg:mb-0 mb-5 relative">Saved History <span class="font-normal text-xs absolute">({{ totalItems }})</span></h1>
-    <div class="flex justify-center lg:justify-end items-center">
-      <UPagination
+  <section class="items-center grid gap-5">
+  <div class="flex sm:gap-0 gap-5 sm:flex-row flex-col-reverse sm:justify-between justify-center">
+    <div class="flex gap-1 justify-start items-center">
+      <UInput 
+        v-model="q" 
+        name="q"
+        placeholder="Search..." 
+        icon="i-heroicons-magnifying-glass-20-solid"
+        autocomplete="off"
+        color="gray" 
+        size="sm" 
+        :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}, icon: { trailing: {pointer: '' }}}"
+        class="w-full sm:w-auto sm:-mb-0 -mb-5" >
+
+        <template #trailing>
+          <UButton
+            v-show="q !== ''"
+            color="gray"
+            variant="link"
+            icon="i-heroicons-x-mark-20-solid"
+            :padded="false"
+            @click="q = ''"
+            class="hover:text-red-400 dark:hover:text-red-600 text-red-700 dark:text-red-400" />
+        </template>
+      </UInput>
+    </div>
+
+    <UPagination
       :prev-button="{ icon: 'i-heroicons-arrow-small-left-20-solid', label: 'Prev', color: 'gray' }"
       :next-button="{ icon: 'i-heroicons-arrow-small-right-20-solid', trailing: true, label: 'Next', color: 'gray' }"
       :model-value="currentPage"
       :page-count="pageCount"
-      :total="totalItems"
+      :total="totalData"
       show-first
       show-last
-      @update:model-value="updatePage" />
+      @update:model-value="updatePage"
+      class="flex justify-center" />
     </div>
-  </header>
   
   <UTable 
-      :columns="tableHeaders" 
-      :rows="paginatedData" 
-      class="max-h-[80vh] sm:max-w-full max-w-[55vh] overflow-auto border rounded border-custom-300 dark:border-custom-800" 
-      :ui="{thead: 'sticky top-0 z-10 dark:bg-custom-700 bg-custom-300 cursor-default', tbody: 'bg-custom-100 dark:bg-custom-950'}" >
-      <template #level-data="{ row }">
-        <UKbd 
-          :class="{
-            'border bg-green-600 border-green-600 dark:border-green-700 text-custom-100 dark:text-green-400 cursor-default': row.level === 'normal',
-            'border bg-yellow-500 border-yellow-500 dark:border-yellow-500 text-custom-100 dark:text-yellow-400 cursor-default': row.level === 'warning',
-            'border bg-red-600 border-red-600 dark:border-red-700 text-custom-100 dark:text-red-400 cursor-default': row.level === 'danger',
-          }" 
-          :value="row.level" />
-      </template>
-      <template #action-data="{ row }">
-        <UTooltip 
-          text="View" 
-          :popper="{ arrow: true, placement: 'right' }" 
-          :ui="{ background: 'dark:bg-custom-800 bg-custom-50', arrow: { background: 'dark:before:bg-custom-700 before:bg-custom-300'}}" >
-          <UIcon 
-            name="i-lucide-eye" 
-            class="text-xl hover:opacity-75" 
-            @click="viewAction(row)" />
-        </UTooltip>
-      </template>
-    </UTable>
+    :columns="tableHeaders" 
+    :rows="paginatedData" 
+    class="max-h-[80vh] max-w-full overflow-auto border rounded border-custom-300 dark:border-custom-800" 
+    :ui="{thead: 'sticky top-0 z-10 dark:bg-custom-700 bg-custom-300 cursor-default', tbody: 'bg-custom-100 dark:bg-custom-950'}" >
+    <template #id-data="{ index }">
+      <span>
+        {{ (currentPage - 1) * pageCount + index + 1 }}
+      </span>
+    </template>
+    <template #level-data="{ row }">
+      <UKbd 
+        :class="{
+          ' bg-green-600 dark:border dark:border-green-700 text-custom-100 dark:text-green-400 cursor-default': row.level === 'normal',
+          ' bg-yellow-500 dark:border dark:border-yellow-500 text-custom-100 dark:text-yellow-400 cursor-default': row.level === 'warning',
+          'bg-red-600 dark:border dark:border-red-700 text-custom-100 dark:text-red-400 cursor-default': row.level === 'danger',
+        }" 
+        :value="row.level" />
+    </template>
+    <template #action-data="{ row }">
+      <UTooltip 
+        text="View" 
+        :popper="{ arrow: true, placement: 'right' }" 
+        :ui="{ background: 'dark:bg-custom-800 bg-custom-50', arrow: { background: 'dark:before:bg-custom-700 before:bg-custom-300'}}" >
+        <UIcon 
+          name="i-lucide-eye" 
+          class="text-xl hover:opacity-75 text-blue-500" 
+          @click="viewAction(row)" />
+      </UTooltip>
+    </template>
+  </UTable>
+</section>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
 import { faker } from '@faker-js/faker';
-
-const tableHeaders = [{
-  key: 'id',
-  label: '#'
-}, {
-  key: 'date',
-  label: 'Date',
-  sortable: true
-}, {
-  key: 'motion_detected',
-  label: 'Motion Detected',
-  sortable: true
-}, {
-  key: 'level',
-  label: 'Level',
-  sortable: true
-}, {
-  key: 'action',
-  label: 'Action'
-}
-];
 
 const levelMapping = {
   normal: ['pickpocketing', 'shoplifting'],
@@ -88,19 +97,50 @@ const generateData = (numRows) => {
   return data;
 };
 
-const data = ref(generateData(1500));
+const data = ref(generateData(30));
 const currentPage = ref(1);
 const pageCount = ref(20);
-const totalItems = computed(() => data.value.length);
+const q = ref('');
 
-// Paginate data based on current page and page size
+const tableHeaders = [{
+  key: 'id',
+  label: `# (${data.value.length})`
+}, {
+  key: 'date',
+  label: 'Date',
+  sortable: true
+}, {
+  key: 'motion_detected',
+  label: 'Motion Detected'
+}, {
+  key: 'level',
+  label: 'Level'
+}, {
+  key: 'action',
+  label: 'Action'
+}
+];
+
+const filteredRows = computed(() => {
+  if (!q.value) {
+    return data.value;
+  }
+
+  return data.value.filter((person) => {
+    return Object.values(person).some((value) => {
+      return String(value).toLowerCase().includes(q.value.toLowerCase());
+    });
+  });
+});
+
+const totalData = computed(() => filteredRows.value.length);
+
 const paginatedData = computed(() => {
   const start = (currentPage.value - 1) * pageCount.value;
   const end = start + pageCount.value;
-  return data.value.slice(start, end);
+  return filteredRows.value.slice(start, end);
 });
 
-// Update current page when pagination changes
 const updatePage = (page) => {
   currentPage.value = page;
 };
@@ -108,4 +148,8 @@ const updatePage = (page) => {
 const viewAction = (item) => {
   console.log('View action for:', item);
 };
+
+watch(q, () => {
+  currentPage.value = 1;
+});
 </script>

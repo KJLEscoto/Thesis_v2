@@ -2,6 +2,14 @@
   <section class="items-center grid gap-5">
     <div class="flex sm:gap-0 gap-5 sm:flex-row flex-col-reverse sm:justify-between justify-center">
       <div class="flex gap-1 justify-start items-center">
+        <div class="lg:block hidden">
+          <UButton 
+            label="Go Train" 
+            icon="i-lucide-hand" 
+            class="dark:text-custom-200 bg-custom-400 hover:bg-custom-500 dark:bg-custom-700 dark:hover:bg-custom-800 rounded p-2" 
+            to="/admin/motion-feed/train"
+            size="xs" />
+        </div>
         <UInput 
           v-model="q" 
           name="q"
@@ -31,7 +39,7 @@
         :next-button="{ icon: 'i-heroicons-arrow-small-right-20-solid', trailing: true, label: 'Next', color: 'gray' }"
         :model-value="currentPage"
         :page-count="pageCount"
-        :total="totalLogs"
+        :total="totalTrains"
         show-first
         show-last
         @update:model-value="updatePage"
@@ -50,113 +58,143 @@
         </span>
       </template>
 
-      <template #message-data="{ row }">
-        <div class="max-w-[30vh] truncate">
-          {{ row.message }}
-        </div>
-      </template>
-
-      <template #status-data="{ row }">
+      <template #level-data="{ row }">
         <UKbd 
           :class="{
-            'border bg-green-600 border-green-600 dark:border-green-700 text-custom-100 dark:text-green-400 cursor-default': row.status === 'Active',
-            'border bg-red-600 border-red-600 dark:border-red-700 text-custom-100 dark:text-red-400 cursor-default': row.status === 'Inactive'
+            ' bg-green-600 dark:border dark:border-green-700 text-custom-100 dark:text-green-400 cursor-default': row.level === 'normal',
+            ' bg-yellow-500 dark:border dark:border-yellow-500 text-custom-100 dark:text-yellow-400 cursor-default': row.level === 'warning',
+            'bg-red-600 dark:border dark:border-red-700 text-custom-100 dark:text-red-400 cursor-default': row.level === 'danger',
           }" 
-          :value="row.status" />
+          :value="row.level" />
       </template>
 
-        <template #action-data="{ row }">
+      <template #action-data="{ row }">
+        <div class="flex justify-start gap-2">
           <UTooltip 
             text="View" 
-            :popper="{ arrow: true, placement: 'right' }" 
+            :popper="{ arrow: true, placement: 'bottom' }" 
             :ui="{ background: 'dark:bg-custom-800 bg-custom-50', arrow: { background: 'dark:before:bg-custom-700 before:bg-custom-300'}}" >
             <UIcon 
               name="i-lucide-eye" 
-              class="text-xl hover:opacity-75" 
+              class="text-xl hover:opacity-50 text-blue-500" 
               @click="viewAction(row)" />
           </UTooltip>
+          <UTooltip 
+            text="Delete" 
+            :popper="{ arrow: true, placement: 'bottom' }" 
+            :ui="{ background: 'dark:bg-custom-800 bg-custom-50', arrow: { background: 'dark:before:bg-custom-700 before:bg-custom-300'}}" >
+            <UIcon 
+              name="i-lucide-trash-2" 
+              class="text-xl hover:opacity-50 text-red-500" 
+              @click="deleteAction(row)" />
+          </UTooltip>
+        </div>
       </template>
+
     </UTable>
 
   </section>
 </template>
 
 <script setup>
+
+// imports
 import { ref, computed, watch } from 'vue';
 import { faker } from '@faker-js/faker';
+import { user } from '~/assets/js/userSample';
 
-const statusOptions = ['idk', 'idk'];
+// variable to fetch the specific user
+const selectedTrain = ref(null);
 
-const motions = {
+const levelMapping = {
   normal: ['pickpocketing', 'shoplifting'],
   danger: ['stealing', 'burglary'],
   warning: ['grab', 'snatch'],
 };
 
-const getRandomMotion = () => {
-  const categories = Object.keys(motions);
-  const randomCategory = faker.helpers.arrayElement(categories);
-  return faker.helpers.arrayElement(motions[randomCategory]);
-};
-
+// fake data
 const generateData = (numRows) => {
   const data = [];
-  const fullNames = Array.from({ length: 10 }, () => faker.person.fullName()); // Generate 10 fake full names
   for (let i = 1; i <= numRows; i++) {
-    const fullName = fullNames[(i - 1) % 10]; // Repeat full names across pages
+    const level = faker.helpers.arrayElement(Object.keys(levelMapping));
+    const motion = faker.helpers.arrayElement(levelMapping[level]);
+
     data.push({
-      date: faker.date.recent().toLocaleDateString(), // Generate recent date
-      motion_detected: getRandomMotion(), // Get random motion detected
-      user_name: fullName, // Use generated full name
-      message: faker.lorem.sentence(), // Generate a random sentence
-      status: faker.helpers.arrayElement(statusOptions) // Generate status
+      id: i,
+      motion: motion,
+      threshold: faker.number.int({ min: 0, max: 100 }) + '%',
+      level: level,
+      date: faker.date.past().toISOString().split('T')[0], // Date in YYYY-MM-DD format
+      action: faker.hacker.verb()
     });
   }
   return data;
 };
 
-const logs = ref(generateData(100));
+
+// variables
+const trains = ref(generateData(200));
 const currentPage = ref(1);
 const pageCount = ref(20);
 const q = ref('');
 
+
+// headers in table
 const tableHeaders = [
-  { key: 'id', label: `# (${logs.value.length})` },
+  { key: 'id', label: `# (${trains.value.length})` },
+  { key: 'motion', label: 'Motion', sortable: true }, // grab, reach, snatch, etc.
+  { key: 'threshold', label: 'Threshold' }, // percentage to trigger the motion
+  { key: 'level', label: 'Level' }, // normal, warning, danger
   { key: 'date', label: 'Date', sortable: true },
-  { key: 'motion_detected', label: 'Motion Detected' },
-  { key: 'user_name', label: 'Detected By' },
-  { key: 'message', label: 'Message'},
-  { key: 'status', label: 'Status' },
   { key: 'action', label: 'Action' }
 ];
 
+
+// filter the table in search
 const filteredRows = computed(() => {
   if (!q.value) {
-    return logs.value;
+    return trains.value;
   }
 
-  return logs.value.filter((person) => {
+  return trains.value.filter((person) => {
     return Object.values(person).some((value) => {
       return String(value).toLowerCase().includes(q.value.toLowerCase());
     });
   });
 });
 
-const totalLogs = computed(() => filteredRows.value.length);
 
+// count overall no. of users
+const totalTrains = computed(() => filteredRows.value.length);
+
+
+// pages
 const paginatedData = computed(() => {
   const start = (currentPage.value - 1) * pageCount.value;
   const end = start + pageCount.value;
   return filteredRows.value.slice(start, end);
 });
 
+const viewAction = (item) => {
+  console.log('View action for:', item);
+};
+
+const deleteAction = (item) => {
+  console.log('Delete action for:', item);
+};
+
 const updatePage = (page) => {
   currentPage.value = page;
 };
 
-const viewAction = (row) => {
-  console.log('View action for row:', row);
+
+// change status
+const toggleStatus = (client) => {
+  client.status = client.status === 'Active' ? 'Inactive' : 'Active';
 };
+
+const isAdmin = user.role === 'admin';
+
 
 // Watch the search query and reset the current page to 1 when it changes
 watch(q, () => {

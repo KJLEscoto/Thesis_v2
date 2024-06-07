@@ -9,7 +9,7 @@ const clientItems = ref([
   {
     title: 'Monitor',
     path: '/client/monitor',
-    icon: 'i-lucide-monitor-play'
+    icon: 'i-lucide-monitor'
   },
   {
     title: 'Notifications',
@@ -19,7 +19,7 @@ const clientItems = ref([
   {
     title: 'Settings',
     path: '/client/settings',
-    icon: 'i-lucide-settings'
+    icon: 'i-lucide-settings-2'
   },
 ]);
 
@@ -39,11 +39,11 @@ const adminItems = ref([
     path: '/admin/users',
     icon: 'i-lucide-users-round'
   }, 
-  {
-    title: 'Notification Log',
-    path: '/admin/notification-log',
-    icon: 'i-lucide-book-open-text'
-  },
+  // {
+  //   title: 'Notification Log',
+  //   path: '/admin/notification-log',
+  //   icon: 'i-lucide-book-open-text'
+  // },
   {
     title: 'Settings',
     path: '/admin/settings',
