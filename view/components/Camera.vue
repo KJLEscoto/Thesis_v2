@@ -1,34 +1,34 @@
 <template>
   <div class="h-full w-full">
     <div class="border-2 border-custom-500 lg:h-full h-[90%] w-full bg-custom-50 dark:bg-custom-200 rounded">
-        <section 
-          v-show="!camera" 
-          class="flex items-center justify-center h-full w-full" >
-          <div class="text-red-800 grid justify-center">
-            <UIcon 
-              class="w-auto h-10 m-auto" 
-              name="i-lucide-video-off"  />
-              <p class="text-xs tracking-wider font-bold">No Camera Detected.
-                <nuxt-link 
-                  to="/client/settings" 
-                  class="text-blue-900 underline hover:text-white transition-colors duration-150" >
-                  Go setup
-                </nuxt-link>
-              </p>
-          </div>
-        </section>
-        <section 
-          v-show="camera" 
-          class="flex items-center justify-center h-full w-full" >
-            <canvas ref="canvas" class="w-full h-full"></canvas>
-        </section>
+      <section 
+        v-show="!camera" 
+        class="flex items-center justify-center h-full w-full" >
+        <div class="text-red-800 grid justify-center">
+          <UIcon 
+            class="w-auto h-10 m-auto" 
+            name="i-lucide-video-off"  />
+            <p class="text-xs tracking-wider font-bold">No Camera Detected.
+              <nuxt-link 
+                to="/client/settings" 
+                class="text-blue-900 underline hover:text-white transition-colors duration-150" >
+                Go setup
+              </nuxt-link>
+            </p>
+        </div>
+      </section>
+      <section 
+        v-show="camera" 
+        class="flex items-center justify-center h-full w-full" >
+          <canvas ref="canvas" class="w-full h-full"></canvas>
+      </section>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue';
 
+// for camera
 const camera = ref(false)
 
 // Define props
@@ -39,6 +39,7 @@ const props = defineProps({
   },
 });
 
+//for video
 const canvas = ref(null);
 
 const drawVideoOnCanvas = (video) => {

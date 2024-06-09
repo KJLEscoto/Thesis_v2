@@ -1,6 +1,6 @@
 <template>
   <section class="items-center grid gap-5">
-  <div class="flex sm:gap-0 gap-5 sm:flex-row flex-col-reverse sm:justify-between justify-center">
+  <div class="flex sm:gap-0 gap-5 sm:flex-row flex-col-reverse sm:justify-between justify-center lg:items-end">
     <div class="flex gap-1 justify-start items-center">
       <UInput 
         v-model="q" 
@@ -26,16 +26,29 @@
       </UInput>
     </div>
 
-    <UPagination
-      :prev-button="{ icon: 'i-heroicons-arrow-small-left-20-solid', label: 'Prev', color: 'gray' }"
-      :next-button="{ icon: 'i-heroicons-arrow-small-right-20-solid', trailing: true, label: 'Next', color: 'gray' }"
-      :model-value="currentPage"
-      :page-count="pageCount"
-      :total="totalData"
-      show-first
-      show-last
-      @update:model-value="updatePage"
-      class="flex justify-center" />
+      <div class="grid justify-center items-center gap-2">
+        <div class="lg:flex justify-end hidden">
+          <span class="text-xs leading-5">
+            Showing
+            <span class="font-medium">{{ startItem }}</span>
+            -
+            <span class="font-medium">{{ endItem }}</span>
+            of
+            <span class="font-medium">{{ totalData }}</span>
+            results
+          </span>
+        </div>
+        <UPagination
+          :prev-button="{ icon: 'i-heroicons-arrow-small-left-20-solid', label: 'Prev', color: 'gray' }"
+          :next-button="{ icon: 'i-heroicons-arrow-small-right-20-solid', trailing: true, label: 'Next', color: 'gray' }"
+          :model-value="currentPage"
+          :page-count="pageCount"
+          :total="totalData"
+          show-first
+          show-last
+          @update:model-value="updatePage"
+          class="flex justify-center" />
+      </div>
     </div>
   
   <UTable 
@@ -69,6 +82,18 @@
       </UTooltip>
     </template>
   </UTable>
+
+  <div class="flex justify-center lg:hidden">
+    <span class="text-xs leading-5">
+      Showing
+      <span class="font-medium">{{ startItem }}</span>
+      -
+      <span class="font-medium">{{ endItem }}</span>
+      of
+      <span class="font-medium">{{ totalData }}</span>
+      results
+    </span>
+  </div>
 </section>
 </template>
 
@@ -104,7 +129,7 @@ const q = ref('');
 
 const tableHeaders = [{
   key: 'id',
-  label: `# (${data.value.length})`
+  label: '#'
 }, {
   key: 'date',
   label: 'Date',
@@ -144,6 +169,16 @@ const paginatedData = computed(() => {
 const updatePage = (page) => {
   currentPage.value = page;
 };
+
+// showing pages
+const startItem = computed(() => {
+  return (currentPage.value - 1) * pageCount.value + 1;
+});
+
+const endItem = computed(() => {
+  const end = currentPage.value * pageCount.value;
+  return end > totalData.value ? totalData.value : end;
+});
 
 const viewAction = (item) => {
   console.log('View action for:', item);

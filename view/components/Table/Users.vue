@@ -1,15 +1,28 @@
 <template>
   <section class="items-center grid gap-5">
+    <div class="lg:flex hidden justify-between items-end -mb-3">
+      <div class="block">
+        <UButton 
+          label="Add User" 
+          icon="i-lucide-user-round-plus" 
+          class="dark:text-custom-200 bg-custom-400 hover:bg-custom-500 dark:bg-custom-700 dark:hover:bg-custom-800 rounded p-2" 
+          to="/admin/users/create"
+          size="xs" />
+      </div>
+      <div class="flex justify-end">
+        <span class="text-xs leading-5">
+          Showing
+          <span class="font-medium">{{ startItem }}</span>
+          -
+          <span class="font-medium">{{ endItem }}</span>
+          of
+          <span class="font-medium">{{ totalUsers }}</span>
+          results
+        </span>
+      </div>
+    </div>
     <div class="flex sm:gap-0 gap-5 sm:flex-row flex-col-reverse sm:justify-between justify-center">
-      <div class="flex gap-1 justify-start items-center">
-        <div class="lg:block hidden">
-          <UButton 
-            label="Add User" 
-            icon="i-lucide-user-round-plus" 
-            class="dark:text-custom-200 bg-custom-400 hover:bg-custom-500 dark:bg-custom-700 dark:hover:bg-custom-800 rounded p-2" 
-            to="/admin/users/create"
-            size="xs" />
-        </div>
+      <div class="flex gap-1 justify-start items-end">
         <UInput 
           v-model="q" 
           name="q"
@@ -34,16 +47,19 @@
         </UInput>
       </div>
 
-      <UPagination
-        :prev-button="{ icon: 'i-heroicons-arrow-small-left-20-solid', label: 'Prev', color: 'gray' }"
-        :next-button="{ icon: 'i-heroicons-arrow-small-right-20-solid', trailing: true, label: 'Next', color: 'gray' }"
-        :model-value="currentPage"
-        :page-count="pageCount"
-        :total="totalUsers"
-        show-first
-        show-last
-        @update:model-value="updatePage"
-        class="flex justify-center" />
+      <div class="grid gap-2">
+        <UPagination
+          :prev-button="{ icon: 'i-heroicons-arrow-small-left-20-solid', label: 'Prev', color: 'gray' }"
+          :next-button="{ icon: 'i-heroicons-arrow-small-right-20-solid', trailing: true, label: 'Next', color: 'gray' }"
+          :model-value="currentPage"
+          :page-count="pageCount"
+          :total="totalUsers"
+          show-first
+          show-last
+          @update:model-value="updatePage"
+          class="flex justify-center" />
+      </div>
+      
     </div>
 
     <UTable 
@@ -95,6 +111,18 @@
 
     </UTable>
 
+    <div class="flex justify-center lg:hidden">
+      <span class="text-xs leading-5">
+        Showing
+        <span class="font-medium">{{ startItem }}</span>
+        -
+        <span class="font-medium">{{ endItem }}</span>
+        of
+        <span class="font-medium">{{ totalUsers }}</span>
+        results
+      </span>
+    </div>
+
   </section>
 </template>
 
@@ -143,7 +171,7 @@ const q = ref('');
 
 // headers in table
 const tableHeaders = [
-  { key: 'id', label: `# (${users.value.length})` },
+  { key: 'id', label: '#' },
   { key: 'name', label: 'Name', sortable: true },
   { key: 'username', label: 'Username' },
   { key: 'role', label: 'Role', sortable: true },
@@ -180,6 +208,16 @@ const paginatedData = computed(() => {
 const updatePage = (page) => {
   currentPage.value = page;
 };
+
+// showing pages
+const startItem = computed(() => {
+  return (currentPage.value - 1) * pageCount.value + 1;
+});
+
+const endItem = computed(() => {
+  const end = currentPage.value * pageCount.value;
+  return end > totalUsers.value ? totalUsers.value : end;
+});
 
 
 // change status
