@@ -28,8 +28,8 @@
                   <UKbd 
                   v-if="p.label === 'status'"
                   :class="{
-                    'dark:border bg-green-600 dark:border-green-700 text-custom-100 dark:text-green-400 cursor-default': p.value === 'active',
-                    'dark:border bg-red-600 dark:border-red-700 text-custom-100 dark:text-red-400 cursor-default': p.value === 'inactive'
+                    'dark:border bg-green-600 dark:border-green-700 text-custom-100 dark:text-green-400 cursor-default px-2': p.value === 'active',
+                    'dark:border bg-red-600 dark:border-red-700 text-custom-100 dark:text-red-400 cursor-default px-2': p.value === 'inactive'
                   }" 
                   :value="p.value" 
                   class="col-span-3 text-center mt-2"

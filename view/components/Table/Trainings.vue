@@ -2,12 +2,9 @@
   <section class="items-center grid gap-5">
     <div class="lg:flex hidden justify-between items-end -mb-3">
       <div class="block">
-        <UButton 
-          label="Go Train" 
-          icon="i-lucide-hand" 
-          class="dark:text-custom-200 bg-custom-400 hover:bg-custom-500 dark:bg-custom-700 dark:hover:bg-custom-800 rounded p-2" 
-          to="/admin/motion-feed/train"
-          size="xs" />
+        <UButton label="Go Train" icon="i-lucide-hand"
+          class="dark:text-custom-200 bg-custom-400 hover:bg-custom-500 dark:bg-custom-700 dark:hover:bg-custom-800 rounded p-2"
+          to="/admin/motion-feed/train" size="xs" />
       </div>
       <div class="flex justify-end">
         <span class="text-xs leading-5">
@@ -23,47 +20,34 @@
     </div>
     <div class="flex sm:gap-0 gap-5 sm:flex-row flex-col-reverse sm:justify-between justify-center">
       <div class="flex gap-1 justify-start items-end">
-        <UInput 
-          v-model="q" 
-          name="q"
-          placeholder="Search..." 
-          icon="i-heroicons-magnifying-glass-20-solid"
-          autocomplete="off"
-          color="gray" 
-          size="sm" 
-          :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}, icon: { trailing: {pointer: '' }}}"
-          class="w-full sm:w-auto sm:-mb-0 -mb-5" >
+        <UInput v-model="q" name="q" placeholder="Search..." icon="i-heroicons-magnifying-glass-20-solid"
+          autocomplete="off" color="gray" size="sm"
+          :ui="{ rounded: 'rounded', color: { gray: { outline: 'dark:bg-custom-100 dark:text-custom-900' } }, icon: { trailing: { pointer: '' } } }"
+          class="w-full sm:w-auto sm:-mb-0 -mb-5">
 
           <template #trailing>
-            <UButton
-              v-show="q !== ''"
-              color="gray"
-              variant="link"
-              icon="i-heroicons-x-mark-20-solid"
-              :padded="false"
-              @click="q = ''"
-              class="hover:text-red-400 dark:hover:text-red-600 text-red-700 dark:text-red-400" />
+            <UButton v-show="q !== ''" color="gray" variant="link" icon="i-heroicons-x-mark-20-solid" :padded="false"
+              @click="q = ''" class="hover:text-red-400 dark:hover:text-red-600 text-red-700 dark:text-red-400" />
           </template>
         </UInput>
       </div>
 
-      <UPagination
-        :prev-button="{ icon: 'i-heroicons-arrow-small-left-20-solid', label: 'Prev', color: 'gray' }"
-        :next-button="{ icon: 'i-heroicons-arrow-small-right-20-solid', trailing: true, label: 'Next', color: 'gray' }"
-        :model-value="currentPage"
-        :page-count="pageCount"
-        :total="totalTrains"
-        show-first
-        show-last
-        @update:model-value="updatePage"
-        class="flex justify-center" />
+      <UPagination :model-value="currentPage" :page-count="pageCount" :total="totalTrains" :ui="{
+        color: 'gray',
+        wrapper: 'flex items-center gap-1',
+        rounded: '!rounded-full min-w-[30px] justify-center',
+        default: {
+          activeButton: {
+            variant: 'outline'
+          }
+        }
+      }" @update:model-value="updatePage" class="flex justify-center" />
     </div>
 
-    <UTable 
-      :columns="tableHeaders" 
-      :rows="paginatedData" 
-      class="max-h-[80vh] max-w-full overflow-auto border rounded border-custom-300 dark:border-custom-800" 
-      :ui="{thead: 'sticky top-0 z-10 dark:bg-custom-700 bg-custom-300 cursor-default', tbody: 'bg-custom-100 dark:bg-custom-950'}" >
+    <UTable :columns="tableHeaders" :rows="paginatedData" sort-asc-icon="i-heroicons-arrow-up"
+      sort-desc-icon="i-heroicons-arrow-down"
+      class="max-h-[70vh] max-w-full overflow-auto border rounded border-custom-300 dark:border-custom-800"
+      :ui="{ thead: 'sticky top-0 z-10 dark:bg-custom-700 bg-custom-300 cursor-default', tbody: 'bg-custom-100 dark:bg-custom-950' }">
 
       <template #id-data="{ index }">
         <span>
@@ -72,34 +56,22 @@
       </template>
 
       <template #level-data="{ row }">
-        <UKbd 
-          :class="{
-            ' bg-green-600 dark:border dark:border-green-700 text-custom-100 dark:text-green-400 cursor-default': row.level === 'normal',
-            ' bg-yellow-500 dark:border dark:border-yellow-500 text-custom-100 dark:text-yellow-400 cursor-default': row.level === 'warning',
-            'bg-red-600 dark:border dark:border-red-700 text-custom-100 dark:text-red-400 cursor-default': row.level === 'danger',
-          }" 
-          :value="row.level" />
+        <UKbd :class="{
+          ' bg-green-600 dark:border dark:border-green-700 text-custom-100 dark:text-green-400 cursor-default px-2': row.level === 'normal',
+          ' bg-yellow-500 dark:border dark:border-yellow-500 text-custom-100 dark:text-yellow-400 cursor-default px-2': row.level === 'warning',
+          'bg-red-600 dark:border dark:border-red-700 text-custom-100 dark:text-red-400 cursor-default px-2': row.level === 'danger',
+        }" :value="row.level" />
       </template>
 
       <template #action-data="{ row }">
         <div class="flex justify-start gap-2">
-          <UTooltip 
-            text="View" 
-            :popper="{ arrow: true, placement: 'bottom' }" 
-            :ui="{ background: 'dark:bg-custom-800 bg-custom-50', arrow: { background: 'dark:before:bg-custom-700 before:bg-custom-300'}}" >
-            <UIcon 
-              name="i-lucide-eye" 
-              class="text-xl hover:opacity-50 text-blue-500" 
-              @click="viewAction(row)" />
+          <UTooltip text="View" :popper="{ arrow: true, placement: 'bottom' }"
+            :ui="{ background: 'dark:bg-custom-800 bg-custom-50', arrow: { background: 'dark:before:bg-custom-700 before:bg-custom-300' } }">
+            <UIcon name="i-lucide-eye" class="text-xl hover:opacity-50 text-blue-500" @click="viewAction(row)" />
           </UTooltip>
-          <UTooltip 
-            text="Delete" 
-            :popper="{ arrow: true, placement: 'bottom' }" 
-            :ui="{ background: 'dark:bg-custom-800 bg-custom-50', arrow: { background: 'dark:before:bg-custom-700 before:bg-custom-300'}}" >
-            <UIcon 
-              name="i-lucide-trash-2" 
-              class="text-xl hover:opacity-50 text-red-500" 
-              @click="deleteAction(row)" />
+          <UTooltip text="Delete" :popper="{ arrow: true, placement: 'bottom' }"
+            :ui="{ background: 'dark:bg-custom-800 bg-custom-50', arrow: { background: 'dark:before:bg-custom-700 before:bg-custom-300' } }">
+            <UIcon name="i-lucide-trash-2" class="text-xl hover:opacity-50 text-red-500" @click="deleteAction(row)" />
           </UTooltip>
         </div>
       </template>
@@ -139,12 +111,12 @@ const levelMapping = {
 
 // fake data
 const generateData = (numRows) => {
-  const data = [];
+  const train = [];
   for (let i = 1; i <= numRows; i++) {
     const level = faker.helpers.arrayElement(Object.keys(levelMapping));
     const motion = faker.helpers.arrayElement(levelMapping[level]);
 
-    data.push({
+    train.push({
       id: i,
       motion: motion,
       threshold: faker.number.int({ min: 0, max: 100 }) + '%',
@@ -153,7 +125,7 @@ const generateData = (numRows) => {
       action: faker.hacker.verb()
     });
   }
-  return data;
+  return train;
 };
 
 

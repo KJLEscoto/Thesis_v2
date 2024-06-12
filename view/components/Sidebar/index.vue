@@ -34,7 +34,7 @@ const open = ref(false);
 
     <div 
       v-if="open" 
-      class="border-b border-custom-500 shadow-xl" >
+      class="border-b border-custom-500 shadow-xl lg:hidden block" >
       <SidebarMenu @click="open = false"/>
       <UIcon 
         name="i-lucide-x" 

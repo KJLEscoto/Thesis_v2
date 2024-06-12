@@ -2,12 +2,9 @@
   <section class="items-center grid gap-5">
     <div class="lg:flex hidden justify-between items-end -mb-3">
       <div class="block">
-        <UButton 
-          label="Add User" 
-          icon="i-lucide-user-round-plus" 
-          class="dark:text-custom-200 bg-custom-400 hover:bg-custom-500 dark:bg-custom-700 dark:hover:bg-custom-800 rounded p-2" 
-          to="/admin/users/create"
-          size="xs" />
+        <UButton label="Add User" icon="i-lucide-user-round-plus"
+          class="dark:text-custom-200 bg-custom-400 hover:bg-custom-500 dark:bg-custom-700 dark:hover:bg-custom-800 rounded p-2"
+          to="/admin/users/create" size="xs" />
       </div>
       <div class="flex justify-end">
         <span class="text-xs leading-5">
@@ -23,50 +20,37 @@
     </div>
     <div class="flex sm:gap-0 gap-5 sm:flex-row flex-col-reverse sm:justify-between justify-center">
       <div class="flex gap-1 justify-start items-end">
-        <UInput 
-          v-model="q" 
-          name="q"
-          placeholder="Search..." 
-          icon="i-heroicons-magnifying-glass-20-solid"
-          autocomplete="off"
-          color="gray" 
-          size="sm" 
-          :ui="{rounded: 'rounded',color: {gray: {outline: 'dark:bg-custom-100 dark:text-custom-900'}}, icon: { trailing: {pointer: '' }}}"
-          class="w-full sm:w-auto sm:-mb-0 -mb-5" >
+        <UInput v-model="q" name="q" placeholder="Search..." icon="i-heroicons-magnifying-glass-20-solid"
+          autocomplete="off" color="gray" size="sm"
+          :ui="{ rounded: 'rounded', color: { gray: { outline: 'dark:bg-custom-100 dark:text-custom-900' } }, icon: { trailing: { pointer: '' } } }"
+          class="w-full sm:w-auto sm:-mb-0 -mb-5">
 
           <template #trailing>
-            <UButton
-              v-show="q !== ''"
-              color="gray"
-              variant="link"
-              icon="i-heroicons-x-mark-20-solid"
-              :padded="false"
-              @click="q = ''"
-              class="hover:text-red-400 dark:hover:text-red-600 text-red-700 dark:text-red-400" />
+            <UButton v-show="q !== ''" color="gray" variant="link" icon="i-heroicons-x-mark-20-solid" :padded="false"
+              @click="q = ''" class="hover:text-red-400 dark:hover:text-red-600 text-red-700 dark:text-red-400" />
           </template>
         </UInput>
       </div>
 
       <div class="grid gap-2">
-        <UPagination
-          :prev-button="{ icon: 'i-heroicons-arrow-small-left-20-solid', label: 'Prev', color: 'gray' }"
-          :next-button="{ icon: 'i-heroicons-arrow-small-right-20-solid', trailing: true, label: 'Next', color: 'gray' }"
-          :model-value="currentPage"
-          :page-count="pageCount"
-          :total="totalUsers"
-          show-first
-          show-last
-          @update:model-value="updatePage"
-          class="flex justify-center" />
+        <UPagination :model-value="currentPage" :page-count="pageCount" :total="totalUsers" :ui="{
+          color: 'gray',
+          wrapper: 'flex items-center gap-1',
+          rounded: '!rounded-full min-w-[30px] justify-center',
+          default: {
+            activeButton: {
+              variant: 'outline'
+            }
+          }
+        }" @update:model-value="updatePage" class="flex justify-center" />
       </div>
-      
+
     </div>
 
-    <UTable 
-      :columns="tableHeaders" 
-      :rows="paginatedData" 
-      class="max-h-[80vh] max-w-full overflow-auto border rounded border-custom-300 dark:border-custom-800" 
-      :ui="{thead: 'sticky top-0 z-10 dark:bg-custom-700 bg-custom-300 cursor-default', tbody: 'bg-custom-100 dark:bg-custom-950'}" >
+    <UTable :columns="tableHeaders" :rows="paginatedData" sort-asc-icon="i-heroicons-arrow-up"
+      sort-desc-icon="i-heroicons-arrow-down"
+      class="max-h-[70vh] max-w-full overflow-auto border rounded border-custom-300 dark:border-custom-800"
+      :ui="{ thead: 'sticky top-0 z-10 dark:bg-custom-700 bg-custom-300 cursor-default', tbody: 'bg-custom-100 dark:bg-custom-950' }">
 
       <template #id-data="{ index }">
         <span>
@@ -75,28 +59,23 @@
       </template>
 
       <template #status-data="{ row }">
-        <UKbd 
-          :class="{
-            'dark:border bg-green-600 dark:border-green-700 text-custom-100 dark:text-green-400 cursor-default': row.status === 'Active',
-            'dark:border bg-red-600 dark:border-red-700 text-custom-100 dark:text-red-400 cursor-default': row.status === 'Inactive'
-          }" 
-          :value="row.status" />
+        <UKbd :class="{
+          'dark:border bg-green-600 dark:border-green-700 text-custom-100 dark:text-green-400 cursor-default px-2': row.status === 'Active',
+          'dark:border bg-red-600 dark:border-red-700 text-custom-100 dark:text-red-400 cursor-default px-2': row.status === 'Inactive'
+        }" :value="row.status" />
       </template>
 
       <template #actions-data="{ row }">
-        <UDropdown 
-          mode="hover" 
-          :items="actions(row)" 
-          :popper="{ placement: 'bottom-end', arrow: 'true', offsetDistance: -10 }" 
-          :ui="{ background: 'dark:bg-custom-950 bg-white', item: { disabled: 'cursor-disable opacity-100' } }" >
-          
-          <UIcon 
-            name="i-lucide-ellipsis" 
-            class="text-xl" />
+        <UDropdown mode="hover" :items="actions(row)"
+          :popper="{ placement: 'bottom-end', arrow: 'true', offsetDistance: -10 }"
+          :ui="{ background: 'dark:bg-custom-950 bg-white', item: { disabled: 'cursor-disable opacity-100' } }">
+
+          <UIcon name="i-lucide-ellipsis" class="text-xl" />
 
           <template #item="{ item }">
             <div class="flex justify-between w-full">
-              <UTooltip v-if="item.disabled" :text="item.tooltip" :popper="{ placement: 'right-start' }" class="flex justify-between w-full">
+              <UTooltip v-if="item.disabled" :text="item.tooltip" :popper="{ placement: 'right-start' }"
+                class="flex justify-between w-full">
                 <span class="truncate opacity-20">{{ item.label }}</span>
                 <UIcon :name="item.icon" class="flex-shrink-0 h-4 w-4 text-gray-400 dark:text-gray-500 opacity-20" />
               </UTooltip>
@@ -155,7 +134,7 @@ const generateData = (numRows) => {
       username: faker.internet.userName(),
       role: faker.helpers.arrayElement(roleOptions),
       status: faker.helpers.arrayElement(statusOptions),
-      name: name 
+      name: name
     });
   }
   return data;
@@ -193,10 +172,8 @@ const filteredRows = computed(() => {
   });
 });
 
-
 // count overall no. of users
 const totalUsers = computed(() => filteredRows.value.length);
-
 
 // pages
 const paginatedData = computed(() => {
@@ -232,12 +209,12 @@ const actions = (client) => [
   // [{ label: `${client.name}`, disabled: true }],
   [
     {
-      title: 'read',
+      title: 'view',
       label: 'View Details',
       icon: 'i-lucide-eye',
       click: () => {
         selectedUser.value = client;
-        navigateTo(`/admin/users/read/${client.id}`);
+        navigateTo(`/admin/users/details/${client.id}`);
       }
     },
     {

@@ -6,9 +6,10 @@
           <UIcon name="i-lucide-chevron-right" class="text-lg" />
         </template>
         <template #default="{ link, isActive }">
-          <div
-            :class="{ 'dark:text-white text-custom-800 text-lg cursor-default': isActive, 'text-custom-300 hover:text-custom-500 hover:dark:text-custom-300 dark:text-custom-500 text-lg': !isActive }"
-            class="rounded-full">
+          <div :class="{
+            'dark:text-white text-custom-800 text-lg cursor-default': isActive,
+            'text-custom-300 hover:text-custom-500 hover:dark:text-custom-300 dark:text-custom-500 text-lg': !isActive
+          }" class="rounded-full">
             {{ link.label }}
           </div>
         </template>
@@ -23,12 +24,13 @@
 
           <header class="flex justify-between items-center">
             <div class="font-semibold cursor-default flex items-center gap-1 w-1/2">
-              <UIcon name="i-lucide-user-round-plus" class="text-xl" />
-              <h1 class="font-bold text-xl">New User</h1>
+              <UIcon name="i-lucide-edit" class="text-xl" />
+              <h1 class="font-bold text-xl">Edit User</h1>
             </div>
           </header>
 
-
+          <p>-- iupdate ang info sa user -- <span class="text-xs">(ang superadmin lang maka access diri na page)</span>
+          </p>
           <div class="flex justify-between">
 
             <h1 class="text-lg w-auto">Personal Information</h1>
@@ -38,7 +40,7 @@
               <section class="w-auto">
                 <UButton label="Cancel" icon="i-lucide-x"
                   class="flex justify-center w-full items-center rounded dark:bg-red-600 dark:hover:bg-red-500 bg-red-700 hover:bg-red-600 dark:text-custom-100"
-                  to="/admin/users" />
+                  to="/admin/users/details/1" />
               </section>
 
               <section class="w-auto">
@@ -156,7 +158,7 @@
             <!-- role -->
             <UFormGroup class="w-full" label="Role" name="role">
               <template #default="{ error }">
-                <USelectMenu color="gray" selected-icon="i-heroicons-hand-thumb-up-solid" size="md" :ui="{
+                <USelectMenu color="gray" size="md" :ui="{
                   rounded: 'rounded',
                   color: error ?
                     { red: { outline: 'bg-red-100 dark:bg-red-50 text-custom-900 dark:text-custom-900 focus:ring-1 focus:ring-red-400 border-2 border-red-400 focus:border-red-400 active:ring-red-400 active:border-red-400' } } : { gray: { outline: 'dark:bg-custom-100 dark:text-custom-900' } }
@@ -173,35 +175,12 @@
             </UFormGroup>
           </section>
 
-          <!-- <div class="flex w-full">
-          <div class="w-2/3"></div>
-            <UFormGroup 
-            v-if="state.role.value === roleOptions[0].value"
-            label="Permission"
-            name="permission" 
-            help="(for some actions)" >
-            <div v-for="(p) in permissionOptions" :key="p.label">
-              <UCheckbox 
-                v-model="state.permission[p.label.toLowerCase()]"
-                class="ml-2">
-                <template #label>
-                  <span> {{ p.label }} </span>
-                </template>
-              </UCheckbox>
-            </div>
-            <template #error="{ error }">
-              <span :class="[error ? 'text-red-500 dark:text-red-400 text-xs font-bold' : 'text-primary-500 dark:text-primary-400']">
-                {{ error ? error : undefined }}
-              </span>
-            </template>
-          </UFormGroup>
-        </div> -->
-
           <h1 class="text-lg w-auto text-start mt-3 -mb-2">Login Credentials</h1>
           <hr class="border-custom-300 dark:border-custom-500 w-full">
 
           <section class="flex w-full gap-x-2">
 
+            <!-- username -->
             <UFormGroup class="w-1/2" label="Username" name="username">
               <template #default="{ error }">
                 <UInput type="text" color="gray" size="md" v-model="state.username" :ui="{
@@ -218,6 +197,7 @@
               </template>
             </UFormGroup>
 
+            <!-- password -->
             <UFormGroup class="w-1/2" label="Password" name="password">
               <template #default="{ error }">
                 <UInput type="password" color="gray" size="md" v-model="state.password" :ui="{
@@ -259,21 +239,6 @@ const roleOptions = [
   }
 ];
 
-// const permissionOptions = [
-//   { 
-//     value: false, 
-//     label: 'View' 
-//   },
-//   { 
-//     value: false, 
-//     label: 'Update' 
-//   },
-//   { 
-//     value: false, 
-//     label: 'Delete' 
-//   }
-// ]
-
 const statusOptions = [
   {
     value: 'active',
@@ -297,20 +262,15 @@ const genderOptions = [
 ];
 
 const state = reactive({
-  first_name: '',
-  last_name: '',
-  m_i: '',
-  gender: '',
-  phone: '',
+  first_name: undefined,
+  last_name: undefined,
+  m_i: undefined,
+  gender: undefined,
+  phone: undefined,
   status: statusOptions[0].value,
-  role: '',
-  // permission: {
-  //   view: false,
-  //   update: false,
-  //   delete: false
-  // },
-  username: '',
-  password: ''
+  role: undefined,
+  username: undefined,
+  password: undefined
 })
 
 const validate = (state: any): FormError[] => {
@@ -320,13 +280,6 @@ const validate = (state: any): FormError[] => {
   if (!state.gender) errors.push({ path: 'gender', message: 'Required' })
   if (!state.phone) errors.push({ path: 'phone', message: 'Required' })
   if (!state.status) errors.push({ path: 'status', message: 'Required' })
-
-  // Check if at least one permission is selected
-  // const selectedPermissions = Object.values(state.permission);
-  // if (!selectedPermissions.some(permission => permission)) {
-  //   errors.push({ path: 'permission', message: 'At least one permission must be selected' })
-  // }
-
   if (!state.role) errors.push({ path: 'role', message: 'Required' })
   if (!state.username) errors.push({ path: 'username', message: 'Required' })
   if (!state.password) errors.push({ path: 'password', message: 'Required' })
@@ -335,7 +288,7 @@ const validate = (state: any): FormError[] => {
 
 const loading = ref(false);
 const loadIcon = ref('');
-const label = ref('Save');
+const label = ref('Update');
 
 async function onSubmit(event: FormSubmitEvent<any>) {
   // Do something with data
@@ -346,25 +299,26 @@ async function onSubmit(event: FormSubmitEvent<any>) {
   label.value = '';
 
   setTimeout(() => {
-    label.value = 'Save';
+    label.value = 'Update';
     loading.value = false;
-    navigateTo('/admin/users')
+    navigateTo('/admin/users/details/1')
   }, 800)
 }
 
 async function onError(event: FormErrorEvent) {
-  const firstError = event.errors.find(error => error.path !== 'permission');
-  if (firstError) {
-    const element = document.getElementById(firstError.id);
-    element?.focus();
-    element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }
+  const element = document.getElementById(event.errors[0].id)
+  element?.focus()
+  element?.scrollIntoView({ behavior: 'smooth', block: 'center' })
 }
 
 const links = [{
   label: 'Users',
   to: '/admin/users'
 }, {
-  label: 'Create',
-}]
+  label: 'Details',
+  to: '/admin/users/details/1'
+}, {
+  label: 'Update',
+}
+]
 </script>
