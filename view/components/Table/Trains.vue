@@ -96,9 +96,8 @@
 <script setup>
 
 // imports
-import { ref, computed, watch } from 'vue';
+import { ModalViewTrains } from '#components'
 import { faker } from '@faker-js/faker';
-import { user } from '~/assets/js/userSample';
 
 // variable to fetch the specific user
 const selectedTrain = ref(null);
@@ -138,7 +137,7 @@ const q = ref('');
 
 // headers in table
 const tableHeaders = [
-  { key: 'id', label: `# (${trains.value.length})` },
+  { key: 'id', label: '#' },
   { key: 'motion', label: 'Motion', sortable: true }, // grab, reach, snatch, etc.
   { key: 'threshold', label: 'Threshold' }, // percentage to trigger the motion
   { key: 'level', label: 'Level' }, // normal, warning, danger
@@ -173,7 +172,8 @@ const paginatedData = computed(() => {
 });
 
 const viewAction = (item) => {
-  console.log('View action for:', item);
+  const modal = useModal()
+  modal.open(ModalViewTrains)
 };
 
 const deleteAction = (item) => {
@@ -193,14 +193,6 @@ const endItem = computed(() => {
   const end = currentPage.value * pageCount.value;
   return end > totalTrains.value ? totalTrains.value : end;
 });
-
-
-// change status
-const toggleStatus = (client) => {
-  client.status = client.status === 'Active' ? 'Inactive' : 'Active';
-};
-
-const isAdmin = user.role === 'admin';
 
 
 // Watch the search query and reset the current page to 1 when it changes

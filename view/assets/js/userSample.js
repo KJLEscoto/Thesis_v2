@@ -9,7 +9,7 @@ export const user = reactive({
   phone: "09123456789",
 
   // statically change it for now just to test (client, admin, superadmin)
-  role: "superadmin",
+  role: "client",
 
   status: "active",
   username: "superadmin123",

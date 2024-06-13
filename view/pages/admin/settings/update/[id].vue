@@ -29,7 +29,7 @@
             </div>
           </header>
 
-
+          <p>-- iupdate ang info sa user -- </p>
           <div class="flex justify-between">
 
             <h1 class="text-lg w-auto">Personal Information</h1>
@@ -39,7 +39,7 @@
               <section class="w-auto">
                 <UButton label="Cancel" icon="i-lucide-x"
                   class="flex justify-center w-full items-center rounded dark:bg-red-600 dark:hover:bg-red-500 bg-red-700 hover:bg-red-600 dark:text-custom-100"
-                  to="/admin/users" />
+                  to="/admin/settings" />
               </section>
 
               <section class="w-auto">
@@ -146,34 +146,6 @@
             </UFormGroup>
           </section>
 
-          <section class="flex w-full gap-x-2">
-
-            <!-- status -->
-            <UFormGroup class="w-2/3" label="Status" name="status">
-              <URadioGroup v-model="state.status" :options="statusOptions" class="ml-2"
-                :uiRadio="{ color: state.status === statusOptions[0].value ? 'text-green-500' : 'text-red-500' }" />
-            </UFormGroup>
-
-            <!-- role -->
-            <UFormGroup class="w-full" label="Role" name="role">
-              <template #default="{ error }">
-                <USelectMenu disabled color="gray" size="md" :ui="{
-                  rounded: 'rounded',
-                  color: error ?
-                    { red: { outline: 'bg-red-100 dark:bg-red-50 text-custom-900 dark:text-custom-900 focus:ring-1 focus:ring-red-400 border-2 border-red-400 focus:border-red-400 active:ring-red-400 active:border-red-400' } } : { gray: { outline: 'dark:bg-custom-100 dark:text-custom-900' } }
-                }"
-                  :uiMenu="{ background: 'dark:bg-custom-400', option: { color: 'dark:text-white', active: 'dark:bg-custom-600', empty: 'dark:text-white' }, empty: 'dark:text-white' }"
-                  v-model="state.role" :options="roleOptions" placeholder="Select a role" />
-              </template>
-              <template #error="{ error }">
-                <span
-                  :class="[error ? 'text-red-500 dark:text-red-400 text-xs font-bold' : 'text-primary-500 dark:text-primary-400']">
-                  {{ error ? error : undefined }}
-                </span>
-              </template>
-            </UFormGroup>
-          </section>
-
           <h1 class="text-lg w-auto text-start mt-3 -mb-2">Login Credentials</h1>
           <hr class="border-custom-300 dark:border-custom-500 w-full">
 
@@ -226,18 +198,6 @@ definePageMeta({
 })
 
 import type { FormError, FormErrorEvent, FormSubmitEvent } from '#ui/types'
-import { user } from '~/assets/js/userSample';
-
-const statusOptions = [
-  {
-    value: 'active',
-    label: 'Active'
-  },
-  {
-    value: 'inactive',
-    label: 'Inactive'
-  }
-];
 
 const genderOptions = [
   {
@@ -256,8 +216,6 @@ const state = reactive({
   m_i: undefined,
   gender: undefined,
   phone: undefined,
-  status: statusOptions[0].value,
-  role: user.role,
   username: undefined,
   password: undefined
 })
@@ -268,7 +226,6 @@ const validate = (state: any): FormError[] => {
   if (!state.last_name) errors.push({ path: 'last_name', message: 'Required' })
   if (!state.gender) errors.push({ path: 'gender', message: 'Required' })
   if (!state.phone) errors.push({ path: 'phone', message: 'Required' })
-  if (!state.status) errors.push({ path: 'status', message: 'Required' })
   if (!state.username) errors.push({ path: 'username', message: 'Required' })
   if (!state.password) errors.push({ path: 'password', message: 'Required' })
   return errors
@@ -289,7 +246,7 @@ async function onSubmit(event: FormSubmitEvent<any>) {
   setTimeout(() => {
     label.value = 'Update';
     loading.value = false;
-    navigateTo('/admin/users/details/1')
+    navigateTo('/admin/settings')
   }, 800)
 }
 
@@ -299,13 +256,11 @@ async function onError(event: FormErrorEvent) {
   element?.scrollIntoView({ behavior: 'smooth', block: 'center' })
 }
 
-const links = [
-  {
-    label: 'Users',
-    to: '/admin/users'
-  },
-  {
-    label: 'Update',
-  }
+const links = [{
+  label: 'Settings',
+  to: '/admin/settings'
+}, {
+  label: 'Update',
+}
 ]
 </script>

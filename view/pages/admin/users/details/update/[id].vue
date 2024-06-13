@@ -158,7 +158,7 @@
             <!-- role -->
             <UFormGroup class="w-full" label="Role" name="role">
               <template #default="{ error }">
-                <USelectMenu color="gray" size="md" :ui="{
+                <USelectMenu disabled color="gray" size="md" :ui="{
                   rounded: 'rounded',
                   color: error ?
                     { red: { outline: 'bg-red-100 dark:bg-red-50 text-custom-900 dark:text-custom-900 focus:ring-1 focus:ring-red-400 border-2 border-red-400 focus:border-red-400 active:ring-red-400 active:border-red-400' } } : { gray: { outline: 'dark:bg-custom-100 dark:text-custom-900' } }
@@ -227,17 +227,7 @@ definePageMeta({
 })
 
 import type { FormError, FormErrorEvent, FormSubmitEvent } from '#ui/types'
-
-const roleOptions = [
-  {
-    value: 'admin',
-    label: 'Admin'
-  },
-  {
-    value: 'client',
-    label: 'Client'
-  }
-];
+import { user } from '~/assets/js/userSample';
 
 const statusOptions = [
   {
@@ -268,7 +258,7 @@ const state = reactive({
   gender: undefined,
   phone: undefined,
   status: statusOptions[0].value,
-  role: undefined,
+  role: user.role,
   username: undefined,
   password: undefined
 })
@@ -280,7 +270,6 @@ const validate = (state: any): FormError[] => {
   if (!state.gender) errors.push({ path: 'gender', message: 'Required' })
   if (!state.phone) errors.push({ path: 'phone', message: 'Required' })
   if (!state.status) errors.push({ path: 'status', message: 'Required' })
-  if (!state.role) errors.push({ path: 'role', message: 'Required' })
   if (!state.username) errors.push({ path: 'username', message: 'Required' })
   if (!state.password) errors.push({ path: 'password', message: 'Required' })
   return errors

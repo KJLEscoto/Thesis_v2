@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
 import { faker } from '@faker-js/faker';
 import { user } from '~/assets/js/userSample';
+import { ModalViewNotifications } from '#components'
 
 const levelMapping = {
   normal: ['pickpocketing', 'shoplifting'],
@@ -78,13 +78,16 @@ const endItem = computed(() => {
   return end > totalNotifications.value ? totalNotifications.value : end;
 });
 
+// for client
 const viewAction = (item) => {
   console.log('View action for:', item);
   navigateTo('/client/notifications/1')
 };
 
+// for admin
 const viewActionModal = (item) => {
-  console.log('View action for:', item);
+  const modal = useModal()
+  modal.open(ModalViewNotifications)
 };
 
 watch(q, () => {
