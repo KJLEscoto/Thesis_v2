@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { user } from '~/assets/js/userSample';
+import { user } from '~/assets/js/userLogged';
 
 const open = ref(false);
 </script>
@@ -14,14 +14,9 @@ const open = ref(false);
       v-show="!open" 
       class="flex shadow lg:hidden items-center justify-between h-full p-5 tracking-wide border-b border-custom-500" >
       <div class="flex gap-3 items-center justify-start">
-        <label class="font-semibold text-xl">
-          {{
-            user.role === 'superadmin' ? 'Superadmin' :
-            user.role === 'admin' ? 'Admin' :
-            user.role === 'client' ? 'Client' :
-            ''
-          }}
-        </label>
+        <div class="font-semibold text-xl max-w-52">
+          <p class="truncate">Hi, <span>{{ user.username }}</span>!</p>
+        </div>
 
         <ToggleDarkMode />
       </div>

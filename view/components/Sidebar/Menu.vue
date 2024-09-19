@@ -1,7 +1,6 @@
 <script setup>
 import { ref, computed, watch } from 'vue';
-import { useRoute } from 'vue-router';
-import { user } from '~/assets/js/userSample';
+import { user } from '~/assets/js/userLogged';
 
 const route = useRoute();
 
@@ -39,11 +38,6 @@ const adminItems = ref([
     path: '/admin/users',
     icon: 'i-lucide-users-round'
   }, 
-  // {
-  //   title: 'Notification Log',
-  //   path: '/admin/notification-log',
-  //   icon: 'i-lucide-book-open-text'
-  // },
   {
     title: 'Settings',
     path: '/admin/settings',
@@ -63,33 +57,42 @@ watch([route, items], () => {
 
 </script>
 
-
 <template>
 <div class=" w-full tracking-wide">
+
   <header class="p-5 text-xl border-custom-500 border-b flex lg:gap-0 gap-3 items-center lg:justify-between justify-start ">
 
-    <label class="font-semibold">
-      {{
-        user.role === 'superadmin' ? 'Superadmin' :
-        user.role === 'admin' ? 'Admin' :
-        user.role === 'client' ? 'Client' :
-        ''
-      }}
-    </label>
+    <div class="font-semibold max-w-40">
+      <p class="truncate">Hi, <span>{{ user.username }}</span>! </p>
+    </div>
 
     <ToggleDarkMode 
       class="block" 
       :popper="{ placement: 'right', arrow: true }" />
   </header>
+
   <section class="grow overflow-y-auto lg:max-h-[79vh] max-h-[30vh] w-auto">
-    <div class="grid gap-2 w-full p-5">
+
+    <div v-if="!user.role || !['client', 'admin', 'superadmin'].includes(user.role)">
+      <p class="text-center p-10">
+        Unrecognized role does not have access to the menu. 
+        <br>
+        Please verify your role.
+      </p>
+    </div>
+
+    <div v-else class="grid gap-2 w-full p-5">
       <nuxt-link 
         :to="item.path" 
         v-for="(item, index) in items" 
         :key="index" 
         class="flex gap-2 items-center px-5 dark:hover:bg-custom-600 hover:bg-white py-2 transition cursor-pointer rounded-sm relative" 
         :class="[activeItem === item ? 'bg-custom-200 dark:bg-custom-700' : '']" >
-        <UIcon :name="item.icon" class="text-lg"/>
+
+        <UIcon 
+          :name="item.icon" 
+          class="text-lg"/>
+          
         <label>{{ item.title }}</label>
       </nuxt-link>
     </div>

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { user } from '~/assets/js/userSample';
+import { user } from '~/assets/js/userLogged';
 
 const initial = computed(() => user.name.charAt(0).toUpperCase());
 
@@ -8,7 +8,7 @@ const isOpen = ref(true)
 const router = useRouter();
 
 const logout = () => {
-  router.push('/login/client');
+  router.push('/auth');
 };
 
 const viewProfile = () => {
@@ -69,7 +69,7 @@ const items = [
       class="bg-red-500 dark:bg-red-500 hover:bg-red-600 h-10 mr-5 my-auto dark:hover:bg-red-400 text-white dark:text-white rounded" 
       label="Logout" 
       icon="i-lucide-log-out"
-      to="/login/client" />
+      @click="logout" />
   </div>
 </div>
 </template>

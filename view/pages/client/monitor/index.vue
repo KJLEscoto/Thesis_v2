@@ -1,4 +1,7 @@
 <template>
+
+  <UseHead title="Monitor - Client"/>
+
   <div class="lg:h-screen h-[700px] w-full p-5">
     <Camera videoUrl="" :isLive="true"/>
     <UButton label="Click me!" class="absolute top-52 right-10 rounded" @click="showToast"/>

@@ -3,7 +3,7 @@
     <div class="h-auto w-full p-5 flex flex-col gap-3">
 
       <section class="flex justify-between items-center">
-        <h1 class="text-lg font-semibold">Motion Detected!</h1>
+        <h1 class="text-lg font-semibold">Motion Detected</h1>
         <!-- <UButton @click="seeNotification" icon="i-lucide-badge-info" trailing label="See Notifications" size="xs" class="rounded"/> -->
         <UIcon name="i-lucide-x" class="text-xl hover:opacity-50 cursor-pointer" @click="closeModal" />
       </section>

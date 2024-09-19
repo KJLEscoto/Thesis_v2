@@ -2,6 +2,21 @@
 export default defineNuxtConfig({
   devtools: { enabled: false },
   modules: ["@nuxt/ui"],
+  app: {
+    head: {
+      title: 'Theft Prediction',
+      meta: [
+        {
+          name: 'description', content: 'AI-powered prediction system.'
+        }
+      ],
+      link: [
+        {
+          rel: 'shortcut icon', type: 'image/png', href: '/icon.png'
+        }
+      ]
+    }
+  },
   colorMode: {
     preference: "light"
   },

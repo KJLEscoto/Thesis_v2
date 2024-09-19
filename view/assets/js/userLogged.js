@@ -12,7 +12,7 @@ export const user = reactive({
   role: "client",
 
   status: "active",
-  username: "superadmin123",
+  username: "kentoy123",
   password: "password",
   account_created: "2024/05/26",
   updated_at: "2024/05/26",

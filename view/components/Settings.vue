@@ -1,4 +1,5 @@
 <template>
+
   <div class="lg:h-screen h-auto w-full p-5 gap-5 flex flex-col justify-between">
     <div class="flex-col gap-5 flex">
 
@@ -81,7 +82,7 @@
 
 <script setup>
 
-import { user } from '~/assets/js/userSample';
+import { user } from '~/assets/js/userLogged';
 
 const initial = computed(() => user.name.charAt(0).toUpperCase());
 

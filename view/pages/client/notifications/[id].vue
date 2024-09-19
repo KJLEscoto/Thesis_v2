@@ -106,7 +106,7 @@ definePageMeta({
 });
 
 // fetch 
-import { user } from '~/assets/js/userSample'
+import { user } from '~/assets/js/userLogged'
 import type { FormError, FormErrorEvent, FormSubmitEvent } from '#ui/types'
 
 const links = [{

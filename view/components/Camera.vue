@@ -1,6 +1,5 @@
 <template>
-  <div class="h-full w-full">
-    <div class="border-2 border-custom-500 lg:h-full h-[90%] w-full bg-custom-50 dark:bg-custom-200 rounded">
+    <div class="border-2 border-custom-500 lg:h-full h-[90%] w-full bg-custom-50 dark:bg-custom-200 rounded-lg">
       <section 
         v-show="!camera" 
         class="flex items-center justify-center h-full w-full">
@@ -20,32 +19,40 @@
       </section>
       <section 
         v-show="camera" 
-        class="flex items-center justify-center h-full w-full bg-custom-400 dark:bg-black relative rounded-sm">
+        class="flex items-center justify-center h-full w-full bg-custom-950 dark:bg-black relative rounded-lg">
+      
+        <img :src="videoFeedUrl" class="h-full w-full object-cover rounded-lg"/>
 
         <div class="flex justify-between absolute top-0 w-full items-center">
-          <section class="dark:text-white text-custom-900 w-auto h-auto bg-custom-300 rounded-ss-sm rounded-br-sm px-2 text-sm bg-opacity-50">
+          
+          <section class="text-white w-auto h-auto rounded-ss-sm rounded-br py-1 px-2 text-sm opacity-70">
             <h1 class="text-lg font-semibold">{{ currentDate }}</h1>
-            <p class="">{{ currentTime }}</p>
+            <p class="font-bold">{{ currentTime }}</p>
           </section>
-          <section class="px-3" v-if="isLive">
-            <UKbd class="flex justify-start gap-1 items-center bg-red-600 px-2 dark:border dark:border-red-700 text-white dark:text-red-400 cursor-default">
-              <UIcon name="i-lucide-radio" class="text-base"/>
+
+          <section 
+            v-if="isLive" 
+            class="absolute right-4">
+
+            <div class="flex justify-start gap-1 animate-pulse items-center bg-red-600 dark:bg-gray-900 rounded px-2 py-1 dark:border dark:border-red-500 text-white dark:text-red-500 cursor-default text-xs font-bold">
+              <UIcon 
+                name="i-lucide-radio" 
+                class="text-base"/>
               <p>LIVE</p>
-            </UKbd>
+            </div>
           </section>
         </div>
         
-        <canvas ref="canvas" class="w-full h-full"></canvas>
       </section>
     </div>
-  </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 
 // for camera
 const camera = ref(true);
+const videoFeedUrl = ref('http://127.0.0.1:5000/video_feed') // URL of the Flask server
 
 // Define props
 const props = defineProps({
@@ -59,41 +66,9 @@ const props = defineProps({
   }
 });
 
-// for video
-const canvas = ref(null);
-
-const drawVideoOnCanvas = (video) => {
-  const ctx = canvas.value.getContext('2d');
-
-  const drawFrame = () => {
-    ctx.drawImage(video, 0, 0, canvas.value.width, canvas.value.height);
-    requestAnimationFrame(drawFrame);
-  };
-
-  drawFrame();
-};
-
-const setupVideo = () => {
-  const video = document.createElement('video');
-  video.src = props.videoUrl;
-  video.crossOrigin = 'anonymous';
-  video.autoplay = true;
-  video.muted = true;
-  video.play();
-
-  video.addEventListener('canplay', () => {
-    canvas.value.width = video.videoWidth;
-    canvas.value.height = video.videoHeight;
-    drawVideoOnCanvas(video);
-  });
-};
-
-onMounted(() => {
-  setupVideo();
-});
-
+// Watch for changes in videoUrl
 watch(() => props.videoUrl, () => {
-  setupVideo();
+  videoFeedUrl.value = props.videoUrl;
 });
 
 // For date and time
@@ -113,7 +88,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-canvas {
+img {
   display: block;
 }
 </style>

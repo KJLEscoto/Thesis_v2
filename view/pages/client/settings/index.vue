@@ -1,4 +1,5 @@
 <template>
+  <UseHead title="Settings - Client"/>
   <Settings />
 </template>
 
