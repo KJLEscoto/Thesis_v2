@@ -9,6 +9,9 @@ const goBack = () => {
 </script>
 
 <template>
+
+  <UseHead title="Error"/>
+
 <div class="h-screen w-full">
   <div class="h-screen flex justify-center items-center">
     <div class="flex items-center justify-center h-auto w-full cursor-default p-10 m-auto">

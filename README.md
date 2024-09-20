@@ -109,9 +109,12 @@ See [documentation](https://drive.google.com/file/d/13JfqGKbeYx3t3D2HC0iH9tSk4r6
 > ![localhost](https://drive.google.com/uc?export=view&id=1ZUasDbDnpKBn2sKebAHRpFY8HsPvE9Sb)
 >
 
-### ❤️ That's it! The project is now ready to use. ❤️
+### ⭐ That's it! The project is now ready to use. GO start monitoring. ⭐
+> 
+> ![landing-page](https://drive.google.com/uc?export=view&id=17uKbu88C3i3U5fEAU_o6aHezuaVQSuxZ)
 
-## 👪 Credits
+
+## 📝 Credits
 This project was developed by:
 - [Luis Suizo](https://github.com/evander092002)
 - [Kent Escoto](https://github.com/KJLEscoto)

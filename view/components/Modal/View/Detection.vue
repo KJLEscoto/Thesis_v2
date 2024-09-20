@@ -45,7 +45,6 @@ const modal = useModal()
 const toast = useToast()
 
 const closeModal = () => {
-  // status = ignore
   modal.close()
 }
 

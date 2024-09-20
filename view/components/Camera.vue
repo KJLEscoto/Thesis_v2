@@ -1,9 +1,10 @@
 <template>
-    <div class="border-2 border-custom-500 lg:h-full h-[90%] w-full bg-custom-50 dark:bg-custom-200 rounded-lg">
+    <div class="lg:h-full h-[90%] w-full  rounded-lg">
+
       <section 
         v-show="!camera" 
         class="flex items-center justify-center h-full w-full">
-        <div class="text-red-800 grid justify-center">
+        <div class="text-red-500 grid justify-center">
           <UIcon 
             class="w-auto h-10 m-auto" 
             name="i-lucide-video-off" />
@@ -11,20 +12,20 @@
             No Camera Detected.
             <nuxt-link 
               to="#" 
-              class="text-blue-900 underline hover:text-custom-300 transition-colors duration-150">
+              class="text-blue-700 underline hover:text-custom-300 transition-colors duration-150">
               Go setup
             </nuxt-link>
           </p>
         </div>
       </section>
+
       <section 
         v-show="camera" 
-        class="flex items-center justify-center h-full w-full bg-custom-950 dark:bg-black relative rounded-lg">
+        class="flex items-center justify-center h-full w-full bg-custom-950 dark:bg-black relative">
       
-        <img :src="videoFeedUrl" class="h-full w-full object-cover rounded-lg"/>
+        <img :src="videoFeedUrl" class="h-full w-full object-cover block border-none"/>
 
         <div class="flex justify-between absolute top-0 w-full items-center">
-          
           <section class="text-white w-auto h-auto rounded-ss-sm rounded-br py-1 px-2 text-sm opacity-70">
             <h1 class="text-lg font-semibold">{{ currentDate }}</h1>
             <p class="font-bold">{{ currentTime }}</p>
@@ -40,10 +41,11 @@
                 class="text-base"/>
               <p>LIVE</p>
             </div>
+
           </section>
         </div>
-        
       </section>
+
     </div>
 </template>
 
@@ -86,9 +88,3 @@ onMounted(() => {
   setInterval(updateDateTime, 1000); // Update every second
 });
 </script>
-
-<style scoped>
-img {
-  display: block;
-}
-</style>
