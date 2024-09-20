@@ -7,7 +7,8 @@
         <h1 class="text-lg font-semibold text-custom-800 dark:text-white">Settings</h1>
         <UButton
           class="bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-400 text-white dark:text-white rounded"
-          label="Logout" icon="i-lucide-log-out" />
+          label="Logout" 
+          icon="i-lucide-log-out" />
       </header>
 
       <main
@@ -15,12 +16,20 @@
 
         <div class="flex justify-between items-center">
           <h1 class="font-semibold text-lg">Profile</h1>
-          <UButton v-if="user.role === 'admin' || user.role === 'superadmin'"
-            class="flex cursor-pointer justify-center items-center rounded dark:text-white'" label="Edit"
-            icon="i-lucide-edit" to="/admin/settings/update/1" />
-          <UButton v-if="user.role === 'client'"
-            class="flex cursor-pointer justify-center items-center rounded dark:text-white'" label="Edit"
-            icon="i-lucide-edit" to="/client/settings/update/1" />
+
+          <UButton 
+            v-if="user.role === 'client'"
+            class="flex cursor-pointer justify-center items-center rounded dark:text-white'" 
+            label="Edit"
+            icon="i-lucide-edit" 
+            to="/client/settings/username_here" />
+
+          <UButton 
+            v-if="user.role === 'admin' || user.role === 'superadmin'"
+            class="flex cursor-pointer justify-center items-center rounded dark:text-white'" 
+            label="Edit"
+            icon="i-lucide-edit" 
+            to="/admin/settings/username_here" />
         </div>
 
         <hr class="dark:border-custom-700 border-custom-200">
@@ -36,10 +45,18 @@
             <div v-for="(p, index) in profile" :key="index" class="grid grid-cols-5 gap-5 my-2">
               <h1 class="capitalize col-span-2">{{ p.label }}: </h1>
               <div class="col-span-2 dark:text-custom-300 text-custom-500 capitalize">
-                <UKbd v-if="p.label === 'status'" :class="{
+                <UKbd 
+                v-if="p.label === 'status'" 
+                :class="{
                   'dark:border bg-green-600 dark:border-green-700 text-custom-100 dark:text-green-400 cursor-default px-2': p.value === 'active',
                   'dark:border bg-red-600 dark:border-red-700 text-custom-100 dark:text-red-400 cursor-default px-2': p.value === 'inactive'
-                }" :value="p.value" class="col-span-3 text-center mt-2" />
+                }" 
+                :value="p.value" class="col-span-3 text-center mt-2" />
+
+                <div v-else-if="p.label === 'email'">
+                  <p class="lowercase">{{ p.value }}</p>
+                </div>
+
                 <p v-else> {{ p.value }} </p>
               </div>
             </div>
@@ -55,9 +72,14 @@
           <h1 class="font-semibold text-lg">Login Credentials</h1>
           <hr class="dark:border-custom-700 border-custom-200">
           <section class="my-auto">
-            <div v-for="(l, index) in login" :key="index" class="grid grid-cols-3 gap-5 my-2">
+            <div 
+              v-for="(l, index) in login" 
+              :key="index" 
+              class="grid grid-cols-3 gap-5 my-2">
+
               <h1 class="capitalize col-span-1">{{ l.label }}: </h1>
               <p class="col-span-2 dark:text-custom-300 text-custom-500">{{ l.value }}</p>
+
             </div>
           </section>
         </section>
@@ -67,9 +89,14 @@
           <h1 class="font-semibold text-lg">Timestamps (date & time)</h1>
           <hr class="dark:border-custom-700 border-custom-200">
           <section class="my-auto">
-            <div v-for="(t, index) in timestamp" :key="index" class="grid grid-cols-5 gap-5 my-2">
+            <div 
+              v-for="(t, index) in timestamp" 
+              :key="index" 
+              class="grid grid-cols-5 gap-5 my-2">
+
               <h1 class="capitalize col-span-2">{{ t.label }}: </h1>
               <p class="col-span-3 dark:text-custom-300 text-custom-500">{{ t.value }}</p>
+
             </div>
           </section>
         </section>
@@ -80,9 +107,10 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 import { user } from '~/assets/js/userLogged';
+import { ModalUserEdit } from '#components';
 
 const initial = computed(() => user.name.charAt(0).toUpperCase());
 
@@ -98,6 +126,10 @@ const profile = [
   {
     label: 'phone no.',
     value: user.phone
+  },
+  {
+    label: 'email',
+    value: user.email
   },
   {
     label: 'role',

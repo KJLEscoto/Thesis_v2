@@ -2,7 +2,7 @@ let alertSound;
 
 // Ensure Audio is only initialized on the client-side
 if (typeof window !== 'undefined') {
-    alertSound = new Audio('/alert_2.mp3');
+    alertSound = new Audio('/alert_1.mp3');
 }
 
 // Export function to stop and reset the alert sound

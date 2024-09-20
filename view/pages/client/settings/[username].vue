@@ -1,6 +1,8 @@
 <template>
   <div class="h-auto w-full flex flex-col p-5 gap-10">
+
     <section class="">
+
       <UBreadcrumb :links="links">
         <template #divider>
           <UIcon name="i-lucide-chevron-right" class="text-lg" />
@@ -14,6 +16,7 @@
           </div>
         </template>
       </UBreadcrumb>
+
     </section>
     <section class="h-4/5 w-full flex justify-center items-center">
       <div
@@ -25,11 +28,10 @@
           <header class="flex justify-between items-center">
             <div class="font-semibold cursor-default flex items-center gap-1 w-1/2">
               <UIcon name="i-lucide-edit" class="text-xl" />
-              <h1 class="font-bold text-xl">Edit User</h1>
+              <h1 class="font-bold text-xl">Edit</h1>
             </div>
           </header>
 
-          <p>-- iupdate ang info sa user -- </p>
           <div class="flex justify-between">
 
             <h1 class="text-lg w-auto">Personal Information</h1>

@@ -60,7 +60,7 @@
       <template #action-data="{ row }">
         <UTooltip text="View" :popper="{ arrow: true, placement: 'right' }"
           :ui="{ background: 'dark:bg-custom-800 bg-custom-50', arrow: { background: 'dark:before:bg-custom-700 before:bg-custom-300' } }">
-          <UIcon name="i-lucide-eye" class="text-xl hover:opacity-75 text-blue-500" @click="viewActionModal(row)" />
+          <UIcon name="i-lucide-eye" class="text-xl hover:opacity-75 text-blue-500" @click="openModal()" />
         </UTooltip>
       </template>
     </UTable>
@@ -81,94 +81,71 @@
 
 <script setup lang="ts">
 import { faker } from '@faker-js/faker';
-// import { user } from '~/assets/js/userLogged';
-import { ModalViewNotifications } from '#components'
+import { ModalViewNotifications } from '#components';
 
-const levelMapping = {
-  normal: ['pickpocketing', 'shoplifting'],
-  danger: ['stealing', 'burglary'],
-  warning: ['grab', 'snatch'],
+const motions = ['pickpocketing', 'shoplifting', 'stealing', 'burglary', 'grab', 'snatch'];
+
+// Generate mock data for notifications
+const generateData = (numRows: number) => {
+  return Array.from({ length: numRows }, (_, i) => ({
+    id: i + 1,
+    date: faker.date.recent().toISOString().split('T')[0],
+    motion_detected: faker.helpers.arrayElement(motions),
+  }));
 };
 
-const notificationStatus = ['Approved', 'Ignored'];
-
-const generateData = (numRows) => {
-  const notifications = [];
-  for (let i = 1; i <= numRows; i++) {
-    const level = faker.helpers.arrayElement(Object.keys(levelMapping));
-    const motion = faker.helpers.arrayElement(levelMapping[level]);
-    notifications.push({
-      id: i,
-      date: faker.date.recent().toISOString().split('T')[0],
-      motion_detected: motion,
-      level: level,
-      status: faker.helpers.arrayElement(notificationStatus),
-    });
-  }
-  return notifications;
-};
-
-// for api retrieval 
-// const { data: notifications, pending } = await useLazyFetch(() => `/api/users?orderBy=${sort.value.column}&order=${sort.value.direction}`)
-
-const notifications = ref(generateData(153));
+const notifications = ref(generateData(27));
 const currentPage = ref(1);
 const pageCount = ref(20);
 const q = ref('');
 
+// Table headers configuration
 const tableHeaders = [
-  { key: 'id', label: '#'},
-  { key: 'date', label: 'Date'},
-  { key: 'motion_detected', label: 'Motion Detected'},
-  { key: 'action', label: 'Action'},
+  { key: 'id', label: '#' },
+  { key: 'date', label: 'Date' },
+  { key: 'motion_detected', label: 'Motion Detected' },
+  { key: 'action', label: 'Action' },
 ];
 
+// Filter rows based on the search query
 const filteredRows = computed(() => {
-  if (!q.value) {
-    return notifications.value;
-  }
-
-  return notifications.value.filter((person) => {
-    return Object.values(person).some((value) => {
-      return String(value).toLowerCase().includes(q.value.toLowerCase());
-    });
-  });
+  return q.value
+    ? notifications.value.filter((item) =>
+        Object.values(item).some((value) =>
+          String(value).toLowerCase().includes(q.value.toLowerCase())
+        )
+      )
+    : notifications.value;
 });
 
+// Pagination logic
 const totalNotifications = computed(() => filteredRows.value.length);
 
 const paginatedData = computed(() => {
   const start = (currentPage.value - 1) * pageCount.value;
-  const end = start + pageCount.value;
-  return filteredRows.value.slice(start, end);
+  return filteredRows.value.slice(start, start + pageCount.value);
 });
 
-const updatePage = (page) => {
+// Update page
+const updatePage = (page: number) => {
   currentPage.value = page;
 };
 
-// showing pages
-const startItem = computed(() => {
-  return (currentPage.value - 1) * pageCount.value + 1;
-});
+// Start and end items for the current page
+const startItem = computed(() => (currentPage.value - 1) * pageCount.value + 1);
 
 const endItem = computed(() => {
   const end = currentPage.value * pageCount.value;
-  return end > totalNotifications.value ? totalNotifications.value : end;
+  return Math.min(end, totalNotifications.value);
 });
 
-// for client
-// const viewAction = (item) => {
-//   console.log('View action for:', item);
-//   navigateTo('/client/notifications/1')
-// };
-
-// for admin
-const viewActionModal = (item) => {
-  const modal = useModal()
-  modal.open(ModalViewNotifications)
+// Action for viewing notifications 
+const openModal = () => {
+  const modal = useModal();
+  modal.open(ModalViewNotifications);
 };
 
+// Reset pagination when the search query changes
 watch(q, () => {
   currentPage.value = 1;
 });

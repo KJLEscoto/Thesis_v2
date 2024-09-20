@@ -1,4 +1,7 @@
 <template>
+
+  <UseHead title="Edit - Settings - Client" />
+
   <UModal 
     v-model="isOpen" 
     :ui="{background: 'bg-custom-50 dark:bg-custom-900'}" 
@@ -20,7 +23,7 @@
           </div>
           <UIcon 
             name="i-lucide-x" 
-            @click="isOpen = false" 
+            @click="closeModal" 
             class="text-red-400 hover:text-red-600 text-xl cursor-pointer" />
         </header>
 
@@ -167,20 +170,27 @@ const genderOptions = ['Male', 'Female'];
 // }));
 
 
-watch(() => props.modelValue, (newVal) => {
-  isOpen.value = newVal;
-});
+// watch(() => props.modelValue, (newVal) => {
+//   isOpen.value = newVal;
+// });
 
-watch(isOpen, (newVal) => {
-  emit('update:modelValue', newVal);
-});
+// watch(isOpen, (newVal) => {
+//   emit('update:modelValue', newVal);
+// });
 
-const closeEditModal = () => {
-  isOpen.value = false;
-  emit('close-edit');
-};
+// const closeEditModal = () => {
+//   isOpen.value = false;
+//   emit('close-edit');
+// };
 
-const updateClientDetails = () => {
-  closeEditModal();
-};
+// const updateClientDetails = () => {
+//   closeEditModal();
+// };
+
+const modal = useModal()
+
+const closeModal = () => {
+  modal.reset()
+}
+
 </script>

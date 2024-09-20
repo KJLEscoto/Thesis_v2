@@ -1,6 +1,6 @@
 <template>
 
-  <UseHead title="OTP - Auth" description="OTP Authentication adds an extra layer of security by requiring a one-time password for each login or transaction, enhancing protection against unauthorized access." />
+  <UseHead title="SMS - Auth" description="SMS - phone number verification." />
 
   <div class="flex justify-center items-center h-screen w-auto">
 
@@ -23,7 +23,7 @@
           <UIcon 
             name="i-lucide-message-square-more" 
             class="text-3xl" />
-          <h1 class="text-2xl font-bold cursor-default">OTP Verification</h1>
+          <h1 class="text-2xl font-bold cursor-default">SMS Verification</h1>
         </div>
       </header>
 
@@ -37,8 +37,8 @@
 
         <template #label>
           <div class="flex flex-col justify-center mb-2 items-center w-full">
-            <p class="font-normal">Enter the code from the SMS we sent to</p>
-            <p class="font-bold text-lg">{{ user.phone }}</p>
+            <p class="font-normal">Enter the code from the <strong>SMS</strong> we sent to</p>
+            <p class="font-medium text-base italic">{{ user.phone }}</p>
           </div>
         </template>
 
@@ -78,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-
+import { timer } from '~/assets/js/setLoadingTime';
 import { user } from '~/assets/js/userLogged';
 import type { FormError, FormErrorEvent, FormSubmitEvent } from '#ui/types'
 
@@ -118,7 +118,7 @@ async function onSubmit(event: FormSubmitEvent<any>) {
 
     label.value = 'Submit';
     loading.value = false;
-  }, 800);
+  }, timer);
 }
 
 async function onError(event: FormErrorEvent) {

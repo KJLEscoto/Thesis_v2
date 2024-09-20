@@ -7,10 +7,10 @@
       videoUrl="http://127.0.0.1:5000/video_feed"
       :isLive="true"/>
 
-    <!-- <UButton 
+    <UButton 
       label="Alert!" 
       class="absolute top-52 right-10 rounded" 
-      @click="showToast"/> -->
+      @click="showToast"/>
   </div>
 </template>
 
