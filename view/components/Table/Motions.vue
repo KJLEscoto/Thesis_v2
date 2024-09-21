@@ -1,16 +1,16 @@
 <template>
   <section class="items-center grid gap-5">
-    <div class="hidden justify-end -mb-3 lg:flex">
-        <span class="text-xs leading-5">
-          Showing
-          <span class="font-medium">{{ startItem }}</span>
-          -
-          <span class="font-medium">{{ endItem }}</span>
-          of
-          <span class="font-medium">{{ totalTrains }}</span>
-          results
-        </span>
-      </div>
+    <div class="hidden justify-end lg:flex -mb-3">
+      <span class="text-xs leading-5">
+        Showing
+        <span class="font-medium">{{ startItem }}</span>
+        -
+        <span class="font-medium">{{ endItem }}</span>
+        of
+        <span class="font-medium">{{ totalTrains }}</span>
+        results
+      </span>
+    </div>
     <div class="flex sm:gap-0 gap-5 sm:flex-row flex-col-reverse sm:justify-between justify-center">
       <div class="flex gap-1 justify-start items-end">
 
@@ -68,7 +68,7 @@
       class="max-h-[70vh] max-w-full overflow-auto border rounded border-custom-300 dark:border-custom-800"
       :ui="{ 
         thead: 'sticky top-0 z-10 dark:bg-custom-700 bg-custom-300 cursor-default', 
-        body: 'bg-custom-100 dark:bg-custom-950' 
+        tbody: 'bg-custom-100 dark:bg-custom-950' 
       }">
 
       <template #id-data="{ index }">
@@ -145,8 +145,9 @@
 <script setup>
 
 // imports
-import { ModalViewTrains } from '#components'
+import { ModalViewMotions } from '#components'
 import { faker } from '@faker-js/faker';
+import { name, playSound } from '~/assets/js/sound'
 
 // variable to fetch the specific user
 const selectedTrain = ref(null);
@@ -210,7 +211,6 @@ const filteredRows = computed(() => {
 // count overall no. of users
 const totalTrains = computed(() => filteredRows.value.length);
 
-
 // pages
 const paginatedData = computed(() => {
   const start = (currentPage.value - 1) * pageCount.value;
@@ -220,11 +220,40 @@ const paginatedData = computed(() => {
 
 const viewAction = (item) => {
   const modal = useModal()
-  modal.open(ModalViewTrains)
+  modal.open(ModalViewMotions)
 };
 
+const toast = useToast()
+name.value = 'success_1'
+
 const deleteAction = (item) => {
-  console.log('Delete action for:', item);
+  if (confirm("Delete this motion?") == true) {
+
+    console.log(item)
+
+    playSound()
+
+    toast.add({
+      title: 'Motion Deleted Successfully!',
+      icon: 'i-lucide-trash-2',
+      timeout: 2500,
+      ui: {
+        background : 'dark:bg-green-700 bg-green-300', 
+        progress: {
+          background: 'dark:bg-white bg-green-700 rounded-full'
+        }, 
+        ring: 'ring-1 ring-green-700 dark:ring-custom-900',
+        default: {
+          closeButton: { 
+            color: 'white',
+          }
+        },
+        icon: 'text-custom-900'
+      },
+    })
+  } else {
+    console.log('Cancelled.')
+  }
 };
 
 const updatePage = (page) => {

@@ -38,7 +38,7 @@
         <template #label>
           <div class="flex flex-col justify-center mb-2 items-center w-full">
             <p class="font-normal">Enter the code from the <strong>SMS</strong> we sent to</p>
-            <p class="font-medium text-base italic">{{ user.phone }}</p>
+            <p class="font-medium text-base italic text-blue-700 dark:text-blue-500">{{ user.phone }}</p>
           </div>
         </template>
 
@@ -78,9 +78,9 @@
 </template>
 
 <script setup lang="ts">
-import { timer } from '~/assets/js/setLoadingTime';
 import { user } from '~/assets/js/userLogged';
 import type { FormError, FormErrorEvent, FormSubmitEvent } from '#ui/types'
+import { name, playSound } from '~/assets/js/sound'
 
 const state = reactive({
   otp: undefined
@@ -96,6 +96,32 @@ const loading = ref(false);
 const loadIcon = ref('');
 const label = ref('Submit');
 
+const toast = useToast()
+name.value = 'login_1'
+
+const showToast = () => {
+  playSound()
+
+  toast.add({
+    title: 'Login Successfully!',
+    icon: 'i-lucide-log-out',
+    timeout: 2000,
+    ui: {
+      background : 'dark:bg-green-700 bg-green-300', 
+      progress: {
+        background: 'dark:bg-white bg-green-700 rounded-full'
+      }, 
+      ring: 'ring-1 ring-green-700 dark:ring-custom-900',
+      default: {
+        closeButton: { 
+          color: 'white',
+        }
+      },
+      icon: 'text-custom-900'
+    },
+  })
+}
+
 async function onSubmit(event: FormSubmitEvent<any>) {
   // Do something with data
   console.log(event.data)
@@ -107,10 +133,11 @@ async function onSubmit(event: FormSubmitEvent<any>) {
   setTimeout(() => {
     console.log(user.role);
 
-    // Conditional navigation based on user role
     if (user.role === 'client') {
+      showToast()
       navigateTo('/client/monitor');
     } else if (user.role === 'admin' || user.role === 'superadmin') {
+      showToast()
       navigateTo('/admin/dashboard');
     } else {
       alert('Unrecognized role detected! Please contact an Admin for verification.');
@@ -118,7 +145,7 @@ async function onSubmit(event: FormSubmitEvent<any>) {
 
     label.value = 'Submit';
     loading.value = false;
-  }, timer);
+  }, 800);
 }
 
 async function onError(event: FormErrorEvent) {

@@ -19,21 +19,22 @@ definePageMeta({
   layout: 'sidebar'
 })
 
-import { playAlertSound, alertStop } from '~/assets/js/alertSound'
+import { name, playSound, stopSound } from '~/assets/js/sound'
 
 // for toast
 const toast = useToast()
 const lastCheckTime = ref(null)
+name.value = 'alert_1'
 
 const onClick = () => {
   navigateTo('/client/notifications')
-  alertStop()
+  stopSound()
   toast.clear()
 }
 
 const showToast = () => {
 
-  playAlertSound()
+  playSound()
 
   toast.add({
     title: 'Motion Detected!',

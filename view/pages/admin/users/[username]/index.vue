@@ -1,54 +1,78 @@
 <template>
+
+  <UseHead :title="`${user.username} - Users - Admin`"/>
+
   <div class="h-auto w-full flex flex-col p-5 gap-10">
+
     <section class="">
       <UBreadcrumb :links="links">
         <template #divider>
-          <UIcon name="i-lucide-chevron-right" class="text-lg" />
+          <UIcon 
+            name="i-lucide-chevron-right" 
+            class="text-lg" />
         </template>
+
         <template #default="{ link, isActive }">
-          <div :class="{
-            'dark:text-white text-custom-800 text-lg cursor-default': isActive,
-            'text-custom-300 hover:text-custom-500 hover:dark:text-custom-300 dark:text-custom-500 text-lg': !isActive
-          }" class="rounded-full">
+          <div 
+            :class="{
+              'dark:text-white text-custom-800 text-lg cursor-default': isActive,
+              'text-custom-300 hover:text-custom-500 hover:dark:text-custom-300 dark:text-custom-500 text-lg': !isActive
+            }" 
+            class="rounded-full">
             {{ link.label }}
           </div>
         </template>
       </UBreadcrumb>
     </section>
+
     <section class="h-4/5 w-full flex justify-center items-center">
       <div class="sm:w-3/4 w-full h-auto flex flex-col gap-5">
         <div class="flex justify-between">
 
           <div class="font-semibold cursor-default flex items-center gap-1 w-1/2">
-            <UIcon name="i-lucide-book-user" class="text-xl" />
+            <UIcon 
+              name="i-lucide-book-user" 
+              class="text-xl" />
             <h1 class="font-bold text-xl">User Details</h1>
           </div>
 
           <div class="flex justify-end w-1/2 gap-x-2">
             <section class="w-auto">
-              <UButton label="Back" icon="i-lucide-move-left"
+
+              <UButton 
+                label="Back" 
+                icon="i-lucide-move-left"
                 class="flex justify-center w-full items-center rounded dark:bg-red-600 dark:hover:bg-red-500 bg-red-700 hover:bg-red-600 dark:text-custom-100"
                 to="/admin/users" />
+
             </section>
+
             <section class="w-auto">
-              <UTooltip text="Only superadmin can edit" v-if="user.role === 'admin'">
-                <UButton :disabled="user.role === 'admin'"
-                  :class="user.role === 'admin' ? 'opacity-20 cursor-not-allowed' : 'flex cursor-pointer justify-center w-full items-center rounded dark:text-white'"
-                  label="Edit" icon="i-lucide-edit" to="/admin/users/details/update/1" />
+              
+              <UButton 
+                v-if="user.role === 'superadmin'"
+                class="flex cursor-pointer justify-center w-full items-center rounded dark:text-white"
+                label="Edit" 
+                icon="i-lucide-edit" 
+                :to="`/admin/users/${user.username}/update`"/>
+
+              <UTooltip 
+                text="Only superadmin can edit" 
+                v-else>
+
+                <UButton 
+                  :disabled="!user.role"
+                  class="opacity-20 cursor-not-allowed rounded"
+                  label="Edit" 
+                  icon="i-lucide-edit"/>
               </UTooltip>
-              <UButton v-else :disabled="user.role === 'admin'"
-                :class="user.role === 'admin' ? 'opacity-20 cursor-not-allowed' : 'flex cursor-pointer justify-center w-full items-center rounded dark:text-white'"
-                label="Edit" icon="i-lucide-edit" to="/admin/users/details/update/1" />
             </section>
           </div>
         </div>
 
-
-        <p>-- retrieve ang info sa user gamit iyang ID -- </p>
-
         <div class="lg:flex grid gap-5 w-full">
           <section
-            class="bg-custom-100 dark:bg-custom-900 border border-custom-300 dark:border-custom-700 rounded p-5 lg:w-1/2 w-full">
+            class="bg-custom-100 dark:bg-custom-900 border border-custom-300 dark:border-custom-700 rounded p-7 lg:w-1/2 w-full">
             <h1 class=" font-semibold">Personal Information</h1>
             <hr class="border-custom-200 dark:border-custom-700 mt-2 mb-2">
             <section class="my-auto">
@@ -59,15 +83,22 @@
                     'dark:border bg-green-600 dark:border-green-700 text-custom-100 dark:text-green-400 cursor-default px-2': p.value === 'active',
                     'dark:border bg-red-600 dark:border-red-700 text-custom-100 dark:text-red-400 cursor-default px-2': p.value === 'inactive'
                   }" :value="p.value" class="col-span-3 text-center mt-2" />
+
+                <div v-else-if="p.label === 'email'">
+                  <p class="lowercase">{{ p.value }}</p>
+                </div>
+                
                   <p v-else> {{ p.value }} </p>
                 </div>
 
               </div>
             </section>
           </section>
+
           <div class="flex flex-col gap-5 lg:w-1/2 w-full">
+
             <section
-              class="bg-custom-100 dark:bg-custom-900 rounded p-5 border border-custom-300 dark:border-custom-700">
+              class="bg-custom-100 dark:bg-custom-900 rounded p-7 border border-custom-300 dark:border-custom-700">
               <h1 class=" font-semibold">Login Credentials</h1>
               <hr class="border-custom-200 dark:border-custom-700 mt-2 mb-2">
               <section class="my-auto">
@@ -77,8 +108,9 @@
                 </div>
               </section>
             </section>
+
             <section
-              class="bg-custom-100 dark:bg-custom-900 rounded p-5 border border-custom-300 dark:border-custom-700">
+              class="bg-custom-100 dark:bg-custom-900 rounded p-7 border border-custom-300 dark:border-custom-700">
               <h1 class=" font-semibold">Timestamps (date & time)</h1>
               <hr class="border-custom-200 dark:border-custom-700 mt-2 mb-2">
               <section class="my-auto">
@@ -88,17 +120,18 @@
                 </div>
               </section>
             </section>
+
           </div>
         </div>
       </div>
     </section>
     <hr class="border-custom-300 dark:border-custom-800">
-    <section class="sm:w-3/4 w-full mx-auto flex flex-col gap-5">
+    <section class="sm:w-3/4 w-full mx-auto flex flex-col gap-3">
       <div class="font-semibold cursor-default flex items-center gap-1 w-1/2">
         <UIcon name="i-lucide-book-open-text" class="text-xl" />
         <h1 class="font-bold text-xl">Notifications Log</h1>
       </div>
-      <p>-- retrieve ang notifications sa user (approved status only) --</p>
+      <p class="lg:-mb-6 mb-0">These are list of motions that was detected by this user.</p>
       <TableNotifications />
     </section>
   </div>
@@ -109,7 +142,7 @@ definePageMeta({
   layout: 'sidebar'
 });
 
-import { user } from '~/assets/js/userSample'
+import { user } from '~/assets/js/userLogged'
 
 const links = [{
   label: 'Users',
@@ -130,6 +163,10 @@ const profile = [
   {
     label: 'phone no.',
     value: user.phone
+  },
+  {
+    label: 'email',
+    value: user.email
   },
   {
     label: 'role',

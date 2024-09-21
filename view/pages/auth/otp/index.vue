@@ -40,8 +40,6 @@
 </template>
 
 <script setup>
-import { timer } from '~/assets/js/setLoadingTime';
-
 
 const loadingSMS = ref(false);
 const loadIconSMS = ref('');
@@ -56,7 +54,7 @@ const sms = () => {
     setTimeout(() => {
     navigateTo('/auth/otp/sms');
     loadingSMS.value = false;
-    }, timer);
+    }, 800);
 };
 
 const email = () => {
@@ -66,7 +64,7 @@ const email = () => {
     setTimeout(() => {
     navigateTo('/auth/otp/email');
     loadingEmail.value = false;
-    }, timer);
+    }, 800);
 };
 
 const router = useRouter();

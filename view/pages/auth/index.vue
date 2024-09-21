@@ -120,7 +120,6 @@
 </template>
 
 <script setup lang="ts">
-import { timer } from '~/assets/js/setLoadingTime';
 import type { FormError, FormErrorEvent, FormSubmitEvent } from '#ui/types';
 
 const state = reactive({
@@ -151,7 +150,7 @@ async function onSubmit(event: FormSubmitEvent<any>) {
     label.value = 'Sign In';
     navigateTo('/auth/otp');  
     loading.value = false;
-  }, timer)
+  }, 800)
 }
 
 async function onError(event: FormErrorEvent) {

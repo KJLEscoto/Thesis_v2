@@ -168,14 +168,10 @@
 import { ref, computed, watch } from 'vue';
 import { faker } from '@faker-js/faker';
 import { user } from '~/assets/js/userLogged';
-
-// variable to fetch the specific user
-const selectedUser = ref(null);
-
+import { name, playSound } from '~/assets/js/sound'
 
 const roleOptions = ['Client', 'Admin'];
 const statusOptions = ['Active', 'Inactive'];
-
 
 // fake data
 const generateData = (numRows) => {
@@ -208,10 +204,10 @@ const q = ref('');
 // headers in table
 const tableHeaders = [
   { key: 'id', label: '#' },
-  { key: 'name', label: 'Name', sortable: true },
+  { key: 'name', label: 'Name' },
   { key: 'username', label: 'Username' },
-  { key: 'role', label: 'Role', sortable: true },
-  { key: 'status', label: 'Status', sortable: true },
+  { key: 'role', label: 'Role' },
+  { key: 'status', label: 'Status' },
   { key: 'actions', label: 'Actions' }
 ];
 
@@ -259,6 +255,40 @@ const toggleStatus = (client) => {
   client.status = client.status === 'Active' ? 'Inactive' : 'Active';
 };
 
+// delete user
+const toast = useToast()
+name.value = 'success_1'
+
+const deleteAction = (client) => {
+  if (confirm("Delete this user?") == true) {
+
+    console.log(client)
+
+    playSound()
+
+    toast.add({
+      title: 'User Deleted Successfully!',
+      icon: 'i-lucide-trash-2',
+      timeout: 2500,
+      ui: {
+        background : 'dark:bg-green-700 bg-green-300', 
+        progress: {
+          background: 'dark:bg-white bg-green-700 rounded-full'
+        }, 
+        ring: 'ring-1 ring-green-700 dark:ring-custom-900',
+        default: {
+          closeButton: { 
+            color: 'white',
+          }
+        },
+        icon: 'text-custom-900'
+      },
+    })
+  } else {
+    console.log('Cancelled.')
+  }
+};
+
 const isAdmin = user.role === 'admin';
 
 // for actions
@@ -270,8 +300,7 @@ const actions = (client) => [
       label: 'View Details',
       icon: 'i-lucide-eye',
       click: () => {
-        selectedUser.value = client;
-        navigateTo(`/admin/users/details/${client.id}`);
+        navigateTo(`/admin/users/${user.username}`);
       }
     },
     {
@@ -279,8 +308,7 @@ const actions = (client) => [
       label: 'Edit Information',
       icon: 'i-lucide-edit',
       click: () => {
-        selectedUser.value = client;
-        navigateTo(`/admin/users/update/${client.id}`);
+        navigateTo(`/admin/users/${user.username}/update`);
       },
       disabled: isAdmin,
       tooltip: isAdmin ? 'Only superadmin can edit' : null
@@ -300,7 +328,10 @@ const actions = (client) => [
       label: 'Delete Client',
       icon: 'i-lucide-trash-2',
       disabled: isAdmin,
-      tooltip: isAdmin ? 'Only superadmin can delete' : null
+      tooltip: isAdmin ? 'Only superadmin can delete' : null,
+      click: () => {
+        deleteAction(client)
+      }
     }
   ]
 ];

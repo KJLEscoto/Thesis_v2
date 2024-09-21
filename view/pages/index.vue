@@ -36,19 +36,22 @@
 </template>
 
 <script setup>
-import { timer } from '~/assets/js/setLoadingTime';
+import { name, playSound } from '~/assets/js/sound'
 
 const loading = ref(false);
 const loadIcon = ref('');
+name.value = 'start_1'
 
 const handleClick = () => {
   loading.value = true;
   loadIcon.value = 'i-lucide-loader-circle'
 
+  playSound()
+
   setTimeout(() => {
     navigateTo('/auth');
     loading.value = false;
-  }, timer);
+  }, 2300);
 };
 
 </script>

@@ -10,7 +10,7 @@ export const user = reactive({
   email: 'kentescoto24@gmail.com',
 
   // statically change it for now just to test (client, admin, superadmin)
-  role: "admin",
+  role: "client",
 
   status: "active",
   username: "kentoy123",

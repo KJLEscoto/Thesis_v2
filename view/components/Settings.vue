@@ -8,11 +8,12 @@
         <UButton
           class="bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-400 text-white dark:text-white rounded"
           label="Logout" 
-          icon="i-lucide-log-out" />
+          icon="i-lucide-log-out"
+          @click="handleLogout" />
       </header>
 
       <main
-        class="flex flex-col h-auto gap-5 p-5 rounded dark:bg-custom-900 bg-custom-100 border border-custom-300 dark:border-custom-700">
+        class="flex flex-col h-auto gap-5 p-10 rounded dark:bg-custom-900 bg-custom-100 border border-custom-300 dark:border-custom-700">
 
         <div class="flex justify-between items-center">
           <h1 class="font-semibold text-lg">Profile</h1>
@@ -22,14 +23,14 @@
             class="flex cursor-pointer justify-center items-center rounded dark:text-white'" 
             label="Edit"
             icon="i-lucide-edit" 
-            to="/client/settings/username_here" />
+            :to="`/client/settings/${user.username}`" />
 
           <UButton 
             v-if="user.role === 'admin' || user.role === 'superadmin'"
             class="flex cursor-pointer justify-center items-center rounded dark:text-white'" 
             label="Edit"
             icon="i-lucide-edit" 
-            to="/admin/settings/username_here" />
+            :to="`/admin/settings/${user.username}`" />
         </div>
 
         <hr class="dark:border-custom-700 border-custom-200">
@@ -68,7 +69,7 @@
       <div class="grid md:grid-cols-2 grid-cols-1 h-auto w-full justify-between gap-5">
 
         <section
-          class="h-auto w-full dark:bg-custom-900 bg-custom-100 flex flex-col gap-5 p-5 rounded border border-custom-300 dark:border-custom-700">
+          class="h-auto w-full dark:bg-custom-900 bg-custom-100 flex flex-col gap-5 p-10 rounded border border-custom-300 dark:border-custom-700">
           <h1 class="font-semibold text-lg">Login Credentials</h1>
           <hr class="dark:border-custom-700 border-custom-200">
           <section class="my-auto">
@@ -85,7 +86,7 @@
         </section>
 
         <section
-          class="h-auto w-full dark:bg-custom-900 bg-custom-100 flex flex-col gap-5 p-5 rounded border border-custom-300 dark:border-custom-700">
+          class="h-auto w-full dark:bg-custom-900 bg-custom-100 flex flex-col gap-5 p-10 rounded border border-custom-300 dark:border-custom-700">
           <h1 class="font-semibold text-lg">Timestamps (date & time)</h1>
           <hr class="dark:border-custom-700 border-custom-200">
           <section class="my-auto">
@@ -110,7 +111,7 @@
 <script setup lang="ts">
 
 import { user } from '~/assets/js/userLogged';
-import { ModalUserEdit } from '#components';
+import { name, playSound } from '~/assets/js/sound'
 
 const initial = computed(() => user.name.charAt(0).toUpperCase());
 
@@ -163,4 +164,36 @@ const timestamp = [
   },
 ]
 
+const toast = useToast()
+name.value = 'logoff_1'
+
+const handleLogout = () => {
+  if (confirm("You would like to log out?") == true) {
+
+  playSound()
+
+  toast.add({
+    title: 'Logout Successfully!',
+    icon: 'i-lucide-log-out',
+    timeout: 2000,
+    ui: {
+      background : 'dark:bg-green-700 bg-green-300', 
+      progress: {
+        background: 'dark:bg-white bg-green-700 rounded-full'
+      }, 
+      ring: 'ring-1 ring-green-700 dark:ring-custom-900',
+      default: {
+        closeButton: { 
+          color: 'white',
+        }
+      },
+      icon: 'text-custom-900'
+    },
+  })
+  
+  navigateTo('/auth')
+  } else {
+  console.log('Cancelled.')
+  }
+}
 </script>
