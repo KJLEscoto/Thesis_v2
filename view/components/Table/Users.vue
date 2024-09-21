@@ -163,45 +163,22 @@
 </template>
 
 <script setup>
-
-// imports
 import { ref, computed, watch } from 'vue';
-import { faker } from '@faker-js/faker';
+import { generateData } from '~/assets/js/users'; // Adjust the path as needed
+
+// Fetch the generated user data
+const users = ref(generateData()); // Store the generated data
+
+// Other imports
 import { user } from '~/assets/js/userLogged';
-import { name, playSound } from '~/assets/js/sound'
+import { name, playSound } from '~/assets/js/sound';
 
-const roleOptions = ['Client', 'Admin'];
-const statusOptions = ['Active', 'Inactive'];
-
-// fake data
-const generateData = (numRows) => {
-  const data = [];
-  for (let i = 1; i <= numRows; i++) {
-    const firstname = faker.person.firstName();
-    const lastname = faker.person.lastName();
-    const middle_initial = faker.string.alpha().toUpperCase();
-    const name = `${firstname} ${middle_initial}. ${lastname}`;
-
-    data.push({
-      id: i,
-      username: faker.internet.userName(),
-      role: faker.helpers.arrayElement(roleOptions),
-      status: faker.helpers.arrayElement(statusOptions),
-      name: name
-    });
-  }
-  return data;
-};
-
-
-// variables
-const users = ref(generateData(200));
+// Variables for pagination and search
 const currentPage = ref(1);
 const pageCount = ref(20);
 const q = ref('');
 
-
-// headers in table
+// Table headers
 const tableHeaders = [
   { key: 'id', label: '#' },
   { key: 'name', label: 'Name' },
@@ -211,8 +188,7 @@ const tableHeaders = [
   { key: 'actions', label: 'Actions' }
 ];
 
-
-// filter the table in search
+// Filtering rows based on the search query
 const filteredRows = computed(() => {
   if (!q.value) {
     return users.value;
@@ -225,10 +201,10 @@ const filteredRows = computed(() => {
   });
 });
 
-// count overall no. of users
+// Counting the total number of users
 const totalUsers = computed(() => filteredRows.value.length);
 
-// pages
+// Paginated data
 const paginatedData = computed(() => {
   const start = (currentPage.value - 1) * pageCount.value;
   const end = start + pageCount.value;
@@ -239,7 +215,7 @@ const updatePage = (page) => {
   currentPage.value = page;
 };
 
-// showing pages
+// Displaying start and end items in pagination
 const startItem = computed(() => {
   return (currentPage.value - 1) * pageCount.value + 1;
 });
@@ -249,91 +225,102 @@ const endItem = computed(() => {
   return end > totalUsers.value ? totalUsers.value : end;
 });
 
+// Toast for status change or delete
+const toast = useToast();
 
-// change status
+// Toggle user status
 const toggleStatus = (client) => {
   client.status = client.status === 'Active' ? 'Inactive' : 'Active';
-};
+  name.value = 'toggle_1';
 
-// delete user
-const toast = useToast()
-name.value = 'success_1'
-
-const deleteAction = (client) => {
-  if (confirm("Delete this user?") == true) {
-
-    console.log(client)
-
-    playSound()
-
+  if (client.status === 'Active') {
     toast.add({
-      title: 'User Deleted Successfully!',
-      icon: 'i-lucide-trash-2',
-      timeout: 2500,
+      title: 'Status changed: Active!',
+      icon: 'i-lucide-toggle-right',
+      timeout: 1500,
       ui: {
-        background : 'dark:bg-green-700 bg-green-300', 
-        progress: {
-          background: 'dark:bg-white bg-green-700 rounded-full'
-        }, 
+        background: 'dark:bg-green-700 bg-green-300',
+        progress: { background: 'dark:bg-white bg-green-700 rounded-full' },
         ring: 'ring-1 ring-green-700 dark:ring-custom-900',
-        default: {
-          closeButton: { 
-            color: 'white',
-          }
-        },
-        icon: 'text-custom-900'
+        default: { closeButton: { color: 'white' } },
+        icon: 'text-custom-900',
       },
-    })
+    });
+    playSound();
   } else {
-    console.log('Cancelled.')
+    toast.add({
+      title: 'Status changed: Inactive!',
+      icon: 'i-lucide-toggle-left',
+      timeout: 1500,
+      ui: {
+        background: 'dark:bg-red-700 bg-red-300',
+        progress: { background: 'dark:bg-white bg-red-700 rounded-full' },
+        ring: 'ring-1 ring-red-700 dark:ring-custom-900',
+        default: { closeButton: { color: 'white' } },
+        icon: 'text-custom-900',
+      },
+    });
+    playSound();
   }
 };
 
+// Delete user
+const deleteAction = (client) => {
+  if (confirm('Delete this user?') == true) {
+    name.value = 'delete_1';
+    toast.add({
+      title: 'User Deleted Successfully!',
+      icon: 'i-lucide-trash-2',
+      timeout: 2000,
+      ui: {
+        background: 'dark:bg-red-700 bg-red-300',
+        progress: { background: 'dark:bg-white bg-red-700 rounded-full' },
+        ring: 'ring-1 ring-red-700 dark:ring-custom-900',
+        default: { closeButton: { color: 'white' } },
+        icon: 'text-custom-900',
+      },
+    });
+    playSound();
+  }
+};
+
+// Check if user is admin
 const isAdmin = user.role === 'admin';
 
-// for actions
+// Actions for each user row
 const actions = (client) => [
-  // [{ label: `${client.name}`, disabled: true }],
   [
     {
       title: 'view',
       label: 'View Details',
       icon: 'i-lucide-eye',
-      click: () => {
-        navigateTo(`/admin/users/${user.username}`);
-      }
+      click: () => navigateTo(`/admin/users/${client.username}`),
     },
     {
       title: 'update',
       label: 'Edit Information',
       icon: 'i-lucide-edit',
-      click: () => {
-        navigateTo(`/admin/users/${user.username}/update`);
-      },
+      click: () => navigateTo(`/admin/users/${client.username}/update`),
       disabled: isAdmin,
-      tooltip: isAdmin ? 'Only superadmin can edit' : null
+      tooltip: isAdmin ? 'Only superadmin can edit' : null,
     },
     {
       title: 'toggle',
       label: `Status: ${client.status}`,
       icon: 'i-lucide-toggle-left',
-      click: () => {
-        toggleStatus(client);
-      }
-    }
+      click: () => toggleStatus(client),
+    },
   ],
   [
     {
       title: 'delete',
-      label: 'Delete Client',
+      label: 'Delete User',
       icon: 'i-lucide-trash-2',
       disabled: isAdmin,
       tooltip: isAdmin ? 'Only superadmin can delete' : null,
-      click: () => {
-        deleteAction(client)
-      }
-    }
-  ]
+      click: () => deleteAction(client),
+    },
+  ],
 ];
 
 // Watch the search query and reset the current page to 1 when it changes

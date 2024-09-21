@@ -15,9 +15,11 @@
 
       <header>
         <div class="flex items-center justify-end">
-          <UButton icon="i-lucide-x" @click="goBack"
-              class="flex justify-center items-center text-sm rounded-full dark:bg-red-600 dark:hover:bg-red-600/75 bg-red-600 hover:bg-red-600/75 dark:text-custom-100"
-              size="2xs" />
+          <UButton 
+            icon="i-lucide-x" 
+            to="/auth/otp"
+            class="flex justify-center items-center text-sm rounded-full dark:bg-red-600 dark:hover:bg-red-600/75 bg-red-600 hover:bg-red-600/75 dark:text-custom-100"
+            size="2xs" />
         </div>
         <div class="flex justify-center items-center gap-1">
           <UIcon 
@@ -104,7 +106,7 @@ const showToast = () => {
 
   toast.add({
     title: 'Login Successfully!',
-    icon: 'i-lucide-log-out',
+    icon: 'i-lucide-log-in',
     timeout: 2000,
     ui: {
       background : 'dark:bg-green-700 bg-green-300', 
@@ -153,10 +155,4 @@ async function onError(event: FormErrorEvent) {
   element?.focus()
   element?.scrollIntoView({ behavior: 'smooth', block: 'center' })
 }
-
-const router = useRouter();
-
-const goBack = () => {
-  router.go(-1);
-};
 </script>

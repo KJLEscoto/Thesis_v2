@@ -45,8 +45,13 @@
             </section>
 
             <section class="w-auto">
-                <UButton :label="label" :loading-icon="loadIcon" :loading="loading" icon="i-lucide-save"
-                class="flex justify-center w-full items-center rounded dark:text-white" type="submit" />
+                <UButton 
+                    :label="label" 
+                    :loading-icon="loadIcon" 
+                    :loading="loading" 
+                    icon="i-lucide-save"
+                    class="flex justify-center w-full items-center rounded dark:text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 hover:dark:bg-blue-800" 
+                    type="submit" />
             </section>
             </div>
         </div>
@@ -111,7 +116,19 @@
             </UFormGroup>
         </section>
 
-        <section class="flex w-full gap-x-2">
+        <section class="flex w-full gap-x-2"> 
+
+        <!-- gender -->
+        <UFormGroup class="w-2/3" label="Gender" name="gender">
+            <URadioGroup v-model="state.gender" :options="genderOptions" class="ml-2" />
+            <template #error="{ error }">
+            <span
+                :class="[error ? 'text-red-500 dark:text-red-400 text-xs font-bold' : 'text-primary-500 dark:text-primary-400']">
+                {{ error ? error : undefined }}
+            </span>
+            </template>
+        </UFormGroup>
+
         <!-- phone -->
         <UFormGroup class="w-1/2" name="phone">
             <template #label>
@@ -155,19 +172,15 @@
             </template>
         </UFormGroup>
 
-        <!-- gender -->
-        <UFormGroup class="w-1/4" label="Gender" name="gender">
-            <URadioGroup v-model="state.gender" :options="genderOptions" class="ml-2" />
-            <template #error="{ error }">
-            <span
-                :class="[error ? 'text-red-500 dark:text-red-400 text-xs font-bold' : 'text-primary-500 dark:text-primary-400']">
-                {{ error ? error : undefined }}
-            </span>
-            </template>
-        </UFormGroup>
         </section>
 
         <section class="flex w-full gap-x-2">
+
+            <!-- status -->
+            <UFormGroup class="w-2/3" label="Status" name="status">
+            <URadioGroup v-model="state.status" :options="statusOptions" class="ml-2"
+                :uiRadio="{ color: state.status === statusOptions[0].value ? 'text-green-500' : 'text-red-500' }" />
+            </UFormGroup>
 
             <!-- role -->
             <UFormGroup class="w-full" label="Role" name="role">
@@ -186,12 +199,6 @@
                 {{ error ? error : undefined }}
                 </span>
             </template>
-            </UFormGroup>
-
-            <!-- status -->
-            <UFormGroup class="w-1/4" label="Status" name="status">
-            <URadioGroup v-model="state.status" :options="statusOptions" class="ml-2"
-                :uiRadio="{ color: state.status === statusOptions[0].value ? 'text-green-500' : 'text-red-500' }" />
             </UFormGroup>
 
         </section>
@@ -312,7 +319,7 @@ console.log(event.data)
 loading.value = true;
 loadIcon.value = 'i-lucide-loader-circle';
 label.value = '';
-name.value = 'success_1'
+name.value = 'success_2'
 
 setTimeout(() => {
     playSound()
@@ -321,11 +328,11 @@ setTimeout(() => {
         icon: 'i-lucide-circle-check-big',
         timeout: 2500,
         ui: {
-        background : 'dark:bg-green-700 bg-green-300', 
+        background : 'dark:bg-blue-700 bg-blue-300', 
         progress: {
-            background: 'dark:bg-white bg-green-700 rounded-full'
+            background: 'dark:bg-white bg-blue-700 rounded-full'
         }, 
-        ring: 'ring-1 ring-green-700 dark:ring-custom-900',
+        ring: 'ring-1 ring-blue-700 dark:ring-custom-900',
         default: {
             closeButton: { 
             color: 'white',

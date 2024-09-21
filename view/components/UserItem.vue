@@ -1,21 +1,51 @@
 <script setup>
-import { ref, computed } from 'vue';
 import { user } from '~/assets/js/userLogged';
+import { name, playSound } from '~/assets/js/sound'
 
 const initial = computed(() => user.name.charAt(0).toUpperCase());
 
 const isOpen = ref(true)
-const router = useRouter();
 
-const logout = () => {
-  router.push('/auth');
-};
+const toast = useToast()
+name.value = 'logoff_1'
+
+const handleLogout = () => {
+  if (confirm("You would like to log out?") == true) {
+
+  playSound()
+
+  toast.add({
+    title: 'Logout Successfully!',
+    icon: 'i-lucide-log-out',
+    timeout: 2000,
+    ui: {
+      background : 'dark:bg-orange-700 bg-orange-300', 
+      progress: {
+        background: 'dark:bg-white bg-orange-700 rounded-full'
+      }, 
+      ring: 'ring-1 ring-orange-700 dark:ring-custom-900',
+      default: {
+        closeButton: { 
+          color: 'white',
+        }
+      },
+      icon: 'text-custom-900'
+    },
+  })
+  
+  navigateTo('/auth')
+  } else {
+  console.log('Cancelled.')
+  }
+}
 
 const viewProfile = () => {
   if (user.role === 'client') {
-    router.push('/client/settings');
+    navigateTo('/client/settings');
   } else if (user.role === 'admin' || user.role === 'superadmin') {
-    router.push('/admin/settings');
+    navigateTo('/admin/settings');
+  } else {
+    alert('Error occured! Try Again.')
   }
 };
 
@@ -29,7 +59,7 @@ const items = [
   {
     label: 'Logout',
     icon: 'i-lucide-log-out',
-    click: logout
+    click: handleLogout
   }],
 ]
 
@@ -69,7 +99,7 @@ const items = [
       class="bg-red-500 dark:bg-red-500 hover:bg-red-600 h-10 mr-5 my-auto dark:hover:bg-red-400 text-white dark:text-white rounded" 
       label="Logout" 
       icon="i-lucide-log-out"
-      @click="logout" />
+      @click="handleLogout" />
   </div>
 </div>
 </template>

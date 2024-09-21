@@ -1,5 +1,6 @@
 <template>
   <section class="items-center grid gap-5">
+    <!-- Pagination and Search Controls -->
     <div class="hidden justify-end lg:flex -mb-3">
       <span class="text-xs leading-5">
         Showing
@@ -7,13 +8,13 @@
         -
         <span class="font-medium">{{ endItem }}</span>
         of
-        <span class="font-medium">{{ totalTrains }}</span>
+        <span class="font-medium">{{ total }}</span>
         results
       </span>
     </div>
     <div class="flex sm:gap-0 gap-5 sm:flex-row flex-col-reverse sm:justify-between justify-center">
+      <!-- Search Input -->
       <div class="flex gap-1 justify-start items-end">
-
         <UInput 
           v-model="q" 
           name="q" 
@@ -28,7 +29,6 @@
             icon: { trailing: { pointer: '' } } 
           }"
           class="w-full sm:w-auto sm:-mb-0 -mb-5">
-
           <template #trailing>
             <UButton 
               v-show="q !== ''" 
@@ -41,11 +41,11 @@
           </template>
         </UInput>
       </div>
-
+      <!-- Pagination -->
       <UPagination 
         :model-value="currentPage" 
         :page-count="pageCount" 
-        :total="totalTrains" 
+        :total="total" 
         :ui="{
           color: 'gray',
           wrapper: 'flex items-center gap-1',
@@ -60,6 +60,7 @@
         class="flex justify-center" />
     </div>
 
+    <!-- Motion Table -->
     <UTable 
       :columns="tableHeaders" 
       :rows="paginatedData" 
@@ -70,63 +71,31 @@
         thead: 'sticky top-0 z-10 dark:bg-custom-700 bg-custom-300 cursor-default', 
         tbody: 'bg-custom-100 dark:bg-custom-950' 
       }">
-
+      <!-- Custom Template for Row Index -->
       <template #id-data="{ index }">
-        <span>
-          {{ (currentPage - 1) * pageCount + index + 1 }}
-        </span>
+        <span>{{ (currentPage - 1) * pageCount + index + 1 }}</span>
       </template>
 
-      <!-- <template #level-data="{ row }">
-        <UKbd :class="{
-          ' bg-green-600 dark:border dark:border-green-700 text-custom-100 dark:text-green-400 cursor-default px-2': row.level === 'normal',
-          ' bg-yellow-500 dark:border dark:border-yellow-500 text-custom-100 dark:text-yellow-400 cursor-default px-2': row.level === 'warning',
-          'bg-red-600 dark:border dark:border-red-700 text-custom-100 dark:text-red-400 cursor-default px-2': row.level === 'danger',
-        }" :value="row.level" />
-      </template> -->
-
+      <!-- Custom Template for Actions -->
       <template #action-data="{ row }">
         <div class="flex justify-start gap-2">
-
-          <UTooltip 
-            text="View" 
-            :popper="{ 
-              arrow: true, 
-              placement: 'bottom' 
-            }"
-            :ui="{ 
-              background: 'dark:bg-custom-800 bg-custom-50', 
-              arrow: { background: 'dark:before:bg-custom-700 before:bg-custom-300' } 
-            }">
-
+          <UTooltip text="View" :popper="{ arrow: true, placement: 'bottom' }">
             <UIcon 
               name="i-lucide-eye" 
               class="text-xl hover:opacity-50 text-blue-500" 
               @click="viewAction(row)" />
           </UTooltip>
-
-          <UTooltip 
-            text="Delete" 
-            :popper="{ 
-              arrow: true, 
-              placement: 'bottom' 
-            }"
-            :ui="{ 
-              background: 'dark:bg-custom-800 bg-custom-50', 
-              arrow: { background: 'dark:before:bg-custom-700 before:bg-custom-300' } 
-            }">
-
+          <UTooltip text="Delete" :popper="{ arrow: true, placement: 'bottom' }">
             <UIcon 
               name="i-lucide-trash-2" 
               class="text-xl hover:opacity-50 text-red-500" 
               @click="deleteAction(row)" />
           </UTooltip>
-          
         </div>
       </template>
-
     </UTable>
 
+    <!-- Mobile Pagination -->
     <div class="flex justify-center lg:hidden">
       <span class="text-xs leading-5">
         Showing
@@ -134,145 +103,94 @@
         -
         <span class="font-medium">{{ endItem }}</span>
         of
-        <span class="font-medium">{{ totalTrains }}</span>
+        <span class="font-medium">{{ total }}</span>
         results
       </span>
     </div>
-
   </section>
 </template>
 
 <script setup>
-
-// imports
+// Imports
 import { ModalViewMotions } from '#components'
-import { faker } from '@faker-js/faker';
 import { name, playSound } from '~/assets/js/sound'
+import { motions } from '~/assets/js/motions'
 
-// variable to fetch the specific user
-const selectedTrain = ref(null);
-
-const levelMapping = {
-  normal: ['pickpocketing', 'shoplifting'],
-  danger: ['stealing', 'burglary'],
-  warning: ['grab', 'snatch'],
-};
-
-// fake data
-const generateData = (numRows) => {
-  const train = [];
-  for (let i = 1; i <= numRows; i++) {
-    const level = faker.helpers.arrayElement(Object.keys(levelMapping));
-    const motion = faker.helpers.arrayElement(levelMapping[level]);
-
-    train.push({
-      id: i,
-      motion: motion,
-      threshold: faker.number.int({ min: 0, max: 100 }) + '%',
-      level: level,
-      date: faker.date.past().toISOString().split('T')[0], // Date in YYYY-MM-DD format
-      action: faker.hacker.verb()
-    });
-  }
-  return train;
-};
-
-
-// variables
-const trains = ref(generateData(200));
+// Reactive Data
 const currentPage = ref(1);
 const pageCount = ref(20);
 const q = ref('');
 
-
-// headers in table
+// Table Headers
 const tableHeaders = [
   { key: 'id', label: '#' },
-  { key: 'motion', label: 'Motion'}, // grab, reach, snatch, etc.
-  { key: 'threshold', label: 'Threshold' }, // percentage to trigger the motion
+  { key: 'name', label: 'Motion' },
+  { key: 'threshold', label: 'Threshold' },
   { key: 'action', label: 'Action' }
 ];
 
-
-// filter the table in search
+// Filtered and Paginated Data
 const filteredRows = computed(() => {
-  if (!q.value) {
-    return trains.value;
-  }
-
-  return trains.value.filter((person) => {
-    return Object.values(person).some((value) => {
-      return String(value).toLowerCase().includes(q.value.toLowerCase());
-    });
-  });
+  if (!q.value) return motions;
+  return motions.filter(motion =>
+    Object.values(motion).some(value => 
+      String(value).toLowerCase().includes(q.value.toLowerCase())
+    )
+  );
 });
 
-
-// count overall no. of users
-const totalTrains = computed(() => filteredRows.value.length);
-
-// pages
+// Pagination and Search Logic
+const total = computed(() => filteredRows.value.length);
 const paginatedData = computed(() => {
   const start = (currentPage.value - 1) * pageCount.value;
-  const end = start + pageCount.value;
-  return filteredRows.value.slice(start, end);
+  return filteredRows.value.slice(start, start + pageCount.value);
 });
 
-const viewAction = (item) => {
-  const modal = useModal()
-  modal.open(ModalViewMotions)
+// Data and reactive state
+const selectedMotion = ref(null); // To store the selected motion
+
+// Open Modal and pass selected motion
+const viewAction = (motion) => {
+  selectedMotion.value = motion; // Set the selected motion
+  const modal = useModal();
+  modal.open(ModalViewMotions, { selectedMotion: motion }); // Pass motion as prop
 };
 
-const toast = useToast()
-name.value = 'success_1'
+// Delete Action
+const toast = useToast();
 
-const deleteAction = (item) => {
-  if (confirm("Delete this motion?") == true) {
+const deleteAction = (motion) => {
+  if (confirm("Delete this motion?")) {
 
-    console.log(item)
+    console.log('Deleted: ', motion)
+    name.value = 'delete_1'
 
-    playSound()
-
+    playSound();
+    
     toast.add({
-      title: 'Motion Deleted Successfully!',
+      title: 'Deleted Successfully!',
       icon: 'i-lucide-trash-2',
-      timeout: 2500,
+      timeout: 2000,
       ui: {
-        background : 'dark:bg-green-700 bg-green-300', 
-        progress: {
-          background: 'dark:bg-white bg-green-700 rounded-full'
-        }, 
-        ring: 'ring-1 ring-green-700 dark:ring-custom-900',
-        default: {
-          closeButton: { 
-            color: 'white',
-          }
-        },
+        background: 'dark:bg-red-700 bg-red-300',
+        progress: { background: 'dark:bg-white bg-red-700 rounded-full' },
+        ring: 'ring-1 ring-red-700 dark:ring-custom-900',
+        default: { closeButton: { color: 'white' } },
         icon: 'text-custom-900'
-      },
-    })
+      }
+    });
   } else {
-    console.log('Cancelled.')
+    console.log('Cancelled.');
   }
 };
 
-const updatePage = (page) => {
-  currentPage.value = page;
-};
+// Update Page on Pagination
+const updatePage = (page) => currentPage.value = page;
 
-// showing pages
-const startItem = computed(() => {
-  return (currentPage.value - 1) * pageCount.value + 1;
-});
+// Helper Computed Values
+const startItem = computed(() => (currentPage.value - 1) * pageCount.value + 1);
+const endItem = computed(() => Math.min(currentPage.value * pageCount.value, total.value));
 
-const endItem = computed(() => {
-  const end = currentPage.value * pageCount.value;
-  return end > totalTrains.value ? totalTrains.value : end;
-});
-
-
-// Watch the search query and reset the current page to 1 when it changes
-watch(q, () => {
-  currentPage.value = 1;
-});
+// Watch Search Query
+watch(q, () => currentPage.value = 1);
 </script>

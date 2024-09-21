@@ -1,4 +1,7 @@
 <template>
+
+  <UseHead title="Create - Users - Admin"/>
+
   <div class="h-auto w-full flex flex-col p-5 gap-10">
     <section class="">
       <UBreadcrumb :links="links">
@@ -16,7 +19,7 @@
     </section>
     <section class="h-4/5 w-full flex justify-center items-center">
       <div
-        class="sm:w-3/4 w-full h-auto border p-5 rounded border-custom-300 bg-custom-100 dark:bg-custom-900 dark:border-custom-700">
+        class="sm:w-3/4 w-full h-auto border p-10 rounded border-custom-300 bg-custom-100 dark:bg-custom-900 dark:border-custom-700">
 
         <UForm class="h-auto w-full flex flex-col gap-3" :state="state" @submit="onSubmit" :validate="validate"
           @error="onError">
@@ -42,8 +45,13 @@
               </section>
 
               <section class="w-auto">
-                <UButton :label="label" :loading-icon="loadIcon" :loading="loading" icon="i-lucide-save"
-                  class="flex justify-center w-full items-center rounded dark:text-white" type="submit" />
+                <UButton 
+                  :label="label" 
+                  :loading-icon="loadIcon" 
+                  :loading="loading" 
+                  icon="i-lucide-save"
+                  class="flex justify-center w-full items-center rounded dark:text-white bg-green-600 hover:bg-green-700 dark:bg-green-700 hover:dark:bg-green-800" 
+                  type="submit" />
               </section>
             </div>
           </div>
@@ -122,7 +130,7 @@
             </UFormGroup>
 
             <!-- phone -->
-            <UFormGroup class="w-full" name="phone">
+            <UFormGroup class="w-1/2" name="phone">
               <template #label>
                 <div class="flex items-center justify-start gap-1">
                   <p class="text-sm">Phone no.</p>
@@ -131,6 +139,26 @@
               </template>
               <template #default="{ error }">
                 <UInput type="text" color="gray" size="md" v-model="state.phone" :ui="{
+                  rounded: 'rounded',
+                  color: error ?
+                    { red: { outline: 'bg-red-100 dark:bg-red-50 text-custom-900 dark:text-custom-900 focus:ring-1 focus:ring-red-400 border-2 border-red-400 focus:border-red-400 active:ring-red-400 active:border-red-400' } } : { gray: { outline: 'dark:bg-custom-100 dark:text-custom-900' } }
+                }" />
+              </template>
+              <template #error="{ error }">
+                <span
+                  :class="[error ? 'text-red-500 dark:text-red-400 text-xs font-bold' : 'text-primary-500 dark:text-primary-400']">
+                  {{ error ? error : undefined }}
+                </span>
+              </template>
+            </UFormGroup>
+
+            <!-- email -->
+            <UFormGroup class="w-1/2" name="email">
+              <template #label>
+                <p class="text-sm">Email</p>
+              </template>
+              <template #default="{ error }">
+                <UInput type="email" color="gray" size="md" v-model="state.email" :ui="{
                   rounded: 'rounded',
                   color: error ?
                     { red: { outline: 'bg-red-100 dark:bg-red-50 text-custom-900 dark:text-custom-900 focus:ring-1 focus:ring-red-400 border-2 border-red-400 focus:border-red-400 active:ring-red-400 active:border-red-400' } } : { gray: { outline: 'dark:bg-custom-100 dark:text-custom-900' } }
@@ -172,30 +200,6 @@
               </template>
             </UFormGroup>
           </section>
-
-          <!-- <div class="flex w-full">
-          <div class="w-2/3"></div>
-            <UFormGroup 
-            v-if="state.role.value === roleOptions[0].value"
-            label="Permission"
-            name="permission" 
-            help="(for some actions)" >
-            <div v-for="(p) in permissionOptions" :key="p.label">
-              <UCheckbox 
-                v-model="state.permission[p.label.toLowerCase()]"
-                class="ml-2">
-                <template #label>
-                  <span> {{ p.label }} </span>
-                </template>
-              </UCheckbox>
-            </div>
-            <template #error="{ error }">
-              <span :class="[error ? 'text-red-500 dark:text-red-400 text-xs font-bold' : 'text-primary-500 dark:text-primary-400']">
-                {{ error ? error : undefined }}
-              </span>
-            </template>
-          </UFormGroup>
-        </div> -->
 
           <h1 class="text-lg w-auto text-start mt-3 -mb-2">Login Credentials</h1>
           <hr class="border-custom-300 dark:border-custom-500 w-full">
@@ -247,6 +251,7 @@ definePageMeta({
 })
 
 import type { FormError, FormErrorEvent, FormSubmitEvent } from '#ui/types'
+import { name, playSound } from '~/assets/js/sound'
 
 const roleOptions = [
   {
@@ -258,21 +263,6 @@ const roleOptions = [
     label: 'Client'
   }
 ];
-
-// const permissionOptions = [
-//   { 
-//     value: false, 
-//     label: 'View' 
-//   },
-//   { 
-//     value: false, 
-//     label: 'Update' 
-//   },
-//   { 
-//     value: false, 
-//     label: 'Delete' 
-//   }
-// ]
 
 const statusOptions = [
   {
@@ -302,13 +292,9 @@ const state = reactive({
   m_i: '',
   gender: '',
   phone: '',
+  email: '',
   status: statusOptions[0].value,
   role: '',
-  // permission: {
-  //   view: false,
-  //   update: false,
-  //   delete: false
-  // },
   username: '',
   password: ''
 })
@@ -319,14 +305,8 @@ const validate = (state: any): FormError[] => {
   if (!state.last_name) errors.push({ path: 'last_name', message: 'Required' })
   if (!state.gender) errors.push({ path: 'gender', message: 'Required' })
   if (!state.phone) errors.push({ path: 'phone', message: 'Required' })
+  if (!state.email) errors.push({ path: 'email', message: 'Required' })
   if (!state.status) errors.push({ path: 'status', message: 'Required' })
-
-  // Check if at least one permission is selected
-  // const selectedPermissions = Object.values(state.permission);
-  // if (!selectedPermissions.some(permission => permission)) {
-  //   errors.push({ path: 'permission', message: 'At least one permission must be selected' })
-  // }
-
   if (!state.role) errors.push({ path: 'role', message: 'Required' })
   if (!state.username) errors.push({ path: 'username', message: 'Required' })
   if (!state.password) errors.push({ path: 'password', message: 'Required' })
@@ -337,6 +317,9 @@ const loading = ref(false);
 const loadIcon = ref('');
 const label = ref('Save');
 
+const toast = useToast()
+name.value = 'success_2'
+
 async function onSubmit(event: FormSubmitEvent<any>) {
   // Do something with data
   console.log(event.data)
@@ -346,9 +329,30 @@ async function onSubmit(event: FormSubmitEvent<any>) {
   label.value = '';
 
   setTimeout(() => {
+    playSound()
+
+    toast.add({
+        title: 'User Created Successfully!',
+        icon: 'i-lucide-user-round-check',
+        timeout: 2000,
+        ui: {
+        background : 'dark:bg-green-700 bg-green-300', 
+        progress: {
+            background: 'dark:bg-white bg-green-700 rounded-full'
+        }, 
+        ring: 'ring-1 ring-green-700 dark:ring-custom-900',
+        default: {
+            closeButton: { 
+            color: 'white',
+            }
+        },
+        icon: 'text-custom-900'
+        },
+    })
+
     label.value = 'Save';
     loading.value = false;
-    navigateTo('/admin/users')
+    navigateTo('/admin/users/create')
   }, 800)
 }
 

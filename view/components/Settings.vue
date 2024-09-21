@@ -177,11 +177,11 @@ const handleLogout = () => {
     icon: 'i-lucide-log-out',
     timeout: 2000,
     ui: {
-      background : 'dark:bg-green-700 bg-green-300', 
+      background : 'dark:bg-orange-700 bg-orange-300', 
       progress: {
-        background: 'dark:bg-white bg-green-700 rounded-full'
+        background: 'dark:bg-white bg-orange-700 rounded-full'
       }, 
-      ring: 'ring-1 ring-green-700 dark:ring-custom-900',
+      ring: 'ring-1 ring-orange-700 dark:ring-custom-900',
       default: {
         closeButton: { 
           color: 'white',

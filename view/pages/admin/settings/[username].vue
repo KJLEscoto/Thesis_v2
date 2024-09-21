@@ -42,15 +42,7 @@
             <div class="flex justify-end w-1/2 gap-x-2">
 
               <section class="w-auto">
-                <UButton 
-                  v-if="user.role === 'client'"
-                  label="Cancel" 
-                  icon="i-lucide-x"
-                  class="flex justify-center w-full items-center rounded dark:bg-red-600 dark:hover:bg-red-500 bg-red-700 hover:bg-red-600 dark:text-custom-100"
-                  to="/client/settings" />
-
                   <UButton 
-                    v-if="user.role === 'admin' || user.role === 'superadmin'"
                     label="Cancel" 
                     icon="i-lucide-x"
                     class="flex justify-center w-full items-center rounded dark:bg-red-600 dark:hover:bg-red-500 bg-red-700 hover:bg-red-600 dark:text-custom-100"
@@ -63,7 +55,7 @@
                   :loading-icon="loadIcon" 
                   :loading="loading" 
                   icon="i-lucide-save"
-                  class="flex justify-center w-full items-center rounded dark:text-white" 
+                  class="flex justify-center w-full items-center rounded dark:text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 hover:dark:bg-blue-800" 
                   type="submit" />
               </section>
             </div>
@@ -130,6 +122,18 @@
           </section>
 
           <section class="flex w-full gap-x-2">
+
+            <!-- gender -->
+            <UFormGroup class="w-2/3" label="Gender" name="gender">
+              <URadioGroup v-model="state.gender" :options="genderOptions" class="ml-2" />
+              <template #error="{ error }">
+                <span
+                  :class="[error ? 'text-red-500 dark:text-red-400 text-xs font-bold' : 'text-primary-500 dark:text-primary-400']">
+                  {{ error ? error : undefined }}
+                </span>
+              </template>
+            </UFormGroup>
+
             <!-- phone -->
             <UFormGroup class="w-1/2" name="phone">
               <template #label>
@@ -165,17 +169,6 @@
                     { red: { outline: 'bg-red-100 dark:bg-red-50 text-custom-900 dark:text-custom-900 focus:ring-1 focus:ring-red-400 border-2 border-red-400 focus:border-red-400 active:ring-red-400 active:border-red-400' } } : { gray: { outline: 'dark:bg-custom-100 dark:text-custom-900' } }
                 }" />
               </template>
-              <template #error="{ error }">
-                <span
-                  :class="[error ? 'text-red-500 dark:text-red-400 text-xs font-bold' : 'text-primary-500 dark:text-primary-400']">
-                  {{ error ? error : undefined }}
-                </span>
-              </template>
-            </UFormGroup>
-
-            <!-- gender -->
-            <UFormGroup class="w-1/4" label="Gender" name="gender">
-              <URadioGroup v-model="state.gender" :options="genderOptions" class="ml-2" />
               <template #error="{ error }">
                 <span
                   :class="[error ? 'text-red-500 dark:text-red-400 text-xs font-bold' : 'text-primary-500 dark:text-primary-400']">
@@ -287,20 +280,20 @@ async function onSubmit(event: FormSubmitEvent<any>) {
   loading.value = true;
   loadIcon.value = 'i-lucide-loader-circle';
   label.value = '';
-  name.value = 'success_1'
+  name.value = 'success_2'
 
   setTimeout(() => { 
     playSound()
     toast.add({
       title: 'Updated Successfully!',
       icon: 'i-lucide-circle-check-big',
-      timeout: 2500,
+      timeout: 2000,
       ui: {
-        background : 'dark:bg-green-700 bg-green-300', 
+        background : 'dark:bg-blue-700 bg-blue-300', 
         progress: {
-          background: 'dark:bg-white bg-green-700 rounded-full'
+          background: 'dark:bg-white bg-blue-700 rounded-full'
         }, 
-        ring: 'ring-1 ring-green-700 dark:ring-custom-900',
+        ring: 'ring-1 ring-blue-700 dark:ring-custom-900',
         default: {
           closeButton: { 
             color: 'white',
@@ -323,7 +316,7 @@ async function onError(event: FormErrorEvent) {
 
 const links = [{
   label: 'Settings',
-  to: '/client/settings'
+  to: '/admin/settings'
 }, {
   label: 'Update',
 }

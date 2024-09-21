@@ -1,6 +1,6 @@
 <template>
 
-<UseHead title="Verify - Auth" description="OTP Authentication adds an extra layer of security by requiring a one-time password for each login or transaction, enhancing protection against unauthorized access." />
+<UseHead title="Verification - Auth" description="OTP Authentication adds an extra layer of security by requiring a one-time password for each login or transaction, enhancing protection against unauthorized access." />
 
 <div class="flex justify-center items-center h-screen w-auto">
 
