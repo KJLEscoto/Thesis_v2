@@ -1,0 +1,1 @@
+pip install -r C:\Users\Kent\Desktop\Coding Portfolio\FULL STACK DEV\Thesis_v2\ThesisApps\requirements.txt

@@ -1,16 +1,14 @@
 <template>
 
-  <UseHead title="Monitor - Client"/>
+  <UseHead title="Monitor - Client" />
 
   <div class="lg:h-screen h-[700px] w-full p-5">
-    <Camera 
-      videoUrl="http://127.0.0.1:5000/video_feed"
-      :isLive="true"/>
+    <Camera videoUrl="http://127.0.0.1:5000/video_feed" :isLive="true" />
 
-    <UButton 
+    <!-- <UButton 
       label="Alert!" 
       class="absolute top-52 right-10 rounded" 
-      @click="showToast"/>
+      @click="showToast"/> -->
   </div>
 </template>
 
@@ -41,13 +39,13 @@ const showToast = () => {
     click: onClick,
     icon: 'i-lucide-triangle-alert',
     ui: {
-      background : 'dark:bg-red-700 bg-red-300', 
+      background: 'dark:bg-red-700 bg-red-300',
       progress: {
         background: 'dark:bg-white bg-red-700 rounded-full'
-      }, 
+      },
       ring: 'ring-1 ring-red-700 dark:ring-custom-900',
       default: {
-        closeButton: { 
+        closeButton: {
           color: 'white',
         }
       },
@@ -69,18 +67,18 @@ const sendSms = (date) => {
       message: 'Potential Theft Detected! At ' + date + '.'
     })
   })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      console.log('Message sent successfully!', data.success);
-    } else {
-      console.error('Failed to send message:', data.error);
-    }
-  })
-  .catch(error => {
-    console.error('Error:', error);
-    console.log('Failed to send message:', error.message);
-  });
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        console.log('Message sent successfully!', data.success);
+      } else {
+        console.error('Failed to send message:', data.error);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      console.log('Failed to send message:', error.message);
+    });
 };
 
 // checks for any detected motion from the database
@@ -88,7 +86,7 @@ const checkForNewEntries = async () => {
   try {
     const response = await fetch('http://127.0.0.1:8000/api/trains')
     const data = await response.json()
-    const latestEntry = data.trains.length ? data.trains[data.trains.length - 1] : null;
+    const latestEntry = data.trains.length ? data.trains[ data.trains.length - 1 ] : null;
     const latestEntryTime = new Date(latestEntry.created_at).toISOString()
 
     // calls the notification functions if the condiition is met
@@ -111,7 +109,7 @@ onMounted(async () => {
     // fetches the latest entry time on mount
     const response = await fetch('http://127.0.0.1:8000/api/trains')
     const data = await response.json()
-    const latestEntry = data.trains[data.trains.length - 1]
+    const latestEntry = data.trains[ data.trains.length - 1 ]
 
     // initializes the variable lastCheckTime 
     lastCheckTime.value = new Date(latestEntry.created_at).toISOString()
@@ -120,6 +118,6 @@ onMounted(async () => {
     setInterval(checkForNewEntries, 5000) // Check every seconds
   } catch (error) {
     console.error('Error initializing last check time:', error)
-}
+  }
 })
 </script>

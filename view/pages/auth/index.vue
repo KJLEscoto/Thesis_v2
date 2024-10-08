@@ -22,6 +22,8 @@
 
       <hr class="border-custom-300 dark:border-custom-500">
 
+      <!-- <p>{{ state.errors && state.errors._data && state.errors._data.error }}</p> -->
+
       <!-- username -->
       <UFormGroup 
         class="grid gap-1" 
@@ -123,9 +125,14 @@
 import type { FormError, FormErrorEvent, FormSubmitEvent } from '#ui/types';
 
 const state = reactive({
-  username: undefined,
-  password: undefined
+  errors: [],
+  username: '',
+  password: '',
 })
+
+const loading = ref(false);
+const loadIcon = ref('');
+const label = ref('Login');
 
 const validate = (state: any): FormError[] => {
   const errors = []
@@ -134,29 +141,44 @@ const validate = (state: any): FormError[] => {
   return errors
 }
 
-const loading = ref(false);
-const loadIcon = ref('');
-const label = ref('Sign In');
-
-async function onSubmit(event: FormSubmitEvent<any>) {
-  // Do something with data
-  console.log(event.data)
-
-  loading.value = true;
-  loadIcon.value = 'i-lucide-loader-circle';
-  label.value = '';
-
-  setTimeout(() => {
-    label.value = 'Sign In';
-    navigateTo('/auth/otp');  
-    loading.value = false;
-  }, 800)
-}
-
 async function onError(event: FormErrorEvent) {
   const element = document.getElementById(event.errors[0].id)
   element?.focus()
   element?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+}
+
+async function onSubmit(event: FormSubmitEvent<any>) {
+  const params = {
+    username: state.username,
+    password: state.password
+  }
+
+  try {
+    const response = await $fetch(`http://127.0.0.1:8000/api/auth/login`, {
+      method: 'POST',
+      body: params
+    })
+
+    if (response) {
+      // console.log(response)
+      loading.value = true;
+      loadIcon.value = 'i-lucide-loader-circle';
+      label.value = '';
+      localStorage.setItem('_token', response.data.token)
+
+      setTimeout(() => {
+        label.value = 'Login';
+        loading.value = false;
+
+        //sendOTP(user.phone.toString());
+
+        navigateTo('/auth/otp')
+      }, 800)
+    }
+  } catch (error) {
+    state.errors = error.response
+    console.log(state.errors)
+  }
 }
 
 </script>

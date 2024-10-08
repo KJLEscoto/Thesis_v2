@@ -22,54 +22,70 @@
         <UButton
             label="SMS Verification"
             icon="i-lucide-message-square-more"
-            :loading="loadingSMS"
-            :loading-icon="loadIconSMS"
+            :loading="sms.bool.value"
+            :loading-icon="sms.icon.value"
             class="flex justify-center items-center gap-1 py-2 rounded dark:text-custom-50 dark:bg-custom-500 hover:dark:bg-custom-500/75"
-            @click="sms" />
+            @click="forSMS" />
 
         <!-- email -->
         <UButton
             label="Email Verification"
             icon="i-lucide-mail"
-            :loading="loadingEmail"
-            :loading-icon="loadIconEmail"
+            :loading="email.bool.value"
+            :loading-icon="email.icon.value"
             class="flex justify-center items-center gap-1 py-2 rounded dark:text-custom-50 dark:bg-custom-500 hover:dark:bg-custom-500/75"
-            @click="email" />
+            @click="forEmail" />
     </main>
 </div>
 </template>
 
 <script setup>
 
-const loadingSMS = ref(false);
-const loadIconSMS = ref('');
+const sms = {
+    bool: ref(false),
+    icon: ref('')
+}
 
-const loadingEmail = ref(false);
-const loadIconEmail = ref('');
+const email = {
+    bool: ref(false),
+    icon: ref('')
+}
 
-const sms = () => {
-    loadingSMS.value = true;
-    loadIconSMS.value = 'i-lucide-loader-circle'
+const forSMS = () => {
+    sms.bool.value = true
+    sms.icon.value = 'i-lucide-loader-circle'
 
     setTimeout(() => {
     navigateTo('/auth/otp/sms');
-    loadingSMS.value = false;
+    sms.bool.value = false
     }, 800);
-};
+}
 
-const email = () => {
-    loadingEmail.value = true;
-    loadIconEmail.value = 'i-lucide-loader-circle'
+const forEmail = () => {
+    email.bool.value = true
+    email.icon.value = 'i-lucide-loader-circle'
 
     setTimeout(() => {
     navigateTo('/auth/otp/email');
-    loadingEmail.value = false;
+    email.bool.value = false;
     }, 800);
 };
 
 const router = useRouter();
 
 const goBack = () => {
-    router.go(-1);  
+    const currentRoute = router.currentRoute.value.path;
+
+    if (currentRoute === '/auth/otp/sms' || currentRoute === '/auth/otp/email') {
+        // If the user is on the SMS or Email OTP routes, go back to /auth/otp
+        router.push('/auth/otp');
+    } else if (currentRoute === '/auth/otp') {
+        // If the user is already at /auth/otp, go back to /auth
+        router.push('/auth');
+    } else {
+        // Default fallback
+        router.back();
+    }
 };
+
 </script>

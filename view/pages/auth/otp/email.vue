@@ -51,7 +51,7 @@
             type="text" 
             color="gray" 
             size="md"
-            :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" 
+            :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : ''" 
             :ui="{
             rounded: 'rounded',
             color: error ?
@@ -63,16 +63,16 @@
         <template #error="{ error }">
         <span
             :class="[error ? 'text-red-500 dark:text-red-400 text-xs font-bold' : 'text-primary-500 dark:text-primary-400']">
-            {{ error ? error : undefined }}
+            {{ error ? error : '' }}
         </span>
         </template>
     </UFormGroup>
 
     <UButton 
         type="submit" 
-        :label="label" 
-        :loading-icon="loadIcon" 
-        :loading="loading"
+        :label="load.label.value" 
+        :loading-icon="load.icon.value" 
+        :loading="load.bool.value"
         class="flex justify-center items-center gap-1 py-2 rounded dark:text-custom-50 dark:bg-custom-500 hover:dark:bg-custom-500/75" />
 
     </UForm>
@@ -80,86 +80,94 @@
 </template>
 
 <script setup lang="ts">
-import { user } from '~/assets/js/userLogged';
+import { user, fetchUser } from '~/assets/js/userLogged';
 import type { FormError, FormErrorEvent, FormSubmitEvent } from '#ui/types'
 import { name, playSound } from '~/assets/js/sound'
 
-const state = reactive({
-otp: undefined
+const loadUser = async () => {
+    await fetchUser();
+    // console.log(user);
+}
+
+onMounted(() => {
+    loadUser() // Load user data when the component mounts
 })
 
+const state = reactive({
+    otp: ''
+})
+
+// FE validation
 const validate = (state: any): FormError[] => {
-const errors = []
-if (!state.otp) errors.push({ path: 'otp', message: 'Required' })
-return errors
+    const errors = []
+    if (!state.otp) errors.push({ path: 'otp', message: 'Required' })
+    return errors
 }
 
-const loading = ref(false);
-const loadIcon = ref('');
-const label = ref('Submit');
+// input field focus
+async function onError(event: FormErrorEvent) {
+    const element = document.getElementById(event.errors[0].id)
+    element?.focus()
+    element?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+}
+
+const load = {
+    bool: ref(false),
+    label: ref('Submit'),
+    icon: ref('')
+}
 
 async function onSubmit(event: FormSubmitEvent<any>) {
-// Do something with data
-console.log(event.data)
+    // console.log(event.data)
 
-loading.value = true;
-loadIcon.value = 'i-lucide-loader-circle';
-label.value = '';
+    load.bool.value = true;
+    load.icon.value = 'i-lucide-loader-circle';
+    load.label.value = '';
 
-const toast = useToast()
-name.value = 'login_1'
+    // sound
+    name.value = 'login_1'
 
-const showToast = () => {
-    playSound()
+    const toast = useToast()
 
-    toast.add({
-    title: 'Login Successfully!',
-    icon: 'i-lucide-log-in',
-    timeout: 2000,
-    ui: {
-        background : 'dark:bg-green-700 bg-green-300', 
-        progress: {
-        background: 'dark:bg-white bg-green-700 rounded-full'
-        }, 
-        ring: 'ring-1 ring-green-700 dark:ring-custom-900',
-        default: {
-        closeButton: { 
-            color: 'white',
-        }
-        },
-        icon: 'text-custom-900'
-    },
-    })
-}
-
-setTimeout(() => {
-    console.log(user.role);
-
-    // Conditional navigation based on user role
-    if (user.role === 'client') {
-    showToast()
-    navigateTo('/client/monitor');
-    } else if (user.role === 'admin' || user.role === 'superadmin') {
-    showToast()
-    navigateTo('/admin/dashboard');
-    } else {
-    alert('Unrecognized role detected! Please contact an Admin for verification.');
+    const showToast = () => {
+        toast.add({
+            title: 'Login Successfully!',
+            icon: 'i-lucide-log-in',
+            timeout: 2000,
+            ui: {
+                background : 'dark:bg-green-700 bg-green-300', 
+                progress: {
+                background: 'dark:bg-white bg-green-700 rounded-full'
+                }, 
+                ring: 'ring-1 ring-green-700 dark:ring-custom-900',
+                default: {
+                closeButton: { 
+                    color: 'white',
+                }
+                },
+                icon: 'text-custom-900'
+            },
+        })
+        playSound()
     }
 
-    label.value = 'Submit';
-    loading.value = false;
-}, 800);
+    setTimeout(() => {
+        // console.log(user.role);
+
+        // Conditional navigation based on user role
+        if (user.role === 'client') {
+            navigateTo('/client/monitor');
+            showToast()
+        } else if (user.role === 'admin' || user.role === 'superadmin') {
+            navigateTo('/admin/dashboard');
+            showToast()
+        } else {
+            alert('Unrecognized role detected! Please contact support.');
+        }
+
+        load.label.value = 'Submit';
+        load.bool.value = false;
+    }, 800);
 }
 
-async function onError(event: FormErrorEvent) {
-const element = document.getElementById(event.errors[0].id)
-element?.focus()
-element?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-}
-
-const router = useRouter();
-
-const goBack = () => {
-router.go(-1);
-};
 </script>

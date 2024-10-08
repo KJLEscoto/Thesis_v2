@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: false },
   modules: ["@nuxt/ui"],
+
   app: {
     head: {
       title: 'Theft Prediction',
@@ -17,15 +18,19 @@ export default defineNuxtConfig({
       ]
     }
   },
+
   colorMode: {
     preference: "light"
   },
+
   css: [
     "~/assets/css/main.css"
   ],
+
   ui: {
     icons: ["lucide"]
   },
+
   tailwindcss: {
     config: {
       theme: {
@@ -48,5 +53,7 @@ export default defineNuxtConfig({
         },
       },
     }
-  }
+  },
+
+  compatibilityDate: '2024-10-08'
 })

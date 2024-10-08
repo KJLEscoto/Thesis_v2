@@ -20,8 +20,8 @@
             icon="i-lucide-cctv" 
             label="Start Monitoring"
             @click="handleClick"
-            :loading="loading" 
-            :loading-icon="loadIcon" />
+            :loading="start.bool.value" 
+            :loading-icon="start.icon.value" />
         </div>
       </section>
       <section class="m-auto">
@@ -38,19 +38,22 @@
 <script setup>
 import { name, playSound } from '~/assets/js/sound'
 
-const loading = ref(false);
-const loadIcon = ref('');
+const start = {
+    bool: ref(false),
+    icon: ref('')
+}
+
 name.value = 'start_1'
 
 const handleClick = () => {
-  loading.value = true;
-  loadIcon.value = 'i-lucide-loader-circle'
+  start.bool.value = true;
+  start.icon.value = 'i-lucide-loader-circle'
 
   playSound()
 
   setTimeout(() => {
     navigateTo('/auth');
-    loading.value = false;
+    start.bool.value = false;
   }, 2300);
 };
 
