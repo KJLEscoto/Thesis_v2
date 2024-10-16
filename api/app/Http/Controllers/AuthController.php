@@ -25,21 +25,21 @@ class AuthController extends Controller
         // Check if the user exists and if the password is correct
         if (!$user || !Hash::check($password, $user->password)) {
             throw ValidationValidationException::withMessages([
-                'username' => ['Invalid login credentials.'],
+                'username' => ['Invalid Login Credentials'],
             ]);
         }
 
         // Check if the user's status is inactive
         if ($user->status === 'inactive') {
             throw ValidationValidationException::withMessages([
-                'username' => ['Your account is inactive. Please contact support.'],
+                'username' => ['Your Account is Inactive. Please Contact Support.'],
             ]);
         }
 
         // Check if the user is admin or superadmin and block access
         if (in_array($user->role, ['admin', 'superadmin'])) {
             throw ValidationValidationException::withMessages([
-                'username' => ['Access denied. Clients only.'],
+                'username' => ['Access Denied. Client Only.'],
             ]);
         }
 
@@ -64,7 +64,7 @@ class AuthController extends Controller
         // Return a success response
         return response()->json([
             'user' => $user,
-            'message' => 'User updated successfully.'
+            'message' => 'User Updated Successfully.'
         ]);
     }
 
@@ -86,7 +86,7 @@ class AuthController extends Controller
         // Check if the user exists and the password matches
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
-                'message' => 'The provided credentials are incorrect.'
+                'message' => 'The Provided Credentials are Incorrect.'
             ], 401); // Return 401 Unauthorized
         }
 
@@ -104,7 +104,7 @@ class AuthController extends Controller
         $request->user()->tokens()->delete();
 
         return response()->json([
-            'message' => 'You are logged out.'
+            'message' => 'You are Logged Out.'
         ]);
     }
 
@@ -118,21 +118,21 @@ class AuthController extends Controller
         // Check if the user exists and the password matches
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
-                'message' => 'The provided credentials are incorrect.'
+                'message' => 'The Provided Credentials are Incorrect.'
             ], 401); // Return 401 Unauthorized
         }
 
         // Check if the user's status is inactive
         if ($user->status === 'inactive') {
             return response()->json([
-                'message' => 'Your account is inactive. Please contact support.'
+                'message' => 'Your Account is Inactive. Please Contact Support.'
             ], 403); // Return 403 Forbidden for inactive status
         }
     
         // Check if the user is an admin or superadmin
-        if (!in_array($user->role, ['admin', 'superadmin'])) {
+        if (!in_array($user->role, ['client'])) {
             return response()->json([
-                'message' => 'Access denied. Admins only.'
+                'message' => 'Access Denied. Admin only.'
             ], 403); // Return 403 Forbidden
         }
     
@@ -181,12 +181,12 @@ class AuthController extends Controller
         $user = User::where('username', $username)->first();
 
         if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
+            return response()->json(['message' => 'User Not Found.'], 404);
         }
 
         return response()->json([
             'user' => $user,
-            'message' => 'User retrieved successfully.'
+            'message' => 'User Retrieved Successfully.'
         ]);
     }
 
@@ -195,7 +195,7 @@ class AuthController extends Controller
         $user = User::find($id);
 
         if (!$user) {
-            return response()->json(['message' => 'User not found.'], 404);
+            return response()->json(['message' => 'User Not Found.'], 404);
         }
 
         // Toggle the status
@@ -204,7 +204,7 @@ class AuthController extends Controller
 
         return response()->json([
             'user' => $user,
-            'message' => 'User status updated successfully.',
+            'message' => 'User Status Updated Successfully.',
         ]);
     }
 

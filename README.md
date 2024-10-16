@@ -26,13 +26,13 @@ See [documentation](https://drive.google.com/file/d/13JfqGKbeYx3t3D2HC0iH9tSk4r6
 > 
 > After that, click **Admin** action in **MySQL** module.
 >
-> If the window appears as shown, proceed to the next step.
+> If the window appears as shown in the browser, proceed to the next step.
 >
 > ![phpmyadmin](https://drive.google.com/uc?export=view&id=1eWiUBuPAoPiUPQTM8rTGlCcvTxMKCDrZ)
 
 ### Clone the Project:
 
-> **Open a terminal you would like to use (git bash, cmd, or any)**
+> **In your Desktop, open a terminal you would like to use (git bash, cmd, or any)**
 > ```bash
 >  git clone https://link-to-project
 > ```
@@ -50,6 +50,16 @@ See [documentation](https://drive.google.com/file/d/13JfqGKbeYx3t3D2HC0iH9tSk4r6
 ### Run Python (Machine Learning):
 
 > **Open a terminal inside VS Code**
+>
+> Go to algo folder
+> ```bash
+>  cd algo
+> ```
+>
+> Install modules
+> ```bash
+>  pip install 'C:\{**your-download-directory**}\requirements.txt'
+> ```
 
 ### Install Dependencies for Laravel (Back-End):
 
@@ -60,7 +70,7 @@ See [documentation](https://drive.google.com/file/d/13JfqGKbeYx3t3D2HC0iH9tSk4r6
 >  cd api
 > ```
 >
-> Install composer
+> Install modules
 > ```bash
 >  composer install
 > ```
@@ -70,14 +80,19 @@ See [documentation](https://drive.google.com/file/d/13JfqGKbeYx3t3D2HC0iH9tSk4r6
 >  cp .env.example .env
 > ```
 > 
-> Generate keys (if there is)
+> Generate app key 
 > ```bash
 >  php artisan key:generate
 > ```
 >
-> Migrate all tables and seed the database
+> Migrate all tables and type 'yes' to create
 > ```bash
->  php artisan migrate --seed
+>  php artisan migrate 
+> ```
+> 
+> Seed database
+> ```bash
+>  php artisan db:seed
 > ```
 > 
 > Run the server
@@ -94,11 +109,16 @@ See [documentation](https://drive.google.com/file/d/13JfqGKbeYx3t3D2HC0iH9tSk4r6
 >  cd view
 > ```
 > 
-> Install NPM
+> Install modules
 > ```bash
 >  npm install
 > ```
 > 
+> Fix compatibilities
+> ```bash
+>  npm audit fix
+>```
+>
 > Run the server
 > ```bash
 >  npm run dev
@@ -109,7 +129,7 @@ See [documentation](https://drive.google.com/file/d/13JfqGKbeYx3t3D2HC0iH9tSk4r6
 > ![localhost](https://drive.google.com/uc?export=view&id=1ZUasDbDnpKBn2sKebAHRpFY8HsPvE9Sb)
 >
 
-### ⭐ That's it! The project is now ready to use. GO start monitoring. ⭐
+### ⭐ That's it! The project is now ready to use. Go and start monitoring. ⭐
 > 
 > ![landing-page](https://drive.google.com/uc?export=view&id=17uKbu88C3i3U5fEAU_o6aHezuaVQSuxZ)
 
@@ -132,6 +152,6 @@ You can send a message on our following socials:
 
 
 ## ©️ Copyright
-Copyright 2024 | Bachelor of Science in Computer Science
+Copyright 2024 | Bachelor of Science in Computer Science | Batch 2025 :>
 
 

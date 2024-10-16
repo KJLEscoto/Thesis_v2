@@ -39,7 +39,7 @@
         :ui="{ error: 'mt-1' }">
 
         <template #label>
-          <div class="flex items-center justify-start gap-1">
+          <div class="flex items-center justify-start gap-1 mb-1">
             <UIcon 
               name="i-lucide-user-round" 
               class="text-lg" />
@@ -58,8 +58,8 @@
             :ui="{
               rounded: 'rounded',
               color: error ?
-                { red: { outline: 'bg-red-100 dark:bg-red-50 text-custom-900 dark:text-custom-900 focus:ring-1 focus:ring-red-400 border-2 border-red-400 focus:border-red-400 active:ring-red-400 active:border-red-400' } } : 
-                { gray: { outline: 'dark:bg-custom-100 dark:text-custom-900' } }
+                { red: { outline: 'dark:bg-red-50 bg-red-100 dark:text-custom-900 focus:ring-2 ring-1 ring-red-400 focus:ring-red-400 focus:border-red-400 active:ring-red-400 active:border-red-400' } } : 
+                { gray: { outline: 'dark:bg-custom-100 dark:text-custom-900 border-none' } }
             }" />
         </template>
 
@@ -78,7 +78,7 @@
         name="password" 
         :ui="{ error: 'mt-1' }">
         <template #label>
-          <div class="flex items-center justify-start gap-1">
+          <div class="flex items-center justify-start gap-1 mb-1">
             <UIcon 
               name="i-lucide-key-round" 
               class="text-lg" />
@@ -97,8 +97,8 @@
             :ui="{
               rounded: 'rounded',
               color: error ?
-                { red: { outline: 'bg-red-100 dark:bg-red-50 text-custom-900 dark:text-custom-900 focus:ring-1 focus:ring-red-400 border-2 border-red-400 focus:border-red-400 active:ring-red-400 active:border-red-400' } } : 
-                { gray: { outline: 'dark:bg-custom-100 dark:text-custom-900' } }
+                { red: { outline: 'dark:bg-red-50 bg-red-100 dark:text-custom-900 focus:ring-2 ring-1 ring-red-400 focus:ring-red-400 focus:border-red-400 active:ring-red-400 active:border-red-400' } } : 
+                { gray: { outline: 'dark:bg-custom-100 dark:text-custom-900 border-none' } }
             }" />
         </template>
 

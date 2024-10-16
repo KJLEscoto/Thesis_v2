@@ -54,33 +54,6 @@ const showToast = () => {
   });
 };
 
-// send sms
-const sendSms = (date) => {
-  // Send the request for SMS
-  fetch('http://127.0.0.1:8000/api/send-twilio', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      phone: '+639810921795',
-      message: 'Potential Theft Detected! At ' + date + '.'
-    })
-  })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        console.log('Message sent successfully!', data.success);
-      } else {
-        console.error('Failed to send message:', data.error);
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      console.log('Failed to send message:', error.message);
-    });
-};
-
 // checks for any detected motion from the database
 const checkForNewEntries = async () => {
   try {

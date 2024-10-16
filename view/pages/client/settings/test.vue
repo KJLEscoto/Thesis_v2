@@ -9,10 +9,10 @@
         label="Logout" icon="i-lucide-log-out" @click="handleLogout" />
     </header>
 
-    <div class="grid md:grid-cols-2 grid-cols-1 gap-5 h-auto w-full">
+    <div class="grid grid-cols-2 gap-5 h-auto w-full">
 
       <div
-        class="flex flex-col h-auto max-h-max w-full gap-5 lg:p-10 p-5 rounded dark:bg-custom-900 bg-custom-100 border border-custom-300 dark:border-custom-700">
+        class="flex flex-col h-auto max-h-max w-full gap-5 p-10 rounded dark:bg-custom-900 bg-custom-100 border border-custom-300 dark:border-custom-700">
 
         <div class="flex justify-between items-center">
           <h1 class="font-semibold text-lg">Profile</h1>
@@ -34,7 +34,7 @@
             class="w-52 h-52 mx-auto flex flex-col justify-center items-center cursor-default mt-5">
 
             <img v-if="user.avatar" 
-              class="w-full h-full border-4 border-custom-400 dark:border-custom-300 rounded-full" 
+              class="w-full h-full border-4 border-custom-400 dark:border-custom-700 rounded-full" 
               :src="user.avatar">
             <span v-else class="font-black text-[150px] w-full h-full dark:bg-custom-700 bg-custom-400 flex items-center justify-center rounded-full">{{ initial }}</span>
             
@@ -59,7 +59,7 @@
             <section class="flex justify-between items-center flex-wrap">
               <div class="flex items-center gap-2"> 
                 <UIcon name="i-heroicons-user-16-solid" class="h-auto w-7"/>
-                <p class="capitalize text-xl font-medium dark:text-custom-300">{{ user.name }}</p>
+                <p class="capitalize text-xl font-medium">{{ user.name }}</p>
               </div>
 
               <div v-if="user.gender === 'female'" class="flex items-center gap-1 rounded-full cursor-default bg-pink-500 dark:bg-pink-500 text-white px-2 py-1"> 
@@ -72,19 +72,19 @@
                 <p class="capitalize text-xs font-medium">{{ user.gender }}</p>
               </div>
 
-              <div v-else class="text-sm">
+              <div v-else>
                 Others
               </div>
             </section>
 
             <section class="flex items-center gap-2"> 
               <UIcon name="i-heroicons-phone-16-solid" class="h-auto w-5"/>
-              <p class="capitalize text-base dark:text-custom-300">{{ user.phone_number }}</p>
+              <p class="capitalize text-base">{{ user.phone_number }}</p>
             </section>
 
             <section class="flex items-center gap-2"> 
               <UIcon name="i-heroicons-envelope-16-solid" class="h-auto w-5"/>
-              <p class="text-base dark:text-custom-300">{{ user.email }}</p>
+              <p class="text-base">{{ user.email }}</p>
             </section>
 
           </div>
@@ -95,7 +95,7 @@
 
             <section class="flex items-center gap-2"> 
               <h1 class="font-medium">Username:</h1>
-              <p class="text-base dark:text-custom-300">{{ user.username }}</p>
+              <p class="text-base">{{ user.username }}</p>
             </section>
 
             <section class="flex justify-between items-center"> 
@@ -103,7 +103,7 @@
                 <h1 class="font-medium">Password:</h1>
                 <!-- dli ma display ang password kay naka hashed (for safety) pero kung dli i-hashed kay ma retrieve-->
                 <!-- <p class="text-base">{{ passwordDisplay }}</p>  -->
-                <p class="text-base dark:text-custom-300">********</p> 
+                <p class="text-base">********</p> 
               </div>
               <!-- <button @click="togglePasswordVisibility" class="text-blue-500 underline">
                 {{ isPasswordVisible ? 'Hide' : 'Show' }}
@@ -118,14 +118,14 @@
 
         <section
           v-if="user.role === 'client'"
-          class="h-auto w-full dark:bg-custom-900 bg-custom-100 flex flex-col gap-5 lg:p-10 p-5 rounded border border-custom-300 dark:border-custom-700">
+          class="h-auto w-full dark:bg-custom-900 bg-custom-100 flex flex-col gap-5 p-10 rounded border border-custom-300 dark:border-custom-700">
           <div class="flex justify-between items-center">
             <h1 class="font-semibold text-lg">Phone Associated</h1>
             <span>
               <UButton 
                 @click="isOpen = true" 
                 icon="i-iconoir-phone-plus" 
-                label="Add No." 
+                label="Add phone" 
                 class="rounded dark:text-white" 
                 size="xs"/>
             </span>
@@ -150,31 +150,23 @@
                   <UIcon 
                     name="i-lucide-phone" 
                     class="text-lg" />
-                  <p class="text-base">Phone Number <span class="font-bold text-red-700 dark:text-red-400">(max: 3 only)</span></p>
+                  <p class="text-base">Phone Number <span class="font-bold text-red-700 dark:text-red-400">(max: 3 phone no.)</span></p>
                 </div>
               </template>
 
               <template #default="{ error }">
-                <div class="relative w-full">
-
-                  <div class="flex gap-1 items-center absolute z-10 left-2 top-[7px] border-r pr-1 border-r-custom-900">
-                    <UIcon name="i-emojione-v1-flag-for-philippines" />
-                    <div class="font-medium cursor-default text-xs dark:text-custom-900">+63</div>
-                  </div>
-
-                  <UInput 
-                    class="w-full"
-                    v-model="state.phone"
-                    color="gray" 
-                    size="xs"
-                    :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" 
-                    :ui="{
-                      rounded: 'rounded',
-                      color: error ?
-                        { red: { outline: 'bg-red-100 dark:bg-red-50 pl-16 font-medium text-custom-900 dark:text-custom-900 focus:ring-1 focus:ring-red-400 border border-red-700 focus:border-red-400 active:ring-red-400 active:border-red-400' } } : 
-                        { gray: { outline: 'dark:bg-custom-100 font-medium pl-16 dark:text-custom-900 border' } }
-                    }" />
-                </div>
+                <UInput 
+                class="w-full"
+                v-model="state.phone"
+                color="gray" 
+                size="xs"
+                  :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" 
+                  :ui="{
+                    rounded: 'rounded',
+                    color: error ?
+                      { red: { outline: 'bg-red-100 dark:bg-red-50 text-custom-900 dark:text-custom-900 focus:ring-1 focus:ring-red-400 border-2 border-red-400 focus:border-red-400 active:ring-red-400 active:border-red-400' } } : 
+                      { gray: { outline: 'dark:bg-custom-100 dark:text-custom-900' } }
+                  }" />
               </template>
 
               <template #error="{ error }">
@@ -198,7 +190,7 @@
 
               <span class="w-full">
                 <UButton 
-                  @click="isOpen = false, state.phone = ''" 
+                  @click="isOpen = false" 
                   label="Cancel"
                   size="xs"
                   class="rounded dark:bg-red-500 dark:text-white bg-red-500 hover:bg-red-600 dark:hover:bg-red-600 flex justify-center w-full"/>
@@ -213,18 +205,14 @@
           <p class="text-sm text-custom-500 dark:text-custom-300 -mt-3">Selected phone numbers will receive an SMS notification.</p>
           
           <div v-for="(phone, index) in phones" :key="index" class="border-b dark:border-b-custom-950 rounded-lg border-b-custom-200 pb-2">
-            <div class="px-2 flex justify-between items-center ">
-              <div class="max-w-[150px] truncate">
-                <UCheckbox 
-                  :label="phone.number" 
-                  v-model="phone.selected" 
-                  color="green"/>
-              </div>
-
+            <div class="px-2 flex justify-between items-center">
+              <UCheckbox 
+                :label="phone.number" 
+                v-model="phone.selected" 
+                color="green"/>
                 <UTooltip 
                 text="Remove" 
-                :popper="{ placement: 'left', arrow: true }"
-                :ui="{ background: 'dark:bg-custom-800 bg-custom-50', arrow: { background: 'dark:before:bg-custom-700 before:bg-custom-300' } }">
+                :popper="{ placement: 'left-start', arrow: true }">
 
                 <UIcon 
                   @click="remove(phone)"
@@ -263,17 +251,17 @@
         </section>
 
         <section
-          class="h-auto w-full dark:bg-custom-900 bg-custom-100 flex flex-col gap-5 lg:p-10 p-5 rounded border border-custom-300 dark:border-custom-700">
+          class="h-auto w-full dark:bg-custom-900 bg-custom-100 flex flex-col gap-5 p-10 rounded border border-custom-300 dark:border-custom-700">
           <h1 class="font-semibold text-lg">Timestamps (date & time)</h1>
           <hr class="dark:border-custom-700 border-custom-200">
           <div class="space-y-2">
             <section class="flex gap-2">
               <h1 class="font-medium">Account created:</h1>
-              <p class="dark:text-custom-300">{{ formatDate(user.created_at) }}</p>
+              <p>{{ formatDate(user.created_at) }}</p>
             </section>
             <section class="flex gap-2">
               <h1 class="font-medium">Account updated:</h1>
-              <p class="dark:text-custom-300">{{ formatDate(user.updated_at) }}</p>
+              <p>{{ formatDate(user.updated_at) }}</p>
             </section>
           </div>
         </section>
@@ -285,6 +273,10 @@
 </template>
 
 <script setup lang="ts">
+
+definePageMeta({
+  layout: 'sidebar'
+})
 
 import type { FormError, FormErrorEvent, FormSubmitEvent } from '#ui/types'
 import { user, initial } from '~/assets/js/userLogged';
@@ -347,12 +339,10 @@ const remove = (phone: Phone) => {
   }
 };
 
-// phone state
 const state = reactive({
   phone: ''
 })
 
-// FE validation
 const validate = (state: any): FormError[] => {
   const errors = []
   if (!state.phone) errors.push({ path: 'phone', message: 'Required' })
@@ -378,7 +368,7 @@ async function onSubmit(event: FormSubmitEvent<any>) {
   setTimeout(() => {
 
     phones.value.push({
-      number: '+63' + state.phone,   // Use the phone number from the form state
+      number: state.phone,   // Use the phone number from the form state
       selected: true,       // Default selected (you can change this as needed)
     });
 
@@ -407,7 +397,7 @@ async function onSubmit(event: FormSubmitEvent<any>) {
     save.label.value = 'Save';
     save.bool.value = false;
     isOpen.value = false;
-    navigateTo('/client/settings')
+    navigateTo('/client/settings/test')
   }, 800)
 }
 
@@ -418,11 +408,12 @@ async function onError(event: FormErrorEvent) {
 }
 
 const toast = useToast()
+name.value = 'logoff_1'
 
 const handleLogout = () => {
   if (confirm("You would like to log out?") == true) {
 
-    name.value = 'logoff_1'
+    playSound()
 
     toast.add({
       title: 'Logout Successfully!',
@@ -443,7 +434,6 @@ const handleLogout = () => {
       },
     })
 
-    playSound()
     navigateTo('/auth')
   } else {
     console.log('Cancelled.')

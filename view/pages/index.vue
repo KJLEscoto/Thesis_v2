@@ -30,6 +30,15 @@
           alt="cctv"
           class="shadow-md lg:scale-125 scale-100 border-8 rounded-full border-custom-500 dark:border-custom-300">
       </section>
+
+      <!-- display all avatars -->
+      <!-- <div v-for="(avatarUrl, index) in avatars" :key="index">
+        <img class="w-20 h-20 border rounded-full bg-custom-400" :src="avatarUrl">
+      </div> -->
+
+      <!-- selected avatar -->
+      <!-- <img class="w-20 h-20 border rounded-full bg-custom-400" :src="avatars[0]"> -->
+
     </div>
   </div>
 

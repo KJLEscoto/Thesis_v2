@@ -3,20 +3,38 @@
 
       <section 
         v-show="!camera" 
-        class="flex items-center justify-center h-full w-full">
+        class="flex flex-col gap-3 items-center justify-center h-full w-full cursor-default bg-custom-950 dark:bg-black">
+
         <div class="text-red-500 grid justify-center">
           <UIcon 
             class="w-auto h-10 m-auto" 
             name="i-lucide-video-off" />
           <p class="text-xs tracking-wider font-bold">
             No Camera Detected.
-            <nuxt-link 
-              to="#" 
-              class="text-blue-700 underline hover:text-custom-300 transition-colors duration-150">
-              Go setup
-            </nuxt-link>
           </p>
         </div>
+
+        <div class="cursor-default text-white flex gap-2 items-center">
+          Choose Camera: 
+          <USelect
+            color="white"
+            size="2xs"
+            :options="options"
+            placeholder="Select"
+            v-model="selectedCamera"/>
+
+            <div>
+              <UButton 
+                class="rounded"
+                size="2xs"
+                :label="save.label.value"
+                :loading="save.bool.value" 
+                :loading-icon="save.icon.value"
+                @click="handleClick"/>
+            </div>
+        </div>
+
+
       </section>
 
       <section 
@@ -26,7 +44,7 @@
         <img :src="videoFeedUrl" class="h-full w-full object-cover block border-none"/>
 
         <div class="flex justify-between absolute top-0 w-full items-center">
-          <section class="text-white w-auto h-auto rounded-ss-sm rounded-br py-1 px-2 text-sm opacity-70">
+          <section class="text-white w-auto h-auto rounded-ss-sm rounded-br py-1 px-2 text-sm opacity-70 cursor-default bg-slate-700">
             <h1 class="text-lg font-semibold">{{ currentDate }}</h1>
             <p class="font-bold">{{ currentTime }}</p>
           </section>
@@ -49,14 +67,12 @@
     </div>
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue';
+<script setup lang="ts">
 
 // for camera
 const camera = ref(true);
 const videoFeedUrl = ref('http://127.0.0.1:5000/video_feed') // URL of the Flask server
 
-// Define props
 const props = defineProps({
   videoUrl: {
     type: String,
@@ -67,6 +83,38 @@ const props = defineProps({
     default: true
   }
 });
+
+const options = [
+  {
+    label: 'camera 1',
+    value: 'camera 1 value hehe taena'
+  },
+  {
+    label: 'camera 2',
+    value: 'camera 2 value hehe kupal'
+  },
+]
+
+const save = {
+    label: ref('Save'),
+    bool: ref(false),
+    icon: ref('')
+}
+
+const selectedCamera = ref('');
+
+const handleClick = () => {
+  save.label.value = '';
+  save.bool.value = true;
+  save.icon.value = 'i-lucide-loader-circle'
+
+  setTimeout(() => {
+    save.label.value = 'Save';
+    save.bool.value = false;
+    console.log('selected camera:', selectedCamera.value) // here
+    // camera.value = true;
+  }, 1300);
+};
 
 // Watch for changes in videoUrl
 watch(() => props.videoUrl, () => {
